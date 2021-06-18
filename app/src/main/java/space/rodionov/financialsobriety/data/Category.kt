@@ -9,6 +9,6 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 class Category(
     val catName: String,
-    @PrimaryKey(autoGenerate = true) val catNumber: Int
+    @PrimaryKey(autoGenerate = true) val catId: Int = 0
 ) : Parcelable {
 }

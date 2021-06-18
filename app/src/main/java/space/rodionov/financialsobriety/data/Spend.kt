@@ -10,11 +10,11 @@ import java.text.DateFormat
 @Parcelize
 data class Spend(
     var sum: Float,
-    var category: Category?,
+    var categoryName: String?,
     var timeStamp: Long = 0L,
     var comment: String?,
 //    val date: String? = DateFormat.getTimeInstance().format(timeStamp),
-    @PrimaryKey(autoGenerate = true) val id: Int
+    @PrimaryKey(autoGenerate = true) val id: Int = 0
 ) : Parcelable {
     val dateFormatted: String
         get() = DateFormat.getTimeInstance().format(timeStamp)
