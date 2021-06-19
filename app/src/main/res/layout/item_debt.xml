@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginVertical="6dp"
+    app:cardCornerRadius="6dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        xmlns:tools="http://schemas.android.com/tools">
+
+        <TextView
+            android:id="@+id/tv_debt_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="3"
+            android:text="Кредит Тиньков:"
+            android:textStyle="italic"
+            android:textSize="22sp"
+            android:layout_toStartOf="@+id/tv_debt_sum"
+            android:layout_marginEnd="10dp"/>
+
+        <TextView
+            android:id="@+id/tv_debt_sum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="0.00"
+            android:textStyle="italic|bold"
+            android:textColor="@color/blue"
+            android:textSize="22sp"
+            android:textAlignment="viewEnd"
+            />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

@@ -1,12 +1,13 @@
-package space.rodionov.financialsobriety.ui.spendandincome
+package space.rodionov.financialsobriety.ui.transaction
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import space.rodionov.financialsobriety.data.FinDao
+import space.rodionov.financialsobriety.data.FinRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class SpendViewModel @Inject constructor(
-    private val finDao: FinDao
+class TransactionsViewModel @Inject constructor(
+    private val repo: FinRepository
 ) : ViewModel() {
 }

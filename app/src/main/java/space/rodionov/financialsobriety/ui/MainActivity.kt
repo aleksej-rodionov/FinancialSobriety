@@ -6,6 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import space.rodionov.financialsobriety.R
@@ -21,10 +22,15 @@ class MainActivity : AppCompatActivity() {
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.findNavController()
+        bottom_nav.setupWithNavController(navController)
 
         setSupportActionBar(toolbar)
         setupActionBarWithNavController(navController)
 
+    }
+
+    override fun onSupportNavigateUp(): Boolean { // че эт
+        return navController.navigateUp() || super.onSupportNavigateUp()
     }
 
 

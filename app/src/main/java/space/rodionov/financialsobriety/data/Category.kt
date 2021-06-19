@@ -11,4 +11,8 @@ class Category(
     val catName: String,
     @PrimaryKey(autoGenerate = true) val catId: Int = 0
 ) : Parcelable {
+
+    override fun toString(): String {
+        return catName
+    }
 }

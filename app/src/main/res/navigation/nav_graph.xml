@@ -1,5 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/frontFragment">
 
+    <fragment
+        android:id="@+id/frontFragment"
+        android:name="space.rodionov.financialsobriety.ui.front.FrontFragment"
+        android:label="fragment_front"
+        tools:layout="@layout/fragment_front" >
+        <action
+            android:id="@+id/action_frontFragment_to_editTransactionFragment"
+            app:destination="@id/editTransactionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/debtsFragment"
+        android:name="space.rodionov.financialsobriety.ui.debt.DebtsFragment"
+        android:label="fragment_debts"
+        tools:layout="@layout/fragment_debts" />
+    <fragment
+        android:id="@+id/editDebtFragment"
+        android:name="space.rodionov.financialsobriety.ui.debt.EditDebtFragment"
+        android:label="fragment_edit_debt"
+        tools:layout="@layout/fragment_edit_debt" />
+    <fragment
+        android:id="@+id/transactionsFragment"
+        android:name="space.rodionov.financialsobriety.ui.transaction.TransactionsFragment"
+        android:label="fragment_transactions"
+        tools:layout="@layout/fragment_transactions" />
+    <fragment
+        android:id="@+id/editTransactionFragment"
+        android:name="space.rodionov.financialsobriety.ui.transaction.EditTransactionFragment"
+        android:label="fragment_edit_transaction"
+        tools:layout="@layout/fragment_edit_transaction" />
 </navigation>
