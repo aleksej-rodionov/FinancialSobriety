@@ -8,5 +8,15 @@ class FinRepository @Inject constructor(
 ) {
     private val finDao = finDb.finDao()
 
+    suspend fun insertSpend(spend: Spend) = finDao.insertSpend(spend)
+    suspend fun insertCategory(category: Category) = finDao.insertCategory(category)
+
+    suspend fun deleteSpend(spend: Spend) = finDao.deleteSpend(spend)
+    suspend fun deleteCategory(category: Category) = finDao.deleteCategory(category)
+
+    suspend fun updateSpend(spend: Spend) = finDao.updateSpend(spend)
+    suspend fun updateCategory(category: Category) = finDao.updateCategory(category)
+
+
 
 }

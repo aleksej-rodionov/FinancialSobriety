@@ -7,11 +7,11 @@
 
     <fragment
         android:id="@+id/frontFragment"
-        android:name="space.rodionov.financialsobriety.ui.front.FrontFragment"
-        android:label="fragment_front"
-        tools:layout="@layout/fragment_front" >
+        android:name="space.rodionov.financialsobriety.ui.home.HomeFragment"
+        android:label="Главная"
+        tools:layout="@layout/fragment_home">
         <action
-            android:id="@+id/action_frontFragment_to_editTransactionFragment"
+            android:id="@+id/action_homeFragment_to_editTransactionFragment"
             app:destination="@id/editTransactionFragment" />
     </fragment>
     <fragment
@@ -32,6 +32,15 @@
     <fragment
         android:id="@+id/editTransactionFragment"
         android:name="space.rodionov.financialsobriety.ui.transaction.EditTransactionFragment"
-        android:label="fragment_edit_transaction"
-        tools:layout="@layout/fragment_edit_transaction" />
+        android:label="{title}"
+        tools:layout="@layout/fragment_edit_transaction">
+        <argument
+            android:name="spend"
+            android:defaultValue="@null"
+            app:argType="space.rodionov.financialsobriety.data.Spend"
+            app:nullable="true" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </fragment>
 </navigation>

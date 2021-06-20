@@ -1,5 +1,6 @@
 package space.rodionov.financialsobriety.ui
 
+import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.NavController
@@ -10,6 +11,7 @@ import androidx.navigation.ui.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import space.rodionov.financialsobriety.R
+import java.text.SimpleDateFormat
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -37,6 +39,8 @@ class MainActivity : AppCompatActivity() {
 
 }
 
+const val ADD_TRANSACTION_RESULT_OK = Activity.RESULT_FIRST_USER
+const val EDIT_TRANSACTION_RESULT_OK = Activity.RESULT_FIRST_USER + 1
 
 
 

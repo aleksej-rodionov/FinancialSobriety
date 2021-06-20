@@ -2,27 +2,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/drillerFragment"
+        android:id="@+id/frontFragment"
         android:title="Домашняя"
         android:icon="@drawable/ic_home"
         />
 
     <item
-        android:id="@+id/categoriesFragment"
+        android:id="@+id/transactionsFragment"
         android:title="История"
         android:icon="@drawable/ic_book"
         />
 
     <item
-        android:id="@+id/vocabularyFragment"
+        android:id="@+id/debtsFragment"
         android:title="Долги"
         android:icon="@drawable/ic_debt"
         />
 
     <item
-        android:id="@+id/settingsFragment"
+        android:id="@+id/balanceFragment"
         android:title="Баланс"
         android:icon="@drawable/ic_balance"
         />
+
 
 </menu>

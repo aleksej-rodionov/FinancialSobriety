@@ -11,73 +11,51 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingVertical="24dp">
+        android:paddingHorizontal="32dp"
+        android:paddingVertical="40dp">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/iv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_calendar" />
+
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/iv_date"
+                android:padding="12dp"
+                tools:text="03.02.21"
+                android:textAlignment="textStart"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="8dp">
+            android:layout_marginVertical="8dp"
+            app:cardCornerRadius="6dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?selectableItemBackground">
-
-                    <ImageView
-                        android:id="@+id/iv_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_margin="8dp"
-                        android:src="@drawable/ic_calendar" />
-
-                    <TextView
-                        android:id="@+id/tv_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_toStartOf="@+id/iv_date"
-                        android:padding="12dp"
-                        android:text="Изменить дату"
-                        android:textAlignment="textStart"
-                        android:textAppearance="@style/TextAppearance.AppCompat"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"/>
-
-                </RelativeLayout>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/cardview_shadow_start_color" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="8dp"
-                    android:text="Сегодня"
-                    android:textSize="18sp" />
-
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="8dp">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_transaction_sum"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
                 android:hint="Сумма"
                 android:textColorHint="?android:textColorHint"
                 app:layout_constraintBottom_toBottomOf="@+id/spFromCurrency"
@@ -90,46 +68,40 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
+                    android:textStyle="italic"
+                    android:textColor="@color/blue"
                     android:inputType="numberDecimal"
                     android:padding="12dp"
                     android:textSize="20sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/cardview_shadow_start_color" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="8dp"
-                android:text="Укажите сумму"
-                android:textSize="18sp" />
-            </LinearLayout>
+
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="8dp">
+            android:layout_marginVertical="8dp"
+            app:cardCornerRadius="6dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
                 android:orientation="vertical">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?selectableItemBackground">
+                    android:layout_height="wrap_content">
 
                     <ImageView
                         android:id="@+id/iv_category"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
                         android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
                         android:layout_margin="8dp"
                         android:src="@drawable/ic_arrow_right" />
 
@@ -144,20 +116,17 @@
                         android:textAlignment="textStart"
                         android:textAppearance="@style/TextAppearance.AppCompat"
                         android:textColor="@color/black"
-                        android:textSize="20sp"/>
+                        android:textSize="20sp" />
 
                 </RelativeLayout>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/cardview_shadow_start_color" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="12dp"
-                    android:paddingVertical="8dp"
+                    android:paddingVertical="6dp"
                     android:text="Выберите категорию"
-                    android:textSize="18sp" />
+                    android:textSize="17sp" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -165,16 +134,16 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="8dp">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+            android:layout_marginVertical="8dp"
+            app:cardCornerRadius="6dp">
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_transaction_comment"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Комментарий"
+                android:layout_marginTop="3dp"
+                android:hint="Комментарий (необязательно)"
                 android:textColorHint="?android:textColorHint"
                 app:layout_constraintBottom_toBottomOf="@+id/spFromCurrency"
                 app:layout_constraintEnd_toStartOf="@+id/spFromCurrency"
@@ -186,46 +155,41 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
+                    android:textStyle="italic"
+                    android:textColor="@color/blue"
                     android:inputType="textMultiLine|textCapSentences"
                     android:padding="12dp"
                     android:textSize="20sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/cardview_shadow_start_color" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="8dp"
-                android:text="Комментарий к транзакции (необязательно)"
-                android:textSize="18sp" />
-            </LinearLayout>
+
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cv_is_debt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="8dp">
+            android:layout_marginVertical="8dp"
+            app:cardCornerRadius="6dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
                 android:orientation="vertical">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?selectableItemBackground">
+                    android:layout_height="wrap_content">
 
                     <ImageView
                         android:id="@+id/iv_cut_debt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
                         android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
                         android:layout_margin="8dp"
                         android:src="@drawable/ic_arrow_right" />
 
@@ -240,19 +204,16 @@
                         android:textAlignment="textStart"
                         android:textAppearance="@style/TextAppearance.AppCompat"
                         android:textColor="@color/black"
-                        android:textSize="20sp"/>
+                        android:textSize="20sp" />
                 </RelativeLayout>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/cardview_shadow_start_color" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="12dp"
-                    android:paddingVertical="8dp"
+                    android:paddingVertical="6dp"
                     android:text="Уменьшить долг не указываемую сумму"
-                    android:textSize="18sp" />
+                    android:textSize="17sp" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -260,7 +221,7 @@
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btn_save"
+        android:id="@+id/fab_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

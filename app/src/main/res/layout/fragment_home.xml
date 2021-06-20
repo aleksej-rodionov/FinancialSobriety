@@ -5,20 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".ui.front.FrontFragment">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card_view_balance"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:cardCornerRadius="8dp">
+    android:paddingHorizontal="32dp"
+    android:paddingVertical="40dp"
+    tools:context=".ui.home.HomeFragment">
+
+
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rl_balance"
+            android:layout_marginVertical="24dp"
             android:padding="12dp">
 
             <TextView
@@ -28,7 +26,7 @@
                 android:layout_centerHorizontal="true"
                 android:text="Баланс за июнь:"
                 android:textColor="@color/black"
-                android:textSize="22sp" />
+                android:textSize="20sp" />
 
 
             <TextView
@@ -39,19 +37,20 @@
                 android:layout_centerHorizontal="true"
                 android:text="0,00"
                 android:textColor="@color/blue"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 android:textStyle="italic|bold" />
         </RelativeLayout>
-    </com.google.android.material.card.MaterialCardView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
 
     <FrameLayout
         android:id="@+id/frame_layout_spend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/card_view_balance"
-        android:layout_marginVertical="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp">
+        android:layout_marginVertical="12dp">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_view_spend"
@@ -75,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:text="Траты"
                     android:textColor="@color/black"
-                    android:textSize="22sp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/tv_currency"
@@ -84,7 +83,7 @@
                     android:layout_alignTop="@+id/tv_spends"
                     android:layout_alignParentEnd="true"
                     android:text="RUB"
-                    android:textSize="20sp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
 
@@ -95,7 +94,7 @@
                     android:layout_below="@id/tv_spends"
                     android:layout_marginTop="8dp"
                     android:text="За июнь:"
-                    android:textSize="22sp"
+                    android:textSize="18sp"
                     android:textStyle="italic" />
 
                 <TextView
@@ -106,7 +105,7 @@
                     android:layout_alignParentEnd="true"
                     android:text="0,00"
                     android:textColor="@color/blue"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     android:textStyle="italic|bold" />
             </RelativeLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -127,9 +126,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/frame_layout_spend"
-        android:layout_marginVertical="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp">
+        android:layout_marginVertical="12dp">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_view_income"
@@ -150,7 +147,7 @@
                     android:layout_height="wrap_content"
                     android:text="Доходы"
                     android:textColor="@color/black"
-                    android:textSize="22sp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/tv_income_currency"
@@ -159,7 +156,7 @@
                     android:layout_alignTop="@+id/tv_income"
                     android:layout_alignParentEnd="true"
                     android:text="RUB"
-                    android:textSize="20sp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
 
@@ -170,7 +167,7 @@
                     android:layout_below="@id/tv_income"
                     android:layout_marginTop="8dp"
                     android:text="За июнь:"
-                    android:textSize="22sp"
+                    android:textSize="19sp"
                     android:textStyle="italic" />
 
                 <TextView
@@ -181,7 +178,7 @@
                     android:layout_alignParentEnd="true"
                     android:text="0,00"
                     android:textColor="@color/blue"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     android:textStyle="italic|bold" />
             </RelativeLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -202,9 +199,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/frame_layout_income"
-        android:layout_marginVertical="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp">
+        android:layout_marginVertical="12dp">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_view_debt"
@@ -225,7 +220,7 @@
                     android:layout_height="wrap_content"
                     android:text="Долги"
                     android:textColor="@color/black"
-                    android:textSize="22sp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/tv_debt_currency"
@@ -234,7 +229,7 @@
                     android:layout_alignTop="@+id/tv_debt"
                     android:layout_alignParentEnd="true"
                     android:text="RUB"
-                    android:textSize="20sp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
 
 
@@ -245,7 +240,7 @@
                     android:layout_below="@id/tv_debt"
                     android:layout_marginTop="8dp"
                     android:text="За июнь:"
-                    android:textSize="22sp"
+                    android:textSize="18sp"
                     android:textStyle="italic" />
 
                 <TextView
@@ -256,10 +251,12 @@
                     android:layout_alignParentEnd="true"
                     android:text="0,00"
                     android:textColor="@color/blue"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     android:textStyle="italic|bold" />
             </RelativeLayout>
         </com.google.android.material.card.MaterialCardView>
+
+
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_add_debt"
@@ -271,5 +268,7 @@
             app:borderWidth="0dp"
             app:tint="@color/white" />
     </FrameLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>
