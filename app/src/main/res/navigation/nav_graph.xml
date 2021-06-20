@@ -43,4 +43,17 @@
             android:name="title"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/recyclerTransactionsFragment"
+        android:name="space.rodionov.financialsobriety.ui.transaction.recycler.RecyclerTransactionsFragment"
+        android:label="fragment_transactions_recycler"
+        tools:layout="@layout/fragment_transactions_recycler" />
+    <fragment
+        android:id="@+id/calendarTransactionsFragment"
+        android:name="space.rodionov.financialsobriety.ui.transaction.calendar.CalendarTransactionsFragment"
+        android:label="CalendarTransactionsFragment" />
+    <fragment
+        android:id="@+id/diagramTransactionsFragment"
+        android:name="space.rodionov.financialsobriety.ui.transaction.diagram.DiagramTransactionsFragment"
+        android:label="DiagramTransactionsFragment" />
 </navigation>
