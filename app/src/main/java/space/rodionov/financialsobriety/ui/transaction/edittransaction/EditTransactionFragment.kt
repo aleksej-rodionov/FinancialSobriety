@@ -1,9 +1,7 @@
-package space.rodionov.financialsobriety.ui.transaction
+package space.rodionov.financialsobriety.ui.transaction.edittransaction
 
 import android.app.DatePickerDialog
-import android.opengl.Visibility
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -19,8 +17,6 @@ import kotlinx.coroutines.flow.collect
 import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.databinding.FragmentEditTransactionBinding
 import space.rodionov.financialsobriety.util.exhaustive
-import timber.log.Timber
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 

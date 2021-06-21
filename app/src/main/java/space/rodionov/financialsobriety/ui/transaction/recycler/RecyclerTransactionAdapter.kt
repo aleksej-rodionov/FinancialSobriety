@@ -39,6 +39,14 @@ class RecyclerTransactionAdapter(
                         listener.onItemClick(spend)
                     }
                 }
+                root.setOnLongClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val spend = getItem(position)
+                        listener.onItemLongClick(spend)
+                    }
+                    return@setOnLongClickListener true
+                }
             }
         }
 
@@ -53,6 +61,7 @@ class RecyclerTransactionAdapter(
 
     interface OnItemClickListener {
         fun onItemClick(spend: Spend)
+        fun onItemLongClick(spend: Spend)
     }
 
     class RecTransComparator : DiffUtil.ItemCallback<Spend>() {

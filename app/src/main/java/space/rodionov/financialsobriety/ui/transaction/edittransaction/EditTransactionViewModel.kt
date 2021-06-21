@@ -1,4 +1,4 @@
-package space.rodionov.financialsobriety.ui.transaction
+package space.rodionov.financialsobriety.ui.transaction.edittransaction
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -74,14 +74,20 @@ class EditTransactionViewModel @Inject constructor(
     // why not suspend? hm.. .. cause here's not only repo.updateSpend() fun
     private fun updateSpend(spend: Spend) = viewModelScope.launch {
         repo.updateSpend(spend)
-        editTransactionEventChannel.send(EditTransactionEvent.NavigateBackWithResult(
-            EDIT_TRANSACTION_RESULT_OK)) // EVENT
+        editTransactionEventChannel.send(
+            EditTransactionEvent.NavigateBackWithResult(
+                EDIT_TRANSACTION_RESULT_OK
+            )
+        ) // EVENT
     }
 
     private fun insertSpend(spend: Spend) = viewModelScope.launch {
         repo.insertSpend(spend)
-        editTransactionEventChannel.send(EditTransactionEvent.NavigateBackWithResult(
-            ADD_TRANSACTION_RESULT_OK)) // EVENT
+        editTransactionEventChannel.send(
+            EditTransactionEvent.NavigateBackWithResult(
+                ADD_TRANSACTION_RESULT_OK
+            )
+        ) // EVENT
     }
 
     private fun showInvalidInputMessage(text: String) = viewModelScope.launch {

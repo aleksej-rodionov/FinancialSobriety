@@ -31,7 +31,7 @@
         tools:layout="@layout/fragment_transactions" />
     <fragment
         android:id="@+id/editTransactionFragment"
-        android:name="space.rodionov.financialsobriety.ui.transaction.EditTransactionFragment"
+        android:name="space.rodionov.financialsobriety.ui.transaction.edittransaction.EditTransactionFragment"
         android:label="{title}"
         tools:layout="@layout/fragment_edit_transaction">
         <argument

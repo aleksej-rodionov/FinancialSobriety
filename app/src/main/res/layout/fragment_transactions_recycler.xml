@@ -24,4 +24,13 @@
         app:borderWidth="0dp"
         app:tint="@color/white" />
 
+    <TextView
+        android:id="@+id/tv_no_transactions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/no_transactions"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

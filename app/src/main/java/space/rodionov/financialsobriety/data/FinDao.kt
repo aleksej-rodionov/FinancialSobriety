@@ -6,12 +6,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface FinDao {
 
-//    @Query("SELECT * FROM spend_table WHERE date")
-//    fun getSpendsOfDate(date: String) : Flow<List<Spend>>
-
-
-
-
+    @Query("SELECT * FROM spend_table ORDER BY timestamp DESC")
+    fun getAllSpends(): Flow<List<Spend>>
 
 
 
