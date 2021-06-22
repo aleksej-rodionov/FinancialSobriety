@@ -65,4 +65,14 @@
             app:argType="space.rodionov.financialsobriety.data.Spend" />
     </dialog>
     <action android:id="@+id/action_global_deleteTransactionDialogFragment" app:destination="@id/deleteTransactionDialogFragment" />
+    <dialog
+        android:id="@+id/chooseCategoryDialogFragment"
+        android:name="space.rodionov.financialsobriety.ui.transaction.edittransaction.ChooseCategoryDialogFragment"
+        android:label="ChooseCategoryDialogFragment" >
+        <argument
+            android:name="categoryName"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
+    </dialog><action android:id="@+id/action_global_chooseCategoryDialogFragment" app:destination="@id/chooseCategoryDialogFragment"/>
 </navigation>

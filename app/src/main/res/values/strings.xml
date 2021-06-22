@@ -5,4 +5,5 @@
     <string name="cancel_action">Cancel</string>
     <string name="yes">Yes</string>
     <string name="no_transactions">There is no transactions</string>
+    <string name="choose_category">Choose category</string>
 </resources>
