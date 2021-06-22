@@ -71,6 +71,10 @@ class EditTransactionViewModel @Inject constructor(
         }
     }
 
+
+
+    // ==============================================
+
     // why not suspend? hm.. .. cause here's not only repo.updateSpend() fun
     private fun updateSpend(spend: Spend) = viewModelScope.launch {
         repo.updateSpend(spend)

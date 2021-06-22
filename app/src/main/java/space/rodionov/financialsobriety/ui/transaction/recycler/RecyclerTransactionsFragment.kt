@@ -6,6 +6,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -52,12 +53,15 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.recTransEvent.collect {
-//                when (it) {
-//                    RecyclerTransactionsViewModel.RecTransEvent.NavigateToAddTransactionScreen -> TODO()
-//                    is RecyclerTransactionsViewModel.RecTransEvent.NavigateToDeleteTransactionScreen -> TODO()
-//                    is RecyclerTransactionsViewModel.RecTransEvent.NavigateToEditTransactionScreen -> TODO()
-//                    is RecyclerTransactionsViewModel.RecTransEvent.ShowUndoDeleteTransactionMessage -> TODO()
-//                }.exhaustive
+                when (it) {
+                    is RecyclerTransactionsViewModel.RecTransEvent.NavigateToAddTransactionScreen -> TODO()
+                    is RecyclerTransactionsViewModel.RecTransEvent.NavigateToDeleteTransactionScreen -> {
+                        val action = RecyclerTransactionsFragmentDirections.actionGlobalDeleteTransactionDialogFragment(it.spend)
+                        findNavController().navigate(action)
+                    }
+                    is RecyclerTransactionsViewModel.RecTransEvent.NavigateToEditTransactionScreen -> TODO()
+                    is RecyclerTransactionsViewModel.RecTransEvent.ShowUndoDeleteTransactionMessage -> TODO()
+                }.exhaustive
             }
         }
     }
@@ -67,7 +71,7 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
     }
 
     override fun onItemLongClick(spend: Spend) {
-        viewModel.onTransactionLongTouched(spend)
+        viewModel.onDeleteTransaction(spend)
     }
 
 

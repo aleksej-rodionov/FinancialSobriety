@@ -52,7 +52,14 @@ class TransactionsFragment : Fragment(R.layout.fragment_transactions) {
 
 }
 
-
+/**
+ * 0. DialogFragment to choose category in add trans fragm
+ * 1. Чтобы календарь сохранялся при повороте экрана
+ *
+ * 3. rest of events in recycler fragm
+ *
+ *
+ */
 
 
 

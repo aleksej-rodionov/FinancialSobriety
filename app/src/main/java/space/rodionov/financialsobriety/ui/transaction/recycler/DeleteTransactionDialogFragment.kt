@@ -7,6 +7,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import space.rodionov.financialsobriety.R
+import timber.log.Timber
 
 @AndroidEntryPoint
 class DeleteTransactionDialogFragment : DialogFragment() {
@@ -19,18 +20,11 @@ class DeleteTransactionDialogFragment : DialogFragment() {
             .setMessage(requireContext().resources.getString(R.string.really_delete_transaction))
             .setNegativeButton(requireContext().resources.getString(R.string.cancel_action), null)
             .setPositiveButton(requireContext().resources.getString(R.string.yes)) { _, _ ->
-//                viewModel.onConfirmClick(spend)
+                if (viewModel.spend != null) {
+                    viewModel.onConfirmClick(viewModel.spend!!)
+                } else {
+                    Timber.d("The Spend? id currently null")
+                }
             }
             .create()
-
-    /**
-     *
-     * 1. how to pass Spend Instance to DeleteTransactionDialogFragment
-     * 2. textView Date crashes when empty in add trans fragm
-     *
-     *
-     *
-      */
-
-
 }

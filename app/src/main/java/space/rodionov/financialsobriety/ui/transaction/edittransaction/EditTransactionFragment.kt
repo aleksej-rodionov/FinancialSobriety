@@ -49,7 +49,7 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
             cvIsDebt.isVisible = viewModel.spend == null
 
             etTransactionSum.addTextChangedListener {
-                viewModel.spendSum = it.toString().toFloat()
+                 if (!it.toString().isBlank()) viewModel.spendSum = it.toString().toFloat() else 0f
             }
             etTransactionComment.addTextChangedListener {
                 viewModel.spendComment = it.toString()

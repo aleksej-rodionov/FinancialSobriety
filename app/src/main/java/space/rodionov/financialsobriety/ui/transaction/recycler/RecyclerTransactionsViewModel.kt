@@ -43,7 +43,7 @@ class RecyclerTransactionsViewModel @Inject constructor(
         recTransEventChannel.send(RecTransEvent.NavigateToEditTransactionScreen(spend))
     }
 
-    fun onTransactionLongTouched(spend: Spend) = viewModelScope.launch {
+    fun onDeleteTransaction(spend: Spend) = viewModelScope.launch {
         recTransEventChannel.send(RecTransEvent.NavigateToDeleteTransactionScreen(spend))
     }
 

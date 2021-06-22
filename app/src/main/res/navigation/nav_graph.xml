@@ -56,4 +56,13 @@
         android:id="@+id/diagramTransactionsFragment"
         android:name="space.rodionov.financialsobriety.ui.transaction.diagram.DiagramTransactionsFragment"
         android:label="DiagramTransactionsFragment" />
+    <dialog
+        android:id="@+id/deleteTransactionDialogFragment"
+        android:name="space.rodionov.financialsobriety.ui.transaction.recycler.DeleteTransactionDialogFragment"
+        android:label="DeleteTransactionDialogFragment" >
+        <argument
+            android:name="spend"
+            app:argType="space.rodionov.financialsobriety.data.Spend" />
+    </dialog>
+    <action android:id="@+id/action_global_deleteTransactionDialogFragment" app:destination="@id/deleteTransactionDialogFragment" />
 </navigation>
