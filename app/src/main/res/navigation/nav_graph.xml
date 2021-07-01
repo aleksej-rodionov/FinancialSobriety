@@ -75,4 +75,13 @@
             app:nullable="true"
             android:defaultValue="null" />
     </dialog><action android:id="@+id/action_global_chooseCategoryDialogFragment" app:destination="@id/chooseCategoryDialogFragment"/>
+    <fragment
+        android:id="@+id/datePickerFragment"
+        android:name="space.rodionov.financialsobriety.ui.transaction.edittransaction.DatePickerFragment"
+        android:label="DatePickerFragment" >
+        <argument
+            android:name="dateFormatted"
+            app:argType="string" />
+    </fragment>
+    <action android:id="@+id/action_global_datePickerFragment" app:destination="@id/datePickerFragment" />
 </navigation>

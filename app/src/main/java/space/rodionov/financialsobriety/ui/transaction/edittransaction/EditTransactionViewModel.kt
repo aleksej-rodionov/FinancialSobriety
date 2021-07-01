@@ -11,6 +11,7 @@ import space.rodionov.financialsobriety.data.FinRepository
 import space.rodionov.financialsobriety.data.Spend
 import space.rodionov.financialsobriety.ui.ADD_TRANSACTION_RESULT_OK
 import space.rodionov.financialsobriety.ui.EDIT_TRANSACTION_RESULT_OK
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -50,7 +51,6 @@ class EditTransactionViewModel @Inject constructor(
             state.set("spendComment", value)
         }
 
-
     fun onSaveClick() {
         if (spendSum.equals(0f) || spendSum.toString().isBlank() || spendCategoryName.isBlank()) {
             showInvalidInputMessage("Укажите сумму и категорию") // EVENT caller
@@ -74,6 +74,32 @@ class EditTransactionViewModel @Inject constructor(
 
 
     // ==============================================
+
+    fun onDatePickerShow() = viewModelScope.launch {
+        editTransactionEventChannel.send(EditTransactionEvent.NavigateToDatePickerDialog(spendDateFormatted))
+    }
+
+    fun onChooseCategoryClick() = viewModelScope.launch {
+        editTransactionEventChannel.send(EditTransactionEvent.NavigateToChooseCategoryScreen(spendCategoryName))
+    }
+
+    fun onCatNameResult(resultCatName: String?) = viewModelScope.launch {
+        spendCategoryName = resultCatName ?: ""
+        if (resultCatName == null) {
+            Timber.d("LOGS resultCatName is NULL")
+        } else {
+            Timber.d("LOGS resultCanName is $resultCatName")
+        }
+    }
+
+    fun onDateResult(resultDate: String?) = viewModelScope.launch {
+        spendDateFormatted = resultDate ?: ""
+        if (resultDate == null) {
+            Timber.d("LOGS resultDate is NULL")
+        } else {
+            Timber.d("LOGS resultDate is $resultDate")
+        }
+    }
 
     // why not suspend? hm.. .. cause here's not only repo.updateSpend() fun
     private fun updateSpend(spend: Spend) = viewModelScope.launch {
@@ -100,6 +126,8 @@ class EditTransactionViewModel @Inject constructor(
 
     // these events are in Event cause only Fragment can show a snackbar or execute navigation events:
     sealed class EditTransactionEvent {
+        data class NavigateToDatePickerDialog(val dateFormatted: String) : EditTransactionEvent()
+        data class NavigateToChooseCategoryScreen(val catName: String?) : EditTransactionEvent()
         data class ShowInvalidInputMessage(val msg: String) : EditTransactionEvent()
         data class NavigateBackWithResult(val result: Int) : EditTransactionEvent()
     }

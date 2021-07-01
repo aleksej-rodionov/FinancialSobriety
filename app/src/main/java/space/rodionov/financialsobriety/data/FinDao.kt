@@ -9,6 +9,9 @@ interface FinDao {
     @Query("SELECT * FROM spend_table ORDER BY timestamp DESC")
     fun getAllSpends(): Flow<List<Spend>>
 
+    @Query("SELECT * FROM category_table ORDER BY catId DESC")
+    fun getAllCategories(): Flow<List<Category>>
+
 
 
 

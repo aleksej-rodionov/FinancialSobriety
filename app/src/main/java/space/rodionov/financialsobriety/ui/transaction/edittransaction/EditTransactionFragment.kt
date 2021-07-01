@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -37,31 +38,47 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
         binding.apply {
             etTransactionSum.setText(viewModel.spendSum.toString())
             etTransactionComment.setText(viewModel.spendComment)
+            tvCategory.text =
+                if (viewModel.spendCategoryName.isNotBlank()) viewModel.spendCategoryName else "Category"
 
             if (viewModel.spend != null) {
-                tvDate.text = viewModel.spend?.dateFormatted
+                tvDate.text = viewModel.spendDateFormatted
             } else {
-                val today = System.currentTimeMillis()
-                tvDate.text = sdf.format(today)
+                viewModel.spendDateFormatted = sdf.format(System.currentTimeMillis())
+                tvDate.text = viewModel.spendDateFormatted
             }
             tvCategory.text = viewModel.spendCategoryName
 
             cvIsDebt.isVisible = viewModel.spend == null
 
             etTransactionSum.addTextChangedListener {
-                 if (!it.toString().isBlank()) viewModel.spendSum = it.toString().toFloat() else 0f
+                if (!it.toString().isBlank()) viewModel.spendSum = it.toString().toFloat() else 0f
             }
             etTransactionComment.addTextChangedListener {
                 viewModel.spendComment = it.toString()
             }
 
             ivDate.setOnClickListener {
-                showDatePicker()
+                viewModel.onDatePickerShow()
+            }
+
+            layoutChooseCategory.setOnClickListener {
+                viewModel.onChooseCategoryClick()
             }
 
             fabSave.setOnClickListener {
                 viewModel.onSaveClick()
             }
+        }
+
+        setFragmentResultListener("cat_name_request") { _, bundle ->
+            val resultCatName = bundle.getString("cat_name_result")
+            viewModel.onCatNameResult(resultCatName)
+        }
+
+        setFragmentResultListener("date_request") { _, bundle ->
+            val resultDate = bundle.getString("date_result")
+            viewModel.onDateResult(resultDate)
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
@@ -71,12 +88,23 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
                         binding.root.focusedChild?.clearFocus()
                         setFragmentResult( // так мы посылаем fragmentResult. (1-Я ПОЛОВИНА FRAGMENT RESULT-A)
                             "add_edit_request",
-                            bundleOf("add_edit_request" to it.result)
+                            bundleOf("add_edit_result" to it.result)
                         )
                         findNavController().popBackStack() // чтобы удалить сразу этот фрагмент из бэкстека.
                     }
                     is EditTransactionViewModel.EditTransactionEvent.ShowInvalidInputMessage -> {
                         Snackbar.make(requireView(), it.msg, Snackbar.LENGTH_LONG).show()
+                    }
+                    is EditTransactionViewModel.EditTransactionEvent.NavigateToChooseCategoryScreen -> {
+                        val action =
+                            EditTransactionFragmentDirections.actionGlobalChooseCategoryDialogFragment(
+                                it.catName
+                            )
+                        findNavController().navigate(action)
+                    }
+                    is EditTransactionViewModel.EditTransactionEvent.NavigateToDatePickerDialog -> {
+                        val action = EditTransactionFragmentDirections.actionGlobalDatePickerFragment(it.dateFormatted)
+                        findNavController().navigate(action)
                     }
                 }.exhaustive // чтобы не забыть все Эвенты обработать.
             }
@@ -94,7 +122,7 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
 
         DatePickerDialog(
             requireContext(),
-            { view, year, month, dayOfMonth ->
+            { _, year, month, dayOfMonth ->
                 val newCalendar = Calendar.getInstance()
                 newCalendar.set(Calendar.YEAR, year);
                 newCalendar.set(Calendar.MONTH, month);

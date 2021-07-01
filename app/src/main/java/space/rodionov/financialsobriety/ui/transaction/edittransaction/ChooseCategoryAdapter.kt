@@ -9,7 +9,8 @@ import space.rodionov.financialsobriety.data.Category
 import space.rodionov.financialsobriety.databinding.ItemChooseCategoryBinding
 
 class ChooseCategoryAdapter(
-    private val listener: ChooseCategoryAdapter.OnItemClickListener
+    private val listener: OnItemClickListener,
+    private val curCatName: String
 ) : ListAdapter<Category, ChooseCategoryAdapter.ChooseCatViewHolder>(ChooseCatComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChooseCatViewHolder {
@@ -38,13 +39,20 @@ class ChooseCategoryAdapter(
                         listener.onItemClick(category)
                     }
                 }
+                radioButton.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        val category = getItem(position)
+                        listener.onItemClick(category)
+                    }
+                }
             }
         }
 
         fun bind(category: Category) {
             binding.apply {
                 tvCatname.text = category.catName
-//                radioButton.isChecked = установить чекд если открыт в модели ЭдитТранскшнФрагмента уже выбранная категория есть
+                radioButton.isChecked = category.catName == curCatName
             }
         }
     }
