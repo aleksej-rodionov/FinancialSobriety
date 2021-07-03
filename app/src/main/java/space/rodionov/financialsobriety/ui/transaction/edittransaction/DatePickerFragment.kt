@@ -43,7 +43,7 @@ class DatePickerFragment : DialogFragment() {
                 newCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 val newDateString = sdf.format(newCalendar.timeInMillis)
 //                viewModel.dateFormatted = newDateString // это ненадо
-                viewModel.onDateChosen(newDateString)  // это говно послать в навигейтБэкк уид резалт
+                viewModel.onDateChosen(newDateString)  // это послать в навигейтБэкк уид резалт
 //                this.dismiss()
             }, todayYear, todayMonth, todayDay
         )
