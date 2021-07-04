@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.view.View
+import android.widget.DatePicker
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
@@ -20,6 +21,7 @@ import java.util.*
 class DatePickerFragment : DialogFragment() {
 
     private val viewModel: DatePickerViewModel by viewModels()
+    val sdf = SimpleDateFormat("dd.MM.yy", Locale.getDefault())
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)
@@ -27,7 +29,7 @@ class DatePickerFragment : DialogFragment() {
 
         val dateString = viewModel.dateFormatted
         val dateFormatted = SimpleDateFormat("dd.MM.yy", Locale.getDefault()).parse(dateString)
-        val sdf = SimpleDateFormat("dd.MM.yy", Locale.getDefault())
+//        val sdf = SimpleDateFormat("dd.MM.yy", Locale.getDefault())
         val calendar = Calendar.getInstance()
         calendar.time = dateFormatted
         val todayYear = calendar.get(Calendar.YEAR)
@@ -36,7 +38,7 @@ class DatePickerFragment : DialogFragment() {
 
         return DatePickerDialog(
             requireContext(),
-            { _, year, month, dayOfMonth ->
+            { view, year, month, dayOfMonth ->
                 val newCalendar = Calendar.getInstance()
                 newCalendar.set(Calendar.YEAR, year);
                 newCalendar.set(Calendar.MONTH, month);
@@ -63,6 +65,15 @@ class DatePickerFragment : DialogFragment() {
             }
         }
     }
+
+//    override fun onDateSet(p0: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+//        val newCalendar = Calendar.getInstance()
+//        newCalendar.set(Calendar.YEAR, year);
+//        newCalendar.set(Calendar.MONTH, month);
+//        newCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+//        val newDateString = sdf.format(newCalendar.timeInMillis)
+//        viewModel.onDateChosen(newDateString)
+//    }
 }
 
 

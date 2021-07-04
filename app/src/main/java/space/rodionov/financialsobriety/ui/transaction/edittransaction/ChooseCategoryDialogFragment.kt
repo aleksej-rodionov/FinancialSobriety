@@ -121,6 +121,10 @@ class ChooseCategoryDialogFragment : DialogFragment(), ChooseCategoryAdapter.OnI
                     }
                 }
 
+//                viewModel.categories.observe(viewLifecycleOwner) {
+//                    chooseCatAdapter.submitList(it)
+//                }
+
                 viewLifecycleOwner.lifecycleScope.launchWhenCreated {
                     viewModel.chooseCategoryEvent.collect {
                         when (it) {

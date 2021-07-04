@@ -2,6 +2,7 @@ package space.rodionov.financialsobriety.ui.transaction.edittransaction
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -27,7 +28,7 @@ class ChooseCategoryViewModel @Inject constructor(
     private val chooseCategoryEventChannel = Channel<ChooseCategoryEvent>()
     val chooseCategoryEvent = chooseCategoryEventChannel.receiveAsFlow()
 
-    val categories = repo.getAllCategories()
+    val categories = repo.getAllCategories()/*.asLiveData()*/
         .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
 //=======================================================
@@ -43,8 +44,7 @@ class ChooseCategoryViewModel @Inject constructor(
 
 /**
  *
- * 0. DialogFragment to choose category in add trans fragm
- * 0.1. разобраться че с первого раза айтемы не отображаются.
+ * 0.1. разобраться че с первого раза айтемы не отображаются + с пнрвого раза категория выбранная не отображается
  * 1. Чтобы календарь сохранялся при повороте экрана
  *
  * 3. rest of events in recycler fragm
