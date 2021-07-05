@@ -3,6 +3,7 @@ package space.rodionov.financialsobriety.ui.transaction.edittransaction
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -30,10 +31,13 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
 
     private val sdf = SimpleDateFormat("dd.MM.yy", Locale.getDefault())
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentEditTransactionBinding.bind(view)
+
+//        dialog?.window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 
         binding.apply {
             etTransactionSum.setText(viewModel.spendSum.toString())
@@ -103,7 +107,7 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
                         findNavController().navigate(action)
                     }
                     is EditTransactionViewModel.EditTransactionEvent.NavigateToDatePickerDialog -> {
-                        val action = EditTransactionFragmentDirections.actionGlobalDatePickerFragment(it.dateFormatted)
+                        val action = EditTransactionFragmentDirections.actionGlobalDatePickerDialogFragment(it.dateFormatted)
                         findNavController().navigate(action)
                     }
                 }.exhaustive // чтобы не забыть все Эвенты обработать.
@@ -111,27 +115,27 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
         }
     }
 
-    private fun showDatePicker() {
-        val dateString = binding.tvDate.text.toString()
-        val dateFormatted = SimpleDateFormat("dd.MM.yy", Locale.getDefault()).parse(dateString)
-        val calendar = Calendar.getInstance()
-        calendar.time = dateFormatted
-        val todayYear = calendar.get(Calendar.YEAR)
-        val todayMonth = calendar.get(Calendar.MONTH)
-        val todayDay = calendar.get(Calendar.DAY_OF_MONTH)
-
-        DatePickerDialog(
-            requireContext(),
-            { _, year, month, dayOfMonth ->
-                val newCalendar = Calendar.getInstance()
-                newCalendar.set(Calendar.YEAR, year);
-                newCalendar.set(Calendar.MONTH, month);
-                newCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                val newDateString = sdf.format(newCalendar.timeInMillis)
-                binding.tvDate.text = newDateString
-            }, todayYear, todayMonth, todayDay
-        ).show()
-    }
+//    private fun showDatePicker() {
+//        val dateString = binding.tvDate.text.toString()
+//        val dateFormatted = SimpleDateFormat("dd.MM.yy", Locale.getDefault()).parse(dateString)
+//        val calendar = Calendar.getInstance()
+//        calendar.time = dateFormatted
+//        val todayYear = calendar.get(Calendar.YEAR)
+//        val todayMonth = calendar.get(Calendar.MONTH)
+//        val todayDay = calendar.get(Calendar.DAY_OF_MONTH)
+//
+//        DatePickerDialog(
+//            requireContext(),
+//            { _, year, month, dayOfMonth ->
+//                val newCalendar = Calendar.getInstance()
+//                newCalendar.set(Calendar.YEAR, year);
+//                newCalendar.set(Calendar.MONTH, month);
+//                newCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+//                val newDateString = sdf.format(newCalendar.timeInMillis)
+//                binding.tvDate.text = newDateString
+//            }, todayYear, todayMonth, todayDay
+//        ).show()
+//    }
 }
 
 

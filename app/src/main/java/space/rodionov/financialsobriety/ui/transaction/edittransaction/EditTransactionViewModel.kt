@@ -38,6 +38,10 @@ class EditTransactionViewModel @Inject constructor(
         }
 
     var spendDateFormatted = state.get<String>("spendDateFormatted") ?: spend?.dateFormatted ?: ""
+        set(value) {
+            field = value
+            state.set("spendDateFormatted", value)
+        }
 
     var spendCategoryName = state.get<String?>("spendCategoryName") ?: spend?.categoryName ?: ""
         set(value) {

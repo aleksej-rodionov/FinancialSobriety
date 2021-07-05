@@ -1,11 +1,11 @@
 package space.rodionov.financialsobriety.ui.transaction.edittransaction
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
@@ -32,6 +32,12 @@ class ChooseCategoryDialogFragment : DialogFragment(), ChooseCategoryAdapter.OnI
 //    private lateinit var binding: FragmentChooseCategoryBinding
 
     private lateinit var chooseCatAdapter: ChooseCategoryAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Timber.d("LOGS onCreate vizvan")
+
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)

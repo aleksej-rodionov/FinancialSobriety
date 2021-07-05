@@ -33,7 +33,6 @@ class DatePickerViewModel @Inject constructor(
     sealed class DatePickerEvent {
         data class NavigateBackWithResult(val dateFormatted: String) : DatePickerEvent()
     }
-
 }
 
 

@@ -76,12 +76,11 @@
             android:defaultValue="null" />
     </dialog><action android:id="@+id/action_global_chooseCategoryDialogFragment" app:destination="@id/chooseCategoryDialogFragment"/>
     <fragment
-        android:id="@+id/datePickerFragment"
-        android:name="space.rodionov.financialsobriety.ui.transaction.edittransaction.DatePickerFragment"
-        android:label="DatePickerFragment" >
+        android:id="@+id/datePickerDialogFragment"
+        android:name="space.rodionov.financialsobriety.ui.transaction.edittransaction.DatePickerDialogFragment"
+        android:label="DatePickerDialogFragment" >
         <argument
             android:name="dateFormatted"
             app:argType="string" />
-    </fragment>
-    <action android:id="@+id/action_global_datePickerFragment" app:destination="@id/datePickerFragment" />
+    </fragment><action android:id="@+id/action_global_datePickerDialogFragment" app:destination="@id/datePickerDialogFragment"/>
 </navigation>
