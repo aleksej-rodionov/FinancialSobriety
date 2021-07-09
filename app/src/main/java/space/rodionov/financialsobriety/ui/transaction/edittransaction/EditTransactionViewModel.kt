@@ -28,29 +28,15 @@ class EditTransactionViewModel @Inject constructor(
 
     val spend = state.get<Spend>("spend")
 
+    var spendDateFormatted = state.getLiveData("spendDateFormatted", spend?.dateFormatted ?: sdf.format(System.currentTimeMillis()))
+
     var spendSum = state.get<Float>("spendSum") ?: spend?.sum ?: 0f
         set(value) {
             field = value
             state.set("spendSum", value)
         }
 
-    var spendTimestamp = state.get<Long>("spendTimestamp") ?: spend?.timestamp ?: 0L
-        set(value) {
-            field = value
-            state.set("spendTimestamp", value)
-        }
-
-    var spendDateFormatted = state.get<String>("spendDateFormatted") ?: spend?.dateFormatted ?: sdf.format(System.currentTimeMillis())
-        set(value) {
-            field = value
-            state.set("spendDateFormatted", value)
-        }
-
-    var spendCategoryName = state.get<String?>("spendCategoryName") ?: spend?.categoryName ?: ""
-        set(value) {
-            field = value
-            state.set("spendCategoryName", value)
-        }
+    var spendCategoryName = state.getLiveData("spendCategoryName", spend?.categoryName ?: "Other")
 
     var spendComment = state.get<String?>("spendComment") ?: spend?.comment ?: ""
         set(value) {
@@ -58,22 +44,30 @@ class EditTransactionViewModel @Inject constructor(
             state.set("spendComment", value)
         }
 
+    var debtReduced = state.getLiveData("debtReduced", "")
+
+    
+
+    //=======================================================================
+
     fun onSaveClick() {
-        if (spendSum.equals(0f) || spendSum.toString().isBlank() || spendCategoryName.isBlank()) {
+        if (spendSum.equals(0f) || spendSum.toString().isBlank() || spendCategoryName.value.isNullOrBlank()) {
             showInvalidInputMessage("Укажите сумму и категорию") // EVENT caller
             return
         }
+        val calendar = Calendar.getInstance()
+        calendar.time = sdf.parse(spendDateFormatted.value)
 
         if (spend != null) {
             val updatedSpend = spend.copy(
                 sum = spendSum,
-                categoryName = "Другое",
-                timestamp = spendTimestamp,
+                categoryName = spendCategoryName.value,
+                timestamp = calendar.timeInMillis / 1000,
                 comment = spendComment
             )
             updateSpend(updatedSpend) // EVENT caller
         } else {
-            val newSpend = Spend(spendSum, spendCategoryName, spendTimestamp, spendComment)
+            val newSpend = Spend(spendSum, spendCategoryName.value, calendar.timeInMillis / 1000, spendComment)
             insertSpend(newSpend) // EVENT caller
         }
     }
@@ -83,15 +77,15 @@ class EditTransactionViewModel @Inject constructor(
     // ==============================================
 
     fun onDatePickerShow() = viewModelScope.launch {
-        editTransactionEventChannel.send(EditTransactionEvent.NavigateToDatePickerDialog(spendDateFormatted))
+        editTransactionEventChannel.send(EditTransactionEvent.NavigateToDatePickerDialog(spendDateFormatted.value ?: sdf.format(System.currentTimeMillis())))
     }
 
     fun onChooseCategoryClick() = viewModelScope.launch {
-        editTransactionEventChannel.send(EditTransactionEvent.NavigateToChooseCategoryScreen(spendCategoryName))
+        editTransactionEventChannel.send(EditTransactionEvent.NavigateToChooseCategoryScreen(spendCategoryName.value))
     }
 
     fun onCatNameResult(resultCatName: String?) = viewModelScope.launch {
-        spendCategoryName = resultCatName ?: ""
+        spendCategoryName.value = resultCatName ?: ""
         if (resultCatName == null) {
             Timber.d("LOGS resultCatName is NULL")
         } else {
@@ -100,7 +94,7 @@ class EditTransactionViewModel @Inject constructor(
     }
 
     fun onDateResult(resultDate: String?) = viewModelScope.launch {
-        spendDateFormatted = resultDate ?: ""
+        spendDateFormatted.value = resultDate ?: sdf.format(System.currentTimeMillis())
         if (resultDate == null) {
             Timber.d("LOGS resultDate is NULL")
         } else {

@@ -48,7 +48,7 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
                 if (viewModel.spendCategoryName.isNotBlank()) viewModel.spendCategoryName else "Category"
 
 //            if (viewModel.spend != null) {
-                tvDate.text = viewModel.spendDateFormatted
+                tvDate.text = viewModel.spendDateFormatted.value
 //            } else {
 //                viewModel.spendDateFormatted = sdf.format(System.currentTimeMillis())
 //                tvDate.text = viewModel.spendDateFormatted
@@ -77,16 +77,7 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
             }
         }
 
-        setFragmentResultListener("cat_name_request") { _, bundle ->
-            val resultCatName = bundle.getString("cat_name_result")
-            viewModel.onCatNameResult(resultCatName)
-        }
 
-        setFragmentResultListener("date_request") { _, bundle ->
-            val resultDate = bundle.getString("date_result")
-            Timber.d("LOGS Main Fragment: recieved date = $resultDate")
-            viewModel.onDateResult(resultDate)
-        }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.editTransactionEvent.collect {
