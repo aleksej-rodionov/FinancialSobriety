@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import space.rodionov.financialsobriety.data.FinRepository
 import space.rodionov.financialsobriety.di.ApplicationScope
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,6 +29,7 @@ class DatePickerViewModel @Inject constructor(
 
     fun onDateChosen(dateFormatted: String) = viewModelScope.launch {
         datePickerEventChannel.send(DatePickerEvent.NavigateBackWithResult(dateFormatted))
+        Timber.d("LOGS viewModel.onDateChosen called with (${dateFormatted})")
     }
 
     sealed class DatePickerEvent {

@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.collect
 import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.databinding.FragmentEditTransactionBinding
 import space.rodionov.financialsobriety.util.exhaustive
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -36,6 +37,7 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentEditTransactionBinding.bind(view)
+        Timber.d("LOGS MainFragment viewModel.spendDateFormatted = ${viewModel.spendDateFormatted}")
 
 //        dialog?.window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 
@@ -45,12 +47,12 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
             tvCategory.text =
                 if (viewModel.spendCategoryName.isNotBlank()) viewModel.spendCategoryName else "Category"
 
-            if (viewModel.spend != null) {
+//            if (viewModel.spend != null) {
                 tvDate.text = viewModel.spendDateFormatted
-            } else {
-                viewModel.spendDateFormatted = sdf.format(System.currentTimeMillis())
-                tvDate.text = viewModel.spendDateFormatted
-            }
+//            } else {
+//                viewModel.spendDateFormatted = sdf.format(System.currentTimeMillis())
+//                tvDate.text = viewModel.spendDateFormatted
+//            }
             tvCategory.text = viewModel.spendCategoryName
 
             cvIsDebt.isVisible = viewModel.spend == null
@@ -82,6 +84,7 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
 
         setFragmentResultListener("date_request") { _, bundle ->
             val resultDate = bundle.getString("date_result")
+            Timber.d("LOGS Main Fragment: recieved date = $resultDate")
             viewModel.onDateResult(resultDate)
         }
 
@@ -109,32 +112,16 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
                     is EditTransactionViewModel.EditTransactionEvent.NavigateToDatePickerDialog -> {
                         val action = EditTransactionFragmentDirections.actionGlobalDatePickerDialogFragment(it.dateFormatted)
                         findNavController().navigate(action)
+//                        val dialog = DatePickerDialogFragment.newInstance(it.dateFormatted)
+//                        dialog.show(parentFragmentManager, DatePickerDialogFragment.TAG)
                     }
                 }.exhaustive // чтобы не забыть все Эвенты обработать.
             }
         }
     }
 
-//    private fun showDatePicker() {
-//        val dateString = binding.tvDate.text.toString()
-//        val dateFormatted = SimpleDateFormat("dd.MM.yy", Locale.getDefault()).parse(dateString)
-//        val calendar = Calendar.getInstance()
-//        calendar.time = dateFormatted
-//        val todayYear = calendar.get(Calendar.YEAR)
-//        val todayMonth = calendar.get(Calendar.MONTH)
-//        val todayDay = calendar.get(Calendar.DAY_OF_MONTH)
-//
-//        DatePickerDialog(
-//            requireContext(),
-//            { _, year, month, dayOfMonth ->
-//                val newCalendar = Calendar.getInstance()
-//                newCalendar.set(Calendar.YEAR, year);
-//                newCalendar.set(Calendar.MONTH, month);
-//                newCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-//                val newDateString = sdf.format(newCalendar.timeInMillis)
-//                binding.tvDate.text = newDateString
-//            }, todayYear, todayMonth, todayDay
-//        ).show()
+//    fun onDateResult(newDate: String) {
+//        viewModel.onDateResult(newDate)
 //    }
 }
 

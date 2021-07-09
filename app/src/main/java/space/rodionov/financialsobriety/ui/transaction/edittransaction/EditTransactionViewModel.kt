@@ -12,6 +12,8 @@ import space.rodionov.financialsobriety.data.Spend
 import space.rodionov.financialsobriety.ui.ADD_TRANSACTION_RESULT_OK
 import space.rodionov.financialsobriety.ui.EDIT_TRANSACTION_RESULT_OK
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,6 +21,7 @@ class EditTransactionViewModel @Inject constructor(
     private val repo: FinRepository,
     private val state: SavedStateHandle
 ) : ViewModel() {
+    private val sdf = SimpleDateFormat("dd.MM.yy", Locale.getDefault())
 
     private val editTransactionEventChannel = Channel<EditTransactionEvent>()
     val editTransactionEvent = editTransactionEventChannel.receiveAsFlow()
@@ -37,7 +40,7 @@ class EditTransactionViewModel @Inject constructor(
             state.set("spendTimestamp", value)
         }
 
-    var spendDateFormatted = state.get<String>("spendDateFormatted") ?: spend?.dateFormatted ?: ""
+    var spendDateFormatted = state.get<String>("spendDateFormatted") ?: spend?.dateFormatted ?: sdf.format(System.currentTimeMillis())
         set(value) {
             field = value
             state.set("spendDateFormatted", value)
@@ -105,7 +108,6 @@ class EditTransactionViewModel @Inject constructor(
         }
     }
 
-    // why not suspend? hm.. .. cause here's not only repo.updateSpend() fun
     private fun updateSpend(spend: Spend) = viewModelScope.launch {
         repo.updateSpend(spend)
         editTransactionEventChannel.send(

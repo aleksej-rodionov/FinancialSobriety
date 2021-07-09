@@ -11,8 +11,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentResultListener
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,55 +27,43 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @AndroidEntryPoint
-class DatePickerDialogFragment : DialogFragment() {
+class DatePickerDialogFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
 
+//    companion object {
+//        const val TAG = "DatePickerDialog"
+//        fun newInstance(dateFormatted: String): DatePickerDialogFragment {
+//            val df = DatePickerDialogFragment()
+////            val args = Bundle()
+////            args.putString("dateFormatted", dateFormatted)
+////            df.arguments = args
+//            df.arguments = bundleOf("dateFormatted" to dateFormatted)
+//            return df
+//        }
+//
+////        fun dateListener(manager: FragmentManager, lifecycleOwner: LifecycleOwner, listener: (String) -> Unit) {
+////            manager.setFragmentResultListener("date_request", lifecycleOwner, FragmentResultListener { _, result ->
+////                listener.invoke(result.getString())
+////            })
+////        }
+//    }
 
-    private val viewModel: DatePickerViewModel by viewModels()
-
-//    private var _binding: FragmentDatePickerBinding? = null
-//    private val binding get() = _binding!!
-//    private lateinit var customView: View
-
+        private val viewModel: DatePickerViewModel by viewModels()
+//    private val viewModel: EditTransactionViewModel by viewModels()
     val sdf = SimpleDateFormat("dd.MM.yy", Locale.getDefault())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Timber.d("LOGS onCreate vizvan")
-        dialog?.window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        showsDialog = true
+
+//        viewModel.dateFormatted = arguments?.getString("dateFormatted").toString()
     }
 
-//    override fun onActivityCreated(savedInstanceState: Bundle?) {
-//        super.onActivityCreated(savedInstanceState)
-//        Timber.d("LOGS onActivityCreated vizvan")
-////        dialog?.window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-//    }
-//
-//    override fun onResume() {
-//        super.onResume()
-//        Timber.d("LOGS onResume vizvan")
-////        dialog?.window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-//    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        super.onCreateDialog(savedInstanceState)
         Timber.d("LOGS onCreateDialog vizvan")
 
-//        _binding = FragmentDatePickerBinding.inflate(LayoutInflater.from(context))
-//        customView = binding.root
-//
-//        Timber.d("LOGS customView = $customView")
-
-//        return AlertDialog.Builder(requireContext())
-//            .setTitle(R.string.choose_date)
-//            .setView(customView)
-//            .setNegativeButton(
-//                requireContext().resources.getString(R.string.cancel_action),
-//                null
-//            )
-//            .create()
-
         val dateString = viewModel.dateFormatted
+//        val dateString = viewModel.spendDateFormatted // NEW
+        Timber.d("LOGS Current Date String = $dateString")
         val dateFormatted = SimpleDateFormat("dd.MM.yy", Locale.getDefault()).parse(dateString)
         val calendar = Calendar.getInstance()
         calendar.time = dateFormatted
@@ -80,89 +71,58 @@ class DatePickerDialogFragment : DialogFragment() {
         val todayMonth = calendar.get(Calendar.MONTH)
         val todayDay = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val datePicker =  DatePickerDialog(
+        return DatePickerDialog(
             requireContext(),
-//            R.style.AppTheme_Dialog_MyDialogTheme,
-            { view, year, month, dayOfMonth ->
-                val newCalendar = Calendar.getInstance()
-                newCalendar.set(Calendar.YEAR, year);
-                newCalendar.set(Calendar.MONTH, month);
-                newCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                val newDateString = sdf.format(newCalendar.timeInMillis)
-//                viewModel.dateFormatted = newDateString // это ненадо
-                viewModel.onDateChosen(newDateString)  // это послать в навигейтБэкк уид резалт
-//                Snackbar.make(requireView(), "Date NOT selected but just picked", Snackbar.LENGTH_SHORT)
-//                this.dismiss()
-            }, todayYear, todayMonth, todayDay
+            this,
+            todayYear,
+            todayMonth,
+            todayDay
         )
-
-//        /*val layoutParams = */datePicker.window?.attributes?.width =
-//        layoutParams?.width
-        return datePicker
     }
 
-
-
-//    override fun onCreateView(
-//        inflater: LayoutInflater,
-//        container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        return super.onCreateView(inflater, container, savedInstanceState)
-//        Timber.d("LOGS onCreateView vizvan")
-//        customView = binding.root
-//        return customView
-//    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return super.onCreateView(inflater, container, savedInstanceState)
+        Timber.d("LOGS onCreateView vizvan")
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Timber.d("LOGS onViewCreated vizvan")
-//        val datePicker = binding.datePicker
-//
-//        val dateString = viewModel.dateFormatted
-//        val dateFormatted = SimpleDateFormat("dd.MM.yy", Locale.getDefault()).parse(dateString)
-//        val calendar = Calendar.getInstance()
-//        calendar.time = dateFormatted
-//        val todayYear = calendar.get(Calendar.YEAR)
-//        val todayMonth = calendar.get(Calendar.MONTH)
-//        val todayDay = calendar.get(Calendar.DAY_OF_MONTH)
-//
-//        datePicker.init(todayYear, todayMonth, todayDay, { _, year, month, dayOfMonth ->
-//                val newCalendar = Calendar.getInstance()
-//                newCalendar.set(Calendar.YEAR, year);
-//                newCalendar.set(Calendar.MONTH, month);
-//                newCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-//                val newDateString = sdf.format(newCalendar.timeInMillis)
-////                viewModel.dateFormatted = newDateString // это ненадо
-//                viewModel.onDateChosen(newDateString)  // это послать в навигейтБэкк уид резалт
-////                this.dismiss()
-//            })
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.datePickerEvent.collect {
                 when (it) {
                     is DatePickerViewModel.DatePickerEvent.NavigateBackWithResult -> {
-                        setFragmentResult("date_request", bundleOf("date_result" to it.dateFormatted))
-                        Snackbar.make(requireView(), "Date selected", Snackbar.LENGTH_SHORT)
+                        setFragmentResult(
+                            "date_request",
+                            bundleOf("date_result" to it.dateFormatted)
+                        )
+                        Timber.d("LOGS date selected: ${it.dateFormatted}")
+
                     }
                 }.exhaustive
             }
         }
     }
 
-//    override fun onDateSet(p0: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-//        val newCalendar = Calendar.getInstance()
-//        newCalendar.set(Calendar.YEAR, year);
-//        newCalendar.set(Calendar.MONTH, month);
-//        newCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-//        val newDateString = sdf.format(newCalendar.timeInMillis)
-//        viewModel.onDateChosen(newDateString)
-//    }
-
-//    override fun onDestroyView() {
-//        super.onDestroyView()
-//        _binding = null
-//    }
+    override fun onDateSet(dp: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        val newCalendar = Calendar.getInstance()
+        newCalendar.set(Calendar.YEAR, year);
+        newCalendar.set(Calendar.MONTH, month);
+        newCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        val newDateString = sdf.format(newCalendar.timeInMillis)
+        Timber.d("LOGS New Date String = $newDateString")
+        viewModel.dateFormatted = newDateString
+        Timber.d("LOGS new viewmodel.dateFormatted = ${viewModel.dateFormatted}")
+        viewModel.onDateChosen(newDateString)
+//        viewModel.spendDateFormatted = newDateString
+//        Timber.d("LOGS new viewmodel.spendDateFormatted = ${viewModel.spendDateFormatted}")
+        this.dismiss()
+    }
 }
 
 
