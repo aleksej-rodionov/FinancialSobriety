@@ -1,15 +1,13 @@
 package space.rodionov.financialsobriety.ui.transaction.edittransaction
 
-import android.app.DatePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -25,13 +23,9 @@ import java.util.*
 
 @AndroidEntryPoint
 class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
-
     private val viewModel: EditTransactionViewModel by viewModels()
-
     private lateinit var binding: FragmentEditTransactionBinding
-
     private val sdf = SimpleDateFormat("dd.MM.yy", Locale.getDefault())
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,38 +33,40 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
         binding = FragmentEditTransactionBinding.bind(view)
         Timber.d("LOGS MainFragment viewModel.spendDateFormatted = ${viewModel.spendDateFormatted}")
 
-//        dialog?.window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-
         binding.apply {
+            viewModel.spendDateFormatted.observe(viewLifecycleOwner) {
+                tvDate.setText(it)
+            }
             etTransactionSum.setText(viewModel.spendSum.toString())
+            viewModel.spendCategoryName.observe(viewLifecycleOwner) {
+                tvCategory.setText(it)
+            }
             etTransactionComment.setText(viewModel.spendComment)
-            tvCategory.text =
-                if (viewModel.spendCategoryName.isNotBlank()) viewModel.spendCategoryName else "Category"
+            viewModel.debtReduced.observe(viewLifecycleOwner) {
+                tvCutDebt.text = if (!it.toString().isBlank()) "Cut down debt: $it" else "Is it debt repayment?"
+            }
 
-//            if (viewModel.spend != null) {
-                tvDate.text = viewModel.spendDateFormatted.value
-//            } else {
-//                viewModel.spendDateFormatted = sdf.format(System.currentTimeMillis())
-//                tvDate.text = viewModel.spendDateFormatted
-//            }
-            tvCategory.text = viewModel.spendCategoryName
 
-            cvIsDebt.isVisible = viewModel.spend == null
+            //===========LISTENERS=================================
 
+            ivDate.setOnClickListener {
+                viewModel.onChooseDateClick()
+            }
             etTransactionSum.addTextChangedListener {
                 if (!it.toString().isBlank()) viewModel.spendSum = it.toString().toFloat() else 0f
+            }
+            layoutChooseCategory.setOnClickListener {
+                viewModel.onChooseCategoryClick()
             }
             etTransactionComment.addTextChangedListener {
                 viewModel.spendComment = it.toString()
             }
-
-            ivDate.setOnClickListener {
-                viewModel.onDatePickerShow()
+            layoutChooseDebt.setOnClickListener {
+                viewModel.onChooseDebtClick()
             }
 
-            layoutChooseCategory.setOnClickListener {
-                viewModel.onChooseCategoryClick()
-            }
+
+
 
             fabSave.setOnClickListener {
                 viewModel.onSaveClick()
@@ -94,19 +90,15 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
                         Snackbar.make(requireView(), it.msg, Snackbar.LENGTH_LONG).show()
                     }
                     is EditTransactionViewModel.EditTransactionEvent.NavigateToChooseCategoryScreen -> {
-                        val action =
-                            EditTransactionFragmentDirections.actionGlobalChooseCategoryDialogFragment(
-                                it.catName
-                            )
-                        findNavController().navigate(action)
+                        ChooseCategoryDialogFragment().show(childFragmentManager, ChooseCategoryDialogFragment.TAG)
                     }
                     is EditTransactionViewModel.EditTransactionEvent.NavigateToDatePickerDialog -> {
-                        val action = EditTransactionFragmentDirections.actionGlobalDatePickerDialogFragment(it.dateFormatted)
-                        findNavController().navigate(action)
-//                        val dialog = DatePickerDialogFragment.newInstance(it.dateFormatted)
-//                        dialog.show(parentFragmentManager, DatePickerDialogFragment.TAG)
+                        DatePickerDialogFragment().show(childFragmentManager, DatePickerDialogFragment.TAG)
                     }
-                }.exhaustive // чтобы не забыть все Эвенты обработать.
+                    is EditTransactionViewModel.EditTransactionEvent.NavigateToChooseDebtScreen -> {
+                        ChooseDebtDialogFragment().show(childFragmentManager, ChooseDebtDialogFragment.TAG)
+                    }
+                }.exhaustive
             }
         }
     }

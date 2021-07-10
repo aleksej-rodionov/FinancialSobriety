@@ -14,9 +14,9 @@
         />
 
     <item
-        android:id="@+id/debtsFragment"
-        android:title="Долги"
-        android:icon="@drawable/ic_debt"
+        android:id="@+id/categoriesFragment"
+        android:title="Категории"
+        android:icon="@drawable/ic_categories"
         />
 
     <item

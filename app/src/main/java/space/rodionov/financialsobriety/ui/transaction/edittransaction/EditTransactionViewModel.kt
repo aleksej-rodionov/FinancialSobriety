@@ -2,11 +2,14 @@ package space.rodionov.financialsobriety.ui.transaction.edittransaction
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import space.rodionov.financialsobriety.data.Category
+import space.rodionov.financialsobriety.data.Debt
 import space.rodionov.financialsobriety.data.FinRepository
 import space.rodionov.financialsobriety.data.Spend
 import space.rodionov.financialsobriety.ui.ADD_TRANSACTION_RESULT_OK
@@ -25,6 +28,12 @@ class EditTransactionViewModel @Inject constructor(
 
     private val editTransactionEventChannel = Channel<EditTransactionEvent>()
     val editTransactionEvent = editTransactionEventChannel.receiveAsFlow()
+
+    val categories = repo.getAllCategories().asLiveData()
+    val debts = repo.getAllDebts().asLiveData()
+
+
+    //==========SAVED STATE HANDLE===========================================
 
     val spend = state.get<Spend>("spend")
 
@@ -46,7 +55,7 @@ class EditTransactionViewModel @Inject constructor(
 
     var debtReduced = state.getLiveData("debtReduced", "")
 
-    
+
 
     //=======================================================================
 
@@ -76,31 +85,31 @@ class EditTransactionViewModel @Inject constructor(
 
     // ==============================================
 
-    fun onDatePickerShow() = viewModelScope.launch {
-        editTransactionEventChannel.send(EditTransactionEvent.NavigateToDatePickerDialog(spendDateFormatted.value ?: sdf.format(System.currentTimeMillis())))
-    }
-
-    fun onChooseCategoryClick() = viewModelScope.launch {
-        editTransactionEventChannel.send(EditTransactionEvent.NavigateToChooseCategoryScreen(spendCategoryName.value))
-    }
-
-    fun onCatNameResult(resultCatName: String?) = viewModelScope.launch {
-        spendCategoryName.value = resultCatName ?: ""
-        if (resultCatName == null) {
-            Timber.d("LOGS resultCatName is NULL")
-        } else {
-            Timber.d("LOGS resultCanName is $resultCatName")
-        }
+    fun onChooseDateClick() = viewModelScope.launch {
+        editTransactionEventChannel.send(EditTransactionEvent.NavigateToDatePickerDialog) // EVENT
     }
 
     fun onDateResult(resultDate: String?) = viewModelScope.launch {
-        spendDateFormatted.value = resultDate ?: sdf.format(System.currentTimeMillis())
-        if (resultDate == null) {
-            Timber.d("LOGS resultDate is NULL")
-        } else {
-            Timber.d("LOGS resultDate is $resultDate")
-        }
+        spendDateFormatted.value = resultDate
     }
+
+    fun onChooseCategoryClick() = viewModelScope.launch {
+        editTransactionEventChannel.send(EditTransactionEvent.NavigateToChooseCategoryScreen) // EVENT
+    }
+
+    fun onCategoryResult(resultCategory: Category?) = viewModelScope.launch {
+        spendCategoryName.value = resultCategory?.catName ?: "Choose category"
+    }
+
+    fun onChooseDebtClick() = viewModelScope.launch {
+        editTransactionEventChannel.send(EditTransactionEvent.NavigateToChooseDebtScreen) // EVENT
+    }
+
+    fun onDebtResult(resultDebt: Debt) {
+        debtReduced.value = resultDebt?.debtName ?: ""
+    }
+
+
 
     private fun updateSpend(spend: Spend) = viewModelScope.launch {
         repo.updateSpend(spend)
@@ -126,8 +135,9 @@ class EditTransactionViewModel @Inject constructor(
 
     // these events are in Event cause only Fragment can show a snackbar or execute navigation events:
     sealed class EditTransactionEvent {
-        data class NavigateToDatePickerDialog(val dateFormatted: String) : EditTransactionEvent()
-        data class NavigateToChooseCategoryScreen(val catName: String?) : EditTransactionEvent()
+        object NavigateToDatePickerDialog : EditTransactionEvent()
+        object NavigateToChooseCategoryScreen : EditTransactionEvent()
+        object NavigateToChooseDebtScreen : EditTransactionEvent()
         data class ShowInvalidInputMessage(val msg: String) : EditTransactionEvent()
         data class NavigateBackWithResult(val result: Int) : EditTransactionEvent()
     }

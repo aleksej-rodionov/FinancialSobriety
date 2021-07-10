@@ -6,5 +6,9 @@
     <string name="yes">Yes</string>
     <string name="no_transactions">There is no transactions</string>
     <string name="choose_category">Choose category</string>
+    <string name="choose_debt">Choose debt</string>
     <string name="choose_date">Choose date</string>
+    <string name="have_already_debt_with_such_name">You already have debt with such name</string>
+    <string name="have_already_category_with_such_name">You already have category with such name</string>
+    <string name="no_categories">There is no categories</string>
 </resources>

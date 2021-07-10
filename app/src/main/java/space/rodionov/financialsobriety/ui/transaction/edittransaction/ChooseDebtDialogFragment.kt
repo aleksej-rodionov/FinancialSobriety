@@ -12,27 +12,27 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import space.rodionov.financialsobriety.R
-import space.rodionov.financialsobriety.data.Category
+import space.rodionov.financialsobriety.data.Debt
 import space.rodionov.financialsobriety.databinding.FragmentDialogRecyclerBinding
+import timber.log.Timber
 
 @AndroidEntryPoint
-class ChooseCategoryDialogFragment : DialogFragment(), ChooseCategoryAdapter.OnItemClickListener {
-
+class ChooseDebtDialogFragment : DialogFragment(), ChooseDebtAdapter.OnDebtItemClickListener {
     companion object {
-        const val TAG = "ChooseCategoryDialog"
+        const val TAG = "ChooseDebtDialog"
     }
-
     private val viewModel: EditTransactionViewModel by viewModels({ requireParentFragment() })
     private var _binding: FragmentDialogRecyclerBinding? = null
     private val binding get() = _binding!!
-    private lateinit var chooseCatAdapter: ChooseCategoryAdapter
+    private lateinit var chooseDebtAdapter: ChooseDebtAdapter
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)
+        Timber.d("LOGS onCreateDialog vizvan")
         _binding = FragmentDialogRecyclerBinding.inflate(LayoutInflater.from(context))
 
         return AlertDialog.Builder(requireContext())
-            .setTitle(requireContext().resources.getString(R.string.choose_category))
+            .setTitle(requireContext().resources.getString(R.string.choose_debt))
             .setView(binding.root)
             .setNegativeButton(requireContext().resources.getString(R.string.cancel_action), null)
             .create()
@@ -44,32 +44,36 @@ class ChooseCategoryDialogFragment : DialogFragment(), ChooseCategoryAdapter.OnI
         savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
-
+        Timber.d("LOGS onCreateView vizvan")
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val category = viewModel.spendCategoryName.value
-        chooseCatAdapter = ChooseCategoryAdapter(this, category)
+        Timber.d("LOGS onViewCreated vizvan")
+
+        val debt = viewModel.debtReduced.value
+        chooseDebtAdapter = ChooseDebtAdapter(this, debt)
 
         binding.apply {
             recyclerView.apply {
-                viewModel.categories.observe(viewLifecycleOwner) {
-                    chooseCatAdapter.submitList(it)
+                viewModel.debts.observe(viewLifecycleOwner) {
+                    chooseDebtAdapter.submitList(it)
 
                     tvNoItems.isVisible = it.size == 0
                 }
+                adapter = chooseDebtAdapter
                 layoutManager = LinearLayoutManager(requireContext())
-                adapter = chooseCatAdapter
                 setHasFixedSize(true)
             }
         }
+
+
     }
 
-    override fun onItemClick(category: Category) {
-        viewModel.onCategoryResult(category)
+    override fun onItemClick(debt: Debt) {
+        viewModel.onDebtResult(debt)
         this.dismiss()
     }
 
@@ -78,16 +82,6 @@ class ChooseCategoryDialogFragment : DialogFragment(), ChooseCategoryAdapter.OnI
         _binding = null
     }
 }
-
-
-
-
-
-
-
-
-
-
 
 
 

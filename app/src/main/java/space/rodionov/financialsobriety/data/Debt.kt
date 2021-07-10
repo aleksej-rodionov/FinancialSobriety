@@ -5,19 +5,14 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
-@Entity(tableName = "category_table")
+@Entity(tableName = "debt_table")
 @Parcelize
-class Category(
-    val catName: String,
-    val catType: TransactionType,
-    @PrimaryKey(autoGenerate = true) val catId: Int = 0
+data class Debt(
+    var debtName: String,
+    var debtSum: Float,
+    @PrimaryKey(autoGenerate = true) val debtId: Int = 0
 ) : Parcelable {
-
     override fun toString(): String {
-        return catName
+        return "$debtName (-$debtSum)"
     }
-}
-
-enum class TransactionType {
-    INCOME, OUTCOME
 }

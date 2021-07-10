@@ -9,7 +9,7 @@ import space.rodionov.financialsobriety.di.ApplicationScope
 import javax.inject.Inject
 import javax.inject.Provider
 
-@Database(entities = [Spend::class, Category::class], version = 1, exportSchema = false)
+@Database(entities = [Spend::class, Category::class, Debt::class], version = 1, exportSchema = false)
 abstract class FinDatabase : RoomDatabase() {
 
     abstract fun finDao() : FinDao
@@ -25,12 +25,12 @@ abstract class FinDatabase : RoomDatabase() {
             val dao = database.get().finDao()
 
             applicationScope.launch {
-                dao.insertCategory(Category("Food"))
-                dao.insertCategory(Category("Transport"))
-                dao.insertCategory(Category("Communitaion"))
-                dao.insertCategory(Category("Healthcare"))
-                dao.insertCategory(Category("Other"))
-                dao.insertCategory(Category("Brother"))
+                dao.insertCategory(Category("Food", TransactionType.OUTCOME))
+                dao.insertCategory(Category("Transport", TransactionType.OUTCOME))
+                dao.insertCategory(Category("Communicaion", TransactionType.OUTCOME))
+                dao.insertCategory(Category("Healthcare", TransactionType.OUTCOME))
+                dao.insertCategory(Category("Other", TransactionType.OUTCOME))
+                dao.insertCategory(Category("Brother", TransactionType.OUTCOME))
 
                 dao.insertSpend(Spend(5267f, "Healthcare", 1623960680, "Элицея и др"))
                 dao.insertSpend(Spend(2202.18f, "Food", 1623777078, null))

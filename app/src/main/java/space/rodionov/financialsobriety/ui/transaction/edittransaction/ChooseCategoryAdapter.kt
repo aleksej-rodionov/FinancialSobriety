@@ -6,15 +6,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import space.rodionov.financialsobriety.data.Category
-import space.rodionov.financialsobriety.databinding.ItemChooseCategoryBinding
+import space.rodionov.financialsobriety.databinding.ItemDialogRecyclerBinding
 
 class ChooseCategoryAdapter(
     private val listener: OnItemClickListener,
-    private val curCatName: String
+    private val curCatName: String?
 ) : ListAdapter<Category, ChooseCategoryAdapter.ChooseCatViewHolder>(ChooseCatComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChooseCatViewHolder {
-        val binding = ItemChooseCategoryBinding.inflate(
+        val binding = ItemDialogRecyclerBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -27,7 +27,7 @@ class ChooseCategoryAdapter(
         holder.bind(curItem)
     }
 
-    inner class ChooseCatViewHolder(private val binding: ItemChooseCategoryBinding) :
+    inner class ChooseCatViewHolder(private val binding: ItemDialogRecyclerBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
@@ -63,11 +63,10 @@ class ChooseCategoryAdapter(
 
     class ChooseCatComparator : DiffUtil.ItemCallback<Category>() {
         override fun areItemsTheSame(oldItem: Category, newItem: Category) =
-            oldItem.catName == newItem.catName
+            oldItem == newItem
 
         override fun areContentsTheSame(oldItem: Category, newItem: Category) =
             oldItem.catName == newItem.catName
-//            oldItem == newItem
     }
 }
 
