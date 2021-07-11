@@ -2,10 +2,12 @@ package space.rodionov.financialsobriety.ui.transaction.edittransaction
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
@@ -15,11 +17,14 @@ import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.data.Category
 import space.rodionov.financialsobriety.databinding.FragmentDialogRecyclerBinding
 
+private const val TAG = "ChooseCategoryDialog LOGS"
+
 @AndroidEntryPoint
 class ChooseCategoryDialogFragment : DialogFragment(), ChooseCategoryAdapter.OnItemClickListener {
 
     companion object {
-        const val TAG = "ChooseCategoryDialog"
+        const val TAG = "chooseCategoryDialog"
+        const val KEY_CAT_LIST = "keyCatList"
     }
 
     private val viewModel: EditTransactionViewModel by viewModels({ requireParentFragment() })
@@ -42,7 +47,7 @@ class ChooseCategoryDialogFragment : DialogFragment(), ChooseCategoryAdapter.OnI
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
 
@@ -54,16 +59,15 @@ class ChooseCategoryDialogFragment : DialogFragment(), ChooseCategoryAdapter.OnI
         val category = viewModel.spendCategoryName.value
         chooseCatAdapter = ChooseCategoryAdapter(this, category)
 
+
         binding.apply {
             recyclerView.apply {
-                viewModel.categories.observe(viewLifecycleOwner) {
-                    chooseCatAdapter.submitList(it)
-
-                    tvNoItems.isVisible = it.size == 0
-                }
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = chooseCatAdapter
-                setHasFixedSize(true)
+            }
+            viewModel.categories.observe(viewLifecycleOwner) {
+                chooseCatAdapter.submitList(it)
+                tvNoItems.isVisible = it.isNullOrEmpty()
             }
         }
     }

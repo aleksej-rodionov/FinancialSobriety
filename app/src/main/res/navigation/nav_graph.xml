@@ -88,7 +88,7 @@
         android:name="space.rodionov.financialsobriety.ui.transaction.edittransaction.ChooseDebtDialogFragment"
         android:label="ChooseDebtDialogFragment" />
     <fragment
-        android:id="@+id/categoriesFragment2"
+        android:id="@+id/categoriesFragment"
         android:name="space.rodionov.financialsobriety.ui.categories.CategoriesFragment"
         android:label="fragment_categories"
         tools:layout="@layout/fragment_categories" />

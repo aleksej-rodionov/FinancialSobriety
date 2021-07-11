@@ -60,12 +60,10 @@ class ChooseDebtDialogFragment : DialogFragment(), ChooseDebtAdapter.OnDebtItemC
             recyclerView.apply {
                 viewModel.debts.observe(viewLifecycleOwner) {
                     chooseDebtAdapter.submitList(it)
-
-                    tvNoItems.isVisible = it.size == 0
+                    tvNoItems.isVisible = it.isNullOrEmpty()
                 }
                 adapter = chooseDebtAdapter
                 layoutManager = LinearLayoutManager(requireContext())
-                setHasFixedSize(true)
             }
         }
 

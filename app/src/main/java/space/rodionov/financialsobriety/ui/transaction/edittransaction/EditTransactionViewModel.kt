@@ -6,6 +6,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import space.rodionov.financialsobriety.data.Category
@@ -31,6 +32,7 @@ class EditTransactionViewModel @Inject constructor(
 
     val categories = repo.getAllCategories().asLiveData()
     val debts = repo.getAllDebts().asLiveData()
+
 
 
     //==========SAVED STATE HANDLE===========================================
@@ -94,7 +96,7 @@ class EditTransactionViewModel @Inject constructor(
     }
 
     fun onChooseCategoryClick() = viewModelScope.launch {
-        editTransactionEventChannel.send(EditTransactionEvent.NavigateToChooseCategoryScreen) // EVENT
+        editTransactionEventChannel.send(EditTransactionEvent.NavigateToChooseCategoryScreen/*(categories.value!!)*/) // EVENT
     }
 
     fun onCategoryResult(resultCategory: Category?) = viewModelScope.launch {
