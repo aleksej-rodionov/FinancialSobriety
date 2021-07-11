@@ -41,6 +41,8 @@ class MainActivity : AppCompatActivity() {
 
 const val ADD_TRANSACTION_RESULT_OK = Activity.RESULT_FIRST_USER
 const val EDIT_TRANSACTION_RESULT_OK = Activity.RESULT_FIRST_USER + 1
+const val ADD_CATEGORY_RESULT_OK = Activity.RESULT_FIRST_USER + 2
+const val EDIT_CATEGORY_RESULT_OK = Activity.RESULT_FIRST_USER + 3
 
 
 

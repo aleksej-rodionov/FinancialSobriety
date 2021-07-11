@@ -27,7 +27,7 @@
     <fragment
         android:id="@+id/transactionsFragment"
         android:name="space.rodionov.financialsobriety.ui.transaction.TransactionsFragment"
-        android:label="fragment_transactions"
+        android:label="My transactions"
         tools:layout="@layout/fragment_transactions" />
     <fragment
         android:id="@+id/editTransactionFragment"
@@ -90,6 +90,24 @@
     <fragment
         android:id="@+id/categoriesFragment"
         android:name="space.rodionov.financialsobriety.ui.categories.CategoriesFragment"
-        android:label="fragment_categories"
-        tools:layout="@layout/fragment_categories" />
+        android:label="Categories"
+        tools:layout="@layout/fragment_categories">
+        <action
+            android:id="@+id/action_categoriesFragment_to_editCategoryFragment"
+            app:destination="@id/editCategoryFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/editCategoryFragment"
+        android:name="space.rodionov.financialsobriety.ui.categories.EditCategoryFragment"
+        android:label="{title}"
+        tools:layout="@layout/fragment_edit_category">
+        <argument
+            android:name="category"
+            android:defaultValue="@null"
+            app:argType="space.rodionov.financialsobriety.data.Category"
+            app:nullable="true" />
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </dialog>
 </navigation>

@@ -3,25 +3,25 @@
 
     <item
         android:id="@+id/frontFragment"
-        android:title="Домашняя"
+        android:title="Home"
         android:icon="@drawable/ic_home"
         />
 
     <item
         android:id="@+id/transactionsFragment"
-        android:title="История"
+        android:title="Journal"
         android:icon="@drawable/ic_book"
         />
 
     <item
         android:id="@+id/categoriesFragment"
-        android:title="Категории"
+        android:title="Categories"
         android:icon="@drawable/ic_categories"
         />
 
     <item
         android:id="@+id/balanceFragment"
-        android:title="Баланс"
+        android:title="Balance"
         android:icon="@drawable/ic_balance"
         />
 

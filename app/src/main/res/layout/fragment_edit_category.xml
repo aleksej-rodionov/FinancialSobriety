@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".ui.categories.EditCategoryFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="24dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enter category name and type"
+            android:textSize="24sp"
+            android:textAlignment="center"
+            android:padding="16dp"
+            android:textColor="@color/blue"
+            android:textStyle="italic"
+            android:layout_marginVertical="24dp"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="8dp"
+            app:cardCornerRadius="6dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_debt_name"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Category name"
+                android:layout_marginTop="3dp"
+                android:textColorHint="?android:textColorHint"
+                app:layout_constraintBottom_toBottomOf="@+id/spFromCurrency"
+                app:layout_constraintEnd_toStartOf="@+id/spFromCurrency"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/spFromCurrency">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_debt_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="22sp"
+                    android:background="@color/white"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:padding="10dp"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+        </androidx.cardview.widget.CardView>
+
+        <Switch
+            android:id="@+id/switch_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="120dp"
+            android:layout_marginTop="36dp"
+            android:text="Type of transactions"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:paddingHorizontal="30dp"
+            android:buttonTint="#FFFFFF"
+            android:foregroundTint="#FFFFFF"
+            android:thumbTint="@color/blue"/>
+
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="32dp"
+        android:src="@drawable/ic_check"
+        app:backgroundTint="@color/blue"
+        app:borderWidth="0dp"
+        app:tint="@color/white" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
