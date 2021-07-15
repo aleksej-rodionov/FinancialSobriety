@@ -2,12 +2,10 @@ package space.rodionov.financialsobriety.ui.transaction.edittransaction
 
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
@@ -56,7 +54,7 @@ class ChooseCategoryDialogFragment : DialogFragment(), ChooseCategoryAdapter.OnI
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val category = viewModel.spendCategoryName.value
+        val category = viewModel.tCategoryName.value
         chooseCatAdapter = ChooseCategoryAdapter(this, category)
 
 

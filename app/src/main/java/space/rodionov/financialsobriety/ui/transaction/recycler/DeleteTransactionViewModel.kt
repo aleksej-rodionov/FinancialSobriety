@@ -6,7 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import space.rodionov.financialsobriety.data.FinRepository
-import space.rodionov.financialsobriety.data.Spend
+import space.rodionov.financialsobriety.data.Transaction
 import space.rodionov.financialsobriety.di.ApplicationScope
 import javax.inject.Inject
 
@@ -17,10 +17,10 @@ class DeleteTransactionViewModel @Inject constructor(
     private val state: SavedStateHandle
 ) : ViewModel() {
 
-    val spend = state.get<Spend>("spend")
+    val transaction = state.get<Transaction>("transaction")
 
-    fun onConfirmClick(spend: Spend) = applicationScope.launch {
-        repo.deleteSpend(spend)
+    fun onConfirmClick(transaction: Transaction) = applicationScope.launch {
+        repo.deleteSpend(transaction)
     }
 
 }

@@ -20,8 +20,8 @@ class DeleteTransactionDialogFragment : DialogFragment() {
             .setMessage(requireContext().resources.getString(R.string.really_delete_transaction))
             .setNegativeButton(requireContext().resources.getString(R.string.cancel_action), null)
             .setPositiveButton(requireContext().resources.getString(R.string.yes)) { _, _ ->
-                if (viewModel.spend != null) {
-                    viewModel.onConfirmClick(viewModel.spend!!)
+                if (viewModel.transaction != null) {
+                    viewModel.onConfirmClick(viewModel.transaction!!)
                 } else {
                     Timber.d("The Spend? id currently null")
                 }

@@ -3,6 +3,7 @@ package space.rodionov.financialsobriety.ui.categories
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -12,7 +13,6 @@ import kotlinx.coroutines.flow.collect
 import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.data.Category
 import space.rodionov.financialsobriety.databinding.FragmentCategoriesBinding
-import space.rodionov.financialsobriety.databinding.FragmentDialogRecyclerBinding
 import space.rodionov.financialsobriety.util.exhaustive
 
 @AndroidEntryPoint
@@ -44,6 +44,11 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories),
             catAdapter.submitList(it)
         }
 
+        setFragmentResultListener("add_edit_request") { _, bundle ->
+            val result = bundle.getInt("add_edit_result")
+            viewModel.onAddEditResult(result)
+        }
+
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.categoriesEvent.collect {
                 when (it) {
@@ -55,7 +60,14 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories),
                             )
                         findNavController().navigate(action)
                     }
-                    is CategoriesViewModel.CategoriesEvent.NavigateToEditCatScreen -> TODO()
+                    is CategoriesViewModel.CategoriesEvent.NavigateToEditCatScreen -> {
+                        val action =
+                            CategoriesFragmentDirections.actionCategoriesFragmentToEditCategoryFragment(
+                                it.category,
+                                "Edit category"
+                            )
+                        findNavController().navigate(action)
+                    }
                     is CategoriesViewModel.CategoriesEvent.ShowCatSavedConfirmMessage -> TODO()
                     is CategoriesViewModel.CategoriesEvent.ShowUndoDeleteCatMessage -> TODO()
                 }.exhaustive
@@ -63,9 +75,8 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories),
         }
     }
 
-
     override fun onItemClick(category: Category) {
-        TODO("Not yet implemented")
+        viewModel.onCatItemClick(category)
     }
 
     override fun onDestroyView() {

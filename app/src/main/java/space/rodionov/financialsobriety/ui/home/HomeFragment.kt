@@ -11,6 +11,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import space.rodionov.financialsobriety.R
+import space.rodionov.financialsobriety.data.TransactionType
 import space.rodionov.financialsobriety.databinding.FragmentHomeBinding
 import space.rodionov.financialsobriety.util.exhaustive
 
@@ -35,6 +36,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             fabAddSpend.setOnClickListener {
                 viewModel.onAddSpendClick()
             }
+
+            fabAddIncome.setOnClickListener {
+                viewModel.onAddIncomeClick()
+            }
         }
 
         setFragmentResultListener("add_edit_result") { _, bundle ->
@@ -46,11 +51,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             viewModel.homeEvent.collect {
                 when (it) {
                     is HomeViewModel.HomeEvent.NavigateToAddSpendScreen -> {
-                        val action = HomeFragmentDirections.actionHomeFragmentToEditTransactionFragment(null, "Новая транзакция")
+                        val action = HomeFragmentDirections.actionHomeFragmentToEditTransactionFragment(null, "Новая транзакция", TransactionType.OUTCOME.name)
                         findNavController().navigate(action)
                     }
                     is HomeViewModel.HomeEvent.ShowTransactionSavedConfirmationMessage -> {
                         Snackbar.make(requireView(), it.msg, Snackbar.LENGTH_SHORT).show()
+                    }
+                    is HomeViewModel.HomeEvent.NavigateToAddIncomeScreen -> {
+                        val action = HomeFragmentDirections.actionHomeFragmentToEditTransactionFragment(null, "Новая транзакция", TransactionType.INCOME.name)
+                        findNavController().navigate(action)
                     }
                 }.exhaustive
             }

@@ -60,7 +60,7 @@
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
-            app:cardCornerRadius="8dp">
+            app:cardCornerRadius="4dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -133,7 +133,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="28dp"
-            app:cardCornerRadius="8dp">
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="4dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -206,7 +209,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="28dp"
-            app:cardCornerRadius="8dp">
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="4dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"

@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import space.rodionov.financialsobriety.data.Category
 import space.rodionov.financialsobriety.data.FinRepository
+import space.rodionov.financialsobriety.ui.ADD_CATEGORY_RESULT_OK
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,6 +28,20 @@ class CategoriesViewModel @Inject constructor(
         categoriesEventChannel.send(CategoriesEvent.NavigateToAddCatScreen)
     }
 
+    fun onCatItemClick(category: Category) = viewModelScope.launch {
+        categoriesEventChannel.send(CategoriesEvent.NavigateToEditCatScreen(category))
+    }
+
+    fun onAddEditResult(result: Int) {
+        when (result) {
+            ADD_CATEGORY_RESULT_OK -> showCatSavedConfirmSnackbar("Category saved")
+            ADD_CATEGORY_RESULT_OK -> showCatSavedConfirmSnackbar("Category updated")
+        }
+    }
+
+    private fun showCatSavedConfirmSnackbar(msg: String) = viewModelScope.launch {
+        CategoriesEvent.ShowCatSavedConfirmMessage(msg)
+    }
 
     sealed class CategoriesEvent {
         object NavigateToAddCatScreen : CategoriesEvent()

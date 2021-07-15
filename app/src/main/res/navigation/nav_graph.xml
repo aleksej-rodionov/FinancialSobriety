@@ -28,26 +28,36 @@
         android:id="@+id/transactionsFragment"
         android:name="space.rodionov.financialsobriety.ui.transaction.TransactionsFragment"
         android:label="My transactions"
-        tools:layout="@layout/fragment_transactions" />
+        tools:layout="@layout/fragment_transactions" >
+        <action
+            android:id="@+id/action_transactionsFragment_to_editTransactionFragment"
+            app:destination="@id/editTransactionFragment" />
+    </fragment>
     <fragment
         android:id="@+id/editTransactionFragment"
         android:name="space.rodionov.financialsobriety.ui.transaction.edittransaction.EditTransactionFragment"
         android:label="{title}"
         tools:layout="@layout/fragment_edit_transaction">
         <argument
-            android:name="spend"
-            android:defaultValue="@null"
-            app:argType="space.rodionov.financialsobriety.data.Spend"
+            android:name="transaction"
+            app:argType="space.rodionov.financialsobriety.data.Transaction"
             app:nullable="true" />
         <argument
             android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="type"
             app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/recyclerTransactionsFragment"
         android:name="space.rodionov.financialsobriety.ui.transaction.recycler.RecyclerTransactionsFragment"
         android:label="fragment_transactions_recycler"
-        tools:layout="@layout/fragment_transactions_recycler" />
+        tools:layout="@layout/fragment_transactions_recycler" >
+        <action
+            android:id="@+id/action_recyclerTransactionsFragment_to_editTransactionFragment"
+            app:destination="@id/editTransactionFragment" />
+    </fragment>
     <fragment
         android:id="@+id/calendarTransactionsFragment"
         android:name="space.rodionov.financialsobriety.ui.transaction.calendar.CalendarTransactionsFragment"
@@ -56,15 +66,6 @@
         android:id="@+id/diagramTransactionsFragment"
         android:name="space.rodionov.financialsobriety.ui.transaction.diagram.DiagramTransactionsFragment"
         android:label="DiagramTransactionsFragment" />
-    <dialog
-        android:id="@+id/deleteTransactionDialogFragment"
-        android:name="space.rodionov.financialsobriety.ui.transaction.recycler.DeleteTransactionDialogFragment"
-        android:label="DeleteTransactionDialogFragment" >
-        <argument
-            android:name="spend"
-            app:argType="space.rodionov.financialsobriety.data.Spend" />
-    </dialog>
-    <action android:id="@+id/action_global_deleteTransactionDialogFragment" app:destination="@id/deleteTransactionDialogFragment" />
     <dialog
         android:id="@+id/chooseCategoryDialogFragment"
         android:name="space.rodionov.financialsobriety.ui.transaction.edittransaction.ChooseCategoryDialogFragment"
@@ -99,7 +100,7 @@
     <dialog
         android:id="@+id/editCategoryFragment"
         android:name="space.rodionov.financialsobriety.ui.categories.EditCategoryFragment"
-        android:label="{title}"
+        android:label="Edit category"
         tools:layout="@layout/fragment_edit_category">
         <argument
             android:name="category"

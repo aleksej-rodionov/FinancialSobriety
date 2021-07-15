@@ -6,16 +6,11 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import space.rodionov.financialsobriety.data.Category
-import space.rodionov.financialsobriety.data.Debt
-import space.rodionov.financialsobriety.data.FinRepository
-import space.rodionov.financialsobriety.data.Spend
+import space.rodionov.financialsobriety.data.*
 import space.rodionov.financialsobriety.ui.ADD_TRANSACTION_RESULT_OK
 import space.rodionov.financialsobriety.ui.EDIT_TRANSACTION_RESULT_OK
-import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -25,7 +20,7 @@ class EditTransactionViewModel @Inject constructor(
     private val repo: FinRepository,
     private val state: SavedStateHandle
 ) : ViewModel() {
-    private val sdf = SimpleDateFormat("dd.MM.yy", Locale.getDefault())
+//    private val sdf = SimpleDateFormat("dd.MM.yy", Locale.getDefault())
 
     private val editTransactionEventChannel = Channel<EditTransactionEvent>()
     val editTransactionEvent = editTransactionEventChannel.receiveAsFlow()
@@ -36,20 +31,21 @@ class EditTransactionViewModel @Inject constructor(
 
 
     //==========SAVED STATE HANDLE===========================================
+    val tType = state.get<String>("type")
 
-    val spend = state.get<Spend>("spend")
+    val transaction = state.get<Transaction>("transaction")
 
-    var spendDateFormatted = state.getLiveData("spendDateFormatted", spend?.dateFormatted ?: sdf.format(System.currentTimeMillis()))
+    var tDateFormatted = state.getLiveData("spendDateFormatted", transaction?.dateFormatted ?: sdf.format(System.currentTimeMillis()))
 
-    var spendSum = state.get<Float>("spendSum") ?: spend?.sum ?: 0f
+    var tSum = state.get<Float>("spendSum") ?: transaction?.sum ?: 0f
         set(value) {
             field = value
             state.set("spendSum", value)
         }
 
-    var spendCategoryName = state.getLiveData("spendCategoryName", spend?.categoryName ?: "Other")
+    var tCategoryName = state.getLiveData("spendCategoryName", transaction?.categoryName ?: "Other")
 
-    var spendComment = state.get<String?>("spendComment") ?: spend?.comment ?: ""
+    var tComment = state.get<String?>("spendComment") ?: transaction?.comment ?: ""
         set(value) {
             field = value
             state.set("spendComment", value)
@@ -62,23 +58,23 @@ class EditTransactionViewModel @Inject constructor(
     //=======================================================================
 
     fun onSaveClick() {
-        if (spendSum.equals(0f) || spendSum.toString().isBlank() || spendCategoryName.value.isNullOrBlank()) {
-            showInvalidInputMessage("Укажите сумму и категорию") // EVENT caller
+        if (tSum.equals(0f) || tSum.toString().isBlank() || tCategoryName.value.isNullOrBlank()) {
+            showInvalidInputMessage("Enter sum and category") // EVENT caller
             return
         }
         val calendar = Calendar.getInstance()
-        calendar.time = sdf.parse(spendDateFormatted.value)
+        calendar.time = sdf.parse(tDateFormatted.value)
 
-        if (spend != null) {
-            val updatedSpend = spend.copy(
-                sum = spendSum,
-                categoryName = spendCategoryName.value,
+        if (transaction != null) {
+            val updatedSpend = transaction.copy(
+                sum = tSum,
+                categoryName = tCategoryName.value,
                 timestamp = calendar.timeInMillis / 1000,
-                comment = spendComment
+                comment = tComment
             )
             updateSpend(updatedSpend) // EVENT caller
         } else {
-            val newSpend = Spend(spendSum, spendCategoryName.value, calendar.timeInMillis / 1000, spendComment)
+            val newSpend = Transaction(tSum, tCategoryName.value, calendar.timeInMillis / 1000, tComment)
             insertSpend(newSpend) // EVENT caller
         }
     }
@@ -92,7 +88,7 @@ class EditTransactionViewModel @Inject constructor(
     }
 
     fun onDateResult(resultDate: String?) = viewModelScope.launch {
-        spendDateFormatted.value = resultDate
+        tDateFormatted.value = resultDate
     }
 
     fun onChooseCategoryClick() = viewModelScope.launch {
@@ -100,7 +96,7 @@ class EditTransactionViewModel @Inject constructor(
     }
 
     fun onCategoryResult(resultCategory: Category?) = viewModelScope.launch {
-        spendCategoryName.value = resultCategory?.catName ?: "Choose category"
+        tCategoryName.value = resultCategory?.catName ?: "Choose category"
     }
 
     fun onChooseDebtClick() = viewModelScope.launch {
@@ -113,8 +109,8 @@ class EditTransactionViewModel @Inject constructor(
 
 
 
-    private fun updateSpend(spend: Spend) = viewModelScope.launch {
-        repo.updateSpend(spend)
+    private fun updateSpend(transaction: Transaction) = viewModelScope.launch {
+        repo.updateSpend(transaction)
         editTransactionEventChannel.send(
             EditTransactionEvent.NavigateBackWithResult(
                 EDIT_TRANSACTION_RESULT_OK
@@ -122,8 +118,8 @@ class EditTransactionViewModel @Inject constructor(
         ) // EVENT
     }
 
-    private fun insertSpend(spend: Spend) = viewModelScope.launch {
-        repo.insertSpend(spend)
+    private fun insertSpend(transaction: Transaction) = viewModelScope.launch {
+        repo.insertSpend(transaction)
         editTransactionEventChannel.send(
             EditTransactionEvent.NavigateBackWithResult(
                 ADD_TRANSACTION_RESULT_OK

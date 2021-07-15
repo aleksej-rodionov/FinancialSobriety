@@ -16,14 +16,27 @@ class HomeViewModel @Inject constructor(
     private val repo: FinRepository
 ) : ViewModel() {
 
+
+
+
+    //==================EVENT CHANNEL AND SEALED CLASS==================
     private val homeEventChannel = Channel<HomeEvent>()
     val homeEvent = homeEventChannel.receiveAsFlow()
 
+    sealed class HomeEvent {
+        object NavigateToAddSpendScreen : HomeEvent()
+        object NavigateToAddIncomeScreen : HomeEvent()
+        data class ShowTransactionSavedConfirmationMessage(val msg: String) : HomeEvent()
+    }
 
-
+    //========================================METHODS===================================
 
     fun onAddSpendClick() = viewModelScope.launch {
         homeEventChannel.send(HomeEvent.NavigateToAddSpendScreen)
+    }
+
+    fun onAddIncomeClick() = viewModelScope.launch {
+        homeEventChannel.send(HomeEvent.NavigateToAddIncomeScreen)
     }
 
     fun onAddEditResult(result: Int) {
@@ -37,10 +50,7 @@ class HomeViewModel @Inject constructor(
         homeEventChannel.send(HomeEvent.ShowTransactionSavedConfirmationMessage(text))
     }
 
-    sealed class HomeEvent {
-        object NavigateToAddSpendScreen : HomeEvent()
-        data class ShowTransactionSavedConfirmationMessage(val msg: String) : HomeEvent()
-    }
+
 
 }
 

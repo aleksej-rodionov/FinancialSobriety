@@ -5,13 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import space.rodionov.financialsobriety.data.Spend
-import space.rodionov.financialsobriety.databinding.FragmentTransactionsRecyclerBinding
+import space.rodionov.financialsobriety.data.Transaction
 import space.rodionov.financialsobriety.databinding.ItemTransactionBinding
 
 class RecyclerTransactionAdapter(
     private val listener: OnItemClickListener
-) : ListAdapter<Spend, RecyclerTransactionAdapter.RecTransViewHolder>(RecTransComparator()) {
+) : ListAdapter<Transaction, RecyclerTransactionAdapter.RecTransViewHolder>(RecTransComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecTransViewHolder {
         val binding = ItemTransactionBinding.inflate(
@@ -39,34 +38,25 @@ class RecyclerTransactionAdapter(
                         listener.onItemClick(spend)
                     }
                 }
-                root.setOnLongClickListener {
-                    val position = adapterPosition
-                    if (position != RecyclerView.NO_POSITION) {
-                        val spend = getItem(position)
-                        listener.onItemLongClick(spend)
-                    }
-                    return@setOnLongClickListener true
-                }
             }
         }
 
-        fun bind(spend: Spend) {
+        fun bind(transaction: Transaction) {
             binding.apply {
-                tvCategory.text = spend.categoryName
-                tvComment.text = spend.comment
-                tvSum.text = spend.sum.toString()
+                tvCategory.text = transaction.categoryName
+                tvComment.text = transaction.comment
+                tvSum.text = transaction.sum.toString()
             }
         }
     }
 
     interface OnItemClickListener {
-        fun onItemClick(spend: Spend)
-        fun onItemLongClick(spend: Spend)
+        fun onItemClick(transaction: Transaction)
     }
 
-    class RecTransComparator : DiffUtil.ItemCallback<Spend>() {
-        override fun areItemsTheSame(oldItem: Spend, newItem: Spend) = oldItem.id == newItem.id
+    class RecTransComparator : DiffUtil.ItemCallback<Transaction>() {
+        override fun areItemsTheSame(oldItem: Transaction, newItem: Transaction) = oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: Spend, newItem: Spend) = oldItem == newItem
+        override fun areContentsTheSame(oldItem: Transaction, newItem: Transaction) = oldItem == newItem
     }
 }

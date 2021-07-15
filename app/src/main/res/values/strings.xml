@@ -4,7 +4,7 @@
     <string name="confirm_deletion">Confirm deletion</string>
     <string name="cancel_action">Cancel</string>
     <string name="yes">Yes</string>
-    <string name="no_transactions">There is no transactions</string>
+    <string name="no_items">There is no items</string>
     <string name="choose_category">Choose category</string>
     <string name="choose_debt">Choose debt</string>
     <string name="choose_date">Choose date</string>

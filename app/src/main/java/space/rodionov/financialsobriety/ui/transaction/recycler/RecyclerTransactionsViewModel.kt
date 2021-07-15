@@ -1,6 +1,5 @@
 package space.rodionov.financialsobriety.ui.transaction.recycler
 
-import androidx.hilt.Assisted
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,7 +10,9 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import space.rodionov.financialsobriety.data.FinRepository
-import space.rodionov.financialsobriety.data.Spend
+import space.rodionov.financialsobriety.data.Transaction
+import space.rodionov.financialsobriety.ui.ADD_TRANSACTION_RESULT_OK
+import space.rodionov.financialsobriety.ui.EDIT_TRANSACTION_RESULT_OK
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,35 +33,51 @@ class RecyclerTransactionsViewModel @Inject constructor(
 
 
 
-    fun onUndoDeleteClick(spend: Spend) = viewModelScope.launch {
-        repo.insertSpend(spend)
+    fun onUndoDeleteClick(transaction: Transaction) = viewModelScope.launch {
+        repo.insertSpend(transaction)
     }
 
 
     //=======================================================================================
 
-    fun onTransactionSelected(spend: Spend) = viewModelScope.launch {
-        recTransEventChannel.send(RecTransEvent.NavigateToEditTransactionScreen(spend))
+    fun onTransactionSelected(transaction: Transaction) = viewModelScope.launch {
+        recTransEventChannel.send(RecTransEvent.NavigateToEditTransactionScreen(transaction))
     }
 
-    fun onDeleteTransaction(spend: Spend) = viewModelScope.launch {
-        recTransEventChannel.send(RecTransEvent.NavigateToDeleteTransactionScreen(spend))
-    }
-
-    fun onTransactionDeleted(spend: Spend) = viewModelScope.launch {
-        repo.deleteSpend(spend)
-        recTransEventChannel.send(RecTransEvent.ShowUndoDeleteTransactionMessage(spend))
+    fun onTransactionDeleted(transaction: Transaction) = viewModelScope.launch {
+        repo.deleteSpend(transaction)
+        recTransEventChannel.send(RecTransEvent.ShowUndoDeleteTransactionMessage(transaction))
     }
 
     fun addTransaction() = viewModelScope.launch {
         recTransEventChannel.send(RecTransEvent.NavigateToAddTransactionScreen)
     }
 
+    fun onAddEditResult(result: Int) {
+        when (result) {
+            EDIT_TRANSACTION_RESULT_OK -> showEditTransConfirmSnackbar("Transaction successfully edited")
+            ADD_TRANSACTION_RESULT_OK -> showEditTransConfirmSnackbar("Transaction successfully added")
+        }
+    }
+
+    private fun showEditTransConfirmSnackbar(msg: String) = viewModelScope.launch {
+        recTransEventChannel.send(RecTransEvent.ShowEditTransConfirmMsg(msg))
+    }
+
+    fun onTransSwiped(transaction: Transaction) = viewModelScope.launch {
+        repo.deleteSpend(transaction)
+        recTransEventChannel.send(RecTransEvent.ShowUndoDeleteTransactionMessage(transaction))
+    }
+
+    fun undoDeleteClick(transaction: Transaction) = viewModelScope.launch {
+        repo.insertSpend(transaction)
+    }
+
     sealed class RecTransEvent {
         object NavigateToAddTransactionScreen : RecTransEvent()
-        data class NavigateToEditTransactionScreen(val spend: Spend) : RecTransEvent()
-        data class ShowUndoDeleteTransactionMessage(val spend: Spend) : RecTransEvent()
-        data class NavigateToDeleteTransactionScreen(val spend: Spend) : RecTransEvent()
+        data class NavigateToEditTransactionScreen(val transaction: Transaction) : RecTransEvent()
+        data class ShowUndoDeleteTransactionMessage(val transaction: Transaction) : RecTransEvent()
+        data class ShowEditTransConfirmMsg(val msg: String) : RecTransEvent()
     }
 }
 

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
@@ -15,33 +14,37 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import space.rodionov.financialsobriety.R
+import space.rodionov.financialsobriety.databinding.FragmentEditCategoryBinding
 import space.rodionov.financialsobriety.databinding.FragmentEditTransactionBinding
 import space.rodionov.financialsobriety.util.exhaustive
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
+private const val TAG = "EditTransactionFragment"
+
 @AndroidEntryPoint
 class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
     private val viewModel: EditTransactionViewModel by viewModels()
-    private lateinit var binding: FragmentEditTransactionBinding
-    private val sdf = SimpleDateFormat("dd.MM.yy", Locale.getDefault())
+//    private lateinit var binding: FragmentEditTransactionBinding
+    private var _binding: FragmentEditTransactionBinding? = null
+    private val binding get() = _binding!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding = FragmentEditTransactionBinding.bind(view)
-        Timber.d("LOGS MainFragment viewModel.spendDateFormatted = ${viewModel.spendDateFormatted}")
+        Log.d(TAG, "onViewCreated: viewModel.tType = ${viewModel.tType}")
+        _binding = FragmentEditTransactionBinding.bind(view)
+        Timber.d("LOGS MainFragment viewModel.spendDateFormatted = ${viewModel.tDateFormatted}")
 
         binding.apply {
-            viewModel.spendDateFormatted.observe(viewLifecycleOwner) {
+            viewModel.tDateFormatted.observe(viewLifecycleOwner) {
                 tvDate.setText(it)
             }
-            etTransactionSum.setText(viewModel.spendSum.toString())
-            viewModel.spendCategoryName.observe(viewLifecycleOwner) {
+            etTransactionSum.setText(viewModel.tSum.toString())
+            viewModel.tCategoryName.observe(viewLifecycleOwner) {
                 tvCategory.setText(it)
             }
-            etTransactionComment.setText(viewModel.spendComment)
+            etTransactionComment.setText(viewModel.tComment)
             viewModel.debtReduced.observe(viewLifecycleOwner) {
                 tvCutDebt.text = if (!it.toString().isBlank()) "Cut down debt: $it" else "Is it debt repayment?"
             }
@@ -53,13 +56,13 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
                 viewModel.onChooseDateClick()
             }
             etTransactionSum.addTextChangedListener {
-                if (!it.toString().isBlank()) viewModel.spendSum = it.toString().toFloat() else 0f
+                if (!it.toString().isBlank()) viewModel.tSum = it.toString().toFloat() else 0f
             }
             layoutChooseCategory.setOnClickListener {
                 viewModel.onChooseCategoryClick()
             }
             etTransactionComment.addTextChangedListener {
-                viewModel.spendComment = it.toString()
+                viewModel.tComment = it.toString()
             }
             layoutChooseDebt.setOnClickListener {
                 viewModel.onChooseDebtClick()
@@ -103,9 +106,10 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
         }
     }
 
-//    fun onDateResult(newDate: String) {
-//        viewModel.onDateResult(newDate)
-//    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
 
 
