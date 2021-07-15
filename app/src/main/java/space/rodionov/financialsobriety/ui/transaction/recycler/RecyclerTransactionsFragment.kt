@@ -52,8 +52,8 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
                 }
             }
 
-            ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
-            {
+            ItemTouchHelper(object :
+                ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
                 override fun onMove(
                     recyclerView: RecyclerView,
                     viewHolder: RecyclerView.ViewHolder,
@@ -82,16 +82,31 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
             viewModel.recTransEvent.collect { event ->
                 when (event) {
                     is RecyclerTransactionsViewModel.RecTransEvent.NavigateToAddTransactionScreen -> {
-                        val action = TransactionsFragmentDirections.actionTransactionsFragmentToEditTransactionFragment(null, "New transaction", TransactionType.OUTCOME.name)
+                        val action =
+                            TransactionsFragmentDirections.actionTransactionsFragmentToEditTransactionFragment(
+                                null,
+                                "New transaction",
+                                TransactionType.OUTCOME.name
+                            )
                         findNavController().navigate(action)
                     }
                     is RecyclerTransactionsViewModel.RecTransEvent.NavigateToEditTransactionScreen -> {
-                        val action = TransactionsFragmentDirections.actionTransactionsFragmentToEditTransactionFragment(event.transaction, "Edit transaction", event.transaction.type.name)
+                        val action =
+                            TransactionsFragmentDirections.actionTransactionsFragmentToEditTransactionFragment(
+                                event.transaction,
+                                "Edit transaction",
+                                event.transaction.type.name
+                            )
                         findNavController().navigate(action)
                     }
                     is RecyclerTransactionsViewModel.RecTransEvent.ShowUndoDeleteTransactionMessage -> {
-                        Snackbar.make(requireView(), "Transaction deleted for good", Snackbar.LENGTH_LONG)
-                            .setAction("UNDO") { viewModel.undoDeleteClick(event.transaction) }.show()
+                        Snackbar.make(
+                            requireView(),
+                            "Transaction deleted for good",
+                            Snackbar.LENGTH_LONG
+                        )
+                            .setAction("UNDO") { viewModel.undoDeleteClick(event.transaction) }
+                            .show()
                     }
                     is RecyclerTransactionsViewModel.RecTransEvent.ShowEditTransConfirmMsg -> {
                         Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_SHORT).show()

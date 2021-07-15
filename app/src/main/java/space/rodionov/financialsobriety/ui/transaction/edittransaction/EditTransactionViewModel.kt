@@ -29,13 +29,15 @@ class EditTransactionViewModel @Inject constructor(
     val debts = repo.getAllDebts().asLiveData()
 
 
-
     //==========SAVED STATE HANDLE===========================================
-    val tType = state.get<String>("type")
+    val tType = state.get<String>("type") ?: "OUTCOME"
 
     val transaction = state.get<Transaction>("transaction")
 
-    var tDateFormatted = state.getLiveData("spendDateFormatted", transaction?.dateFormatted ?: sdf.format(System.currentTimeMillis()))
+    var tDateFormatted = state.getLiveData(
+        "spendDateFormatted",
+        transaction?.dateFormatted ?: sdf.format(System.currentTimeMillis())
+    )
 
     var tSum = state.get<Float>("spendSum") ?: transaction?.sum ?: 0f
         set(value) {
@@ -54,7 +56,6 @@ class EditTransactionViewModel @Inject constructor(
     var debtReduced = state.getLiveData("debtReduced", "")
 
 
-
     //=======================================================================
 
     fun onSaveClick() {
@@ -70,15 +71,17 @@ class EditTransactionViewModel @Inject constructor(
                 sum = tSum,
                 categoryName = tCategoryName.value,
                 timestamp = calendar.timeInMillis / 1000,
-                comment = tComment
+                comment = tComment,
+                type = enumValueOf(tType)
             )
             updateSpend(updatedSpend) // EVENT caller
         } else {
-            val newSpend = Transaction(tSum, tCategoryName.value, calendar.timeInMillis / 1000, tComment)
+            val newSpend = Transaction(
+                tSum, tCategoryName.value, calendar.timeInMillis / 1000, tComment, enumValueOf(tType)
+            )
             insertSpend(newSpend) // EVENT caller
         }
     }
-
 
 
     // ==============================================
@@ -106,7 +109,6 @@ class EditTransactionViewModel @Inject constructor(
     fun onDebtResult(resultDebt: Debt) {
         debtReduced.value = resultDebt?.debtName ?: ""
     }
-
 
 
     private fun updateSpend(transaction: Transaction) = viewModelScope.launch {
