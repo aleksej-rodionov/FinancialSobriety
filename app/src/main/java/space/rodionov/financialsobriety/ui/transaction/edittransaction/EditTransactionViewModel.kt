@@ -6,6 +6,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import space.rodionov.financialsobriety.data.*
@@ -20,12 +21,12 @@ class EditTransactionViewModel @Inject constructor(
     private val repo: FinRepository,
     private val state: SavedStateHandle
 ) : ViewModel() {
-//    private val sdf = SimpleDateFormat("dd.MM.yy", Locale.getDefault())
 
     private val editTransactionEventChannel = Channel<EditTransactionEvent>()
     val editTransactionEvent = editTransactionEventChannel.receiveAsFlow()
 
     val categories = repo.getAllCategories().asLiveData()
+    fun getCategoriesByType(type: TransactionType) = repo.getCategoriesByType(type).asLiveData()
     val debts = repo.getAllDebts().asLiveData()
 
 
@@ -45,7 +46,7 @@ class EditTransactionViewModel @Inject constructor(
             state.set("spendSum", value)
         }
 
-    var tCategoryName = state.getLiveData("spendCategoryName", transaction?.categoryName ?: "Other")
+    var tCategoryName = state.getLiveData("spendCategoryName", transaction?.categoryName ?: "")
 
     var tComment = state.get<String?>("spendComment") ?: transaction?.comment ?: ""
         set(value) {

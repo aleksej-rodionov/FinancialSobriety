@@ -60,7 +60,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
-                    android:hint="Сумма"
+                    android:hint="Sum"
                     android:textColorHint="?android:textColorHint"
                     app:layout_constraintBottom_toBottomOf="@+id/spFromCurrency"
                     app:layout_constraintEnd_toStartOf="@+id/spFromCurrency"
@@ -117,7 +117,7 @@
                             android:layout_alignParentStart="true"
                             android:layout_toStartOf="@+id/iv_category"
                             android:padding="12dp"
-                            android:text="Категория:"
+                            android:text="Category..."
                             android:textAlignment="textStart"
                             android:textAppearance="@style/TextAppearance.AppCompat"
                             android:textColor="@color/black"
@@ -130,7 +130,7 @@
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="12dp"
                         android:paddingVertical="6dp"
-                        android:text="Выберите категорию"
+                        android:text="Choose category"
                         android:textSize="17sp" />
 
                 </LinearLayout>
@@ -148,7 +148,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
-                    android:hint="Комментарий (необязательно)"
+                    android:hint="Comment (not neccessary)"
                     android:textColorHint="?android:textColorHint"
                     app:layout_constraintBottom_toBottomOf="@+id/spFromCurrency"
                     app:layout_constraintEnd_toStartOf="@+id/spFromCurrency"
@@ -206,7 +206,7 @@
                             android:layout_alignParentStart="true"
                             android:layout_toStartOf="@+id/iv_cut_debt"
                             android:padding="12dp"
-                            android:text="Это погашение долгов?"
+                            android:text="Is debt repayment?"
                             android:textAlignment="textStart"
                             android:textAppearance="@style/TextAppearance.AppCompat"
                             android:textColor="@color/black"
@@ -218,7 +218,7 @@
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="12dp"
                         android:paddingVertical="6dp"
-                        android:text="Уменьшить долг не указываемую сумму"
+                        android:text="Reduce debt by the sum entered"
                         android:textSize="17sp" />
 
                 </LinearLayout>

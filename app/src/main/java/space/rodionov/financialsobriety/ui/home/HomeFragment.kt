@@ -51,14 +51,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             viewModel.homeEvent.collect {
                 when (it) {
                     is HomeViewModel.HomeEvent.NavigateToAddSpendScreen -> {
-                        val action = HomeFragmentDirections.actionHomeFragmentToEditTransactionFragment(null, "Новая транзакция", TransactionType.OUTCOME.name)
+                        val action = HomeFragmentDirections.actionHomeFragmentToEditTransactionFragment(null, "New spending", TransactionType.OUTCOME.name)
                         findNavController().navigate(action)
                     }
                     is HomeViewModel.HomeEvent.ShowTransactionSavedConfirmationMessage -> {
                         Snackbar.make(requireView(), it.msg, Snackbar.LENGTH_SHORT).show()
                     }
                     is HomeViewModel.HomeEvent.NavigateToAddIncomeScreen -> {
-                        val action = HomeFragmentDirections.actionHomeFragmentToEditTransactionFragment(null, "Новая транзакция", TransactionType.INCOME.name)
+                        val action = HomeFragmentDirections.actionHomeFragmentToEditTransactionFragment(null, "New income", TransactionType.INCOME.name)
                         findNavController().navigate(action)
                     }
                 }.exhaustive

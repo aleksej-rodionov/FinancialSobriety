@@ -180,7 +180,7 @@
                     android:layout_alignTop="@+id/tv_income_month"
                     android:layout_alignParentEnd="true"
                     android:text="0,00"
-                    android:textColor="@color/blue"
+                    android:textColor="@color/green"
                     android:textSize="20sp"
                     android:textStyle="italic|bold" />
             </RelativeLayout>
@@ -192,7 +192,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
             android:src="@drawable/ic_add"
-            app:backgroundTint="@color/blue"
+            app:backgroundTint="@color/green"
             app:borderWidth="0dp"
             app:tint="@color/white" />
     </FrameLayout>

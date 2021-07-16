@@ -1,15 +1,20 @@
 package space.rodionov.financialsobriety.ui.transaction.recycler
 
+import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.data.Transaction
+import space.rodionov.financialsobriety.data.TransactionType
 import space.rodionov.financialsobriety.databinding.ItemTransactionBinding
 
 class RecyclerTransactionAdapter(
-    private val listener: OnItemClickListener
+    private val listener: OnItemClickListener,
+    private val context: Context
 ) : ListAdapter<Transaction, RecyclerTransactionAdapter.RecTransViewHolder>(RecTransComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecTransViewHolder {
@@ -46,6 +51,10 @@ class RecyclerTransactionAdapter(
                 tvCategory.text = transaction.categoryName
                 tvComment.text = transaction.comment
                 tvSum.text = transaction.sum.toString()
+                if (transaction.type == TransactionType.INCOME) {
+                    tvSum.setTextColor(context.resources.getColor(R.color.green))
+                    tvSum.text = "+ ${tvSum.text}"
+                }
             }
         }
     }

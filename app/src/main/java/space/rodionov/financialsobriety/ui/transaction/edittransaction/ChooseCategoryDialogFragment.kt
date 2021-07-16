@@ -63,7 +63,7 @@ class ChooseCategoryDialogFragment : DialogFragment(), ChooseCategoryAdapter.OnI
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = chooseCatAdapter
             }
-            viewModel.categories.observe(viewLifecycleOwner) {
+            viewModel.getCategoriesByType(enumValueOf(viewModel.tType)).observe(viewLifecycleOwner) {
                 chooseCatAdapter.submitList(it)
                 tvNoItems.isVisible = it.isNullOrEmpty()
             }

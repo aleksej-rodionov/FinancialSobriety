@@ -20,6 +20,7 @@ import space.rodionov.financialsobriety.data.TransactionType
 import space.rodionov.financialsobriety.databinding.FragmentTransactionsRecyclerBinding
 import space.rodionov.financialsobriety.ui.transaction.TransactionsFragmentDirections
 import space.rodionov.financialsobriety.util.exhaustive
+import java.util.*
 
 @AndroidEntryPoint
 class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_recycler),
@@ -33,7 +34,7 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentTransactionsRecyclerBinding.bind(view)
 
-        val transAdapter = RecyclerTransactionAdapter(this)
+        val transAdapter = RecyclerTransactionAdapter(this, requireContext())
 
         binding.apply {
             recyclerView.apply {
@@ -85,7 +86,7 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
                         val action =
                             TransactionsFragmentDirections.actionTransactionsFragmentToEditTransactionFragment(
                                 null,
-                                "New transaction",
+                                "New spending",
                                 TransactionType.OUTCOME.name
                             )
                         findNavController().navigate(action)
@@ -94,7 +95,7 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
                         val action =
                             TransactionsFragmentDirections.actionTransactionsFragmentToEditTransactionFragment(
                                 event.transaction,
-                                "Edit transaction",
+                                "Edit ${event.transaction.type.name.toLowerCase(Locale.ROOT)}",
                                 event.transaction.type.name
                             )
                         findNavController().navigate(action)
