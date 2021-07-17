@@ -64,7 +64,7 @@ class RecyclerTransactionsViewModel @Inject constructor(
         recTransEventChannel.send(RecTransEvent.ShowEditTransConfirmMsg(msg))
     }
 
-    fun onTransSwiped(transaction: Transaction) = viewModelScope.launch {
+    fun onDeleteTransaction(transaction: Transaction) = viewModelScope.launch {
         repo.deleteSpend(transaction)
         recTransEventChannel.send(RecTransEvent.ShowUndoDeleteTransactionMessage(transaction))
     }

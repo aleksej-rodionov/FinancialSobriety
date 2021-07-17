@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="choose_date">Choose date</string>
+    <string name="undo">UNDO</string>
+    <string name="category_deleted">Category irrevocably deleted</string>
+    <string name="debt_deleted">Debt irrevocably deleted</string>
 </resources>

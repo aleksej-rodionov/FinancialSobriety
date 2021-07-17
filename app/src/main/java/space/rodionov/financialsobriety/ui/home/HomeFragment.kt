@@ -24,22 +24,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding = FragmentHomeBinding.bind(view)
-
         binding.apply {
-
-
-
-
-
-            fabAddSpend.setOnClickListener {
-                viewModel.onAddSpendClick()
-            }
-
-            fabAddIncome.setOnClickListener {
-                viewModel.onAddIncomeClick()
-            }
+            cardViewSpend.setOnClickListener { viewModel.onSpendsClick() }
+            cardViewIncome.setOnClickListener { viewModel.onIncomesClick() }
+            cardViewDebt.setOnClickListener { viewModel.onDebtsClick() }
+            fabAddSpend.setOnClickListener { viewModel.onAddSpendClick() }
+            fabAddIncome.setOnClickListener { viewModel.onAddIncomeClick() }
+            fabAddDebt.setOnClickListener { viewModel.onAddDebtClick() }
         }
 
         setFragmentResultListener("add_edit_result") { _, bundle ->
@@ -48,18 +40,34 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         } // 2-Я ПОЛОВИНА ФРАГМЕНТ РЕЗАЛТА
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.homeEvent.collect {
-                when (it) {
+            viewModel.homeEvent.collect { event ->
+                when (event) {
                     is HomeViewModel.HomeEvent.NavigateToAddSpendScreen -> {
                         val action = HomeFragmentDirections.actionHomeFragmentToEditTransactionFragment(null, "New spending", TransactionType.OUTCOME.name)
                         findNavController().navigate(action)
                     }
-                    is HomeViewModel.HomeEvent.ShowTransactionSavedConfirmationMessage -> {
-                        Snackbar.make(requireView(), it.msg, Snackbar.LENGTH_SHORT).show()
-                    }
                     is HomeViewModel.HomeEvent.NavigateToAddIncomeScreen -> {
                         val action = HomeFragmentDirections.actionHomeFragmentToEditTransactionFragment(null, "New income", TransactionType.INCOME.name)
                         findNavController().navigate(action)
+                    }
+                    is HomeViewModel.HomeEvent.NavigateToAddDebtScreen -> {
+                        val action = HomeFragmentDirections.actionFrontFragmentToEditDebtFragment("New debt", null)
+                    }
+                    is HomeViewModel.HomeEvent.NavigateToSpendsScreen -> {
+                        val action =
+                            HomeFragmentDirections.actionFrontFragmentToTransactionsFragment() // ADD ONLY SPENDS VARIABLE
+                        findNavController().navigate(action)
+                    }
+                    is HomeViewModel.HomeEvent.NavigateToIncomesScreen -> {
+                        val action = HomeFragmentDirections.actionFrontFragmentToTransactionsFragment() // ADD ONLY INCOMES VARIABLE
+                        findNavController().navigate(action)
+                    }
+                    is HomeViewModel.HomeEvent.NavigateToDebtsScreen -> {
+                        val action = HomeFragmentDirections.actionFrontFragmentToDebtsFragment()
+                        findNavController().navigate(action)
+                    }
+                    is HomeViewModel.HomeEvent.ShowTransactionSavedConfirmationMessage -> {
+                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_SHORT).show()
                     }
                 }.exhaustive
             }

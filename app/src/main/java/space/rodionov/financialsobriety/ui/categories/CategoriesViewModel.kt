@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import space.rodionov.financialsobriety.data.Category
 import space.rodionov.financialsobriety.data.FinRepository
 import space.rodionov.financialsobriety.ui.ADD_CATEGORY_RESULT_OK
+import space.rodionov.financialsobriety.ui.EDIT_CATEGORY_RESULT_OK
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,11 +19,20 @@ class CategoriesViewModel @Inject constructor(
 ) : ViewModel() {
     val categories = repo.getAllCategories().asLiveData()
 
+
+    //=================EVENT CHANNEL================================
+
     private val categoriesEventChannel = Channel<CategoriesEvent>() // SEALED_EVENT 2,
     val categoriesEvent = categoriesEventChannel.receiveAsFlow()
 
+    sealed class CategoriesEvent {
+        object NavigateToAddCatScreen : CategoriesEvent()
+        data class NavigateToEditCatScreen(val category: Category) : CategoriesEvent()
+        data class ShowCatSavedConfirmMessage(val msg: String) : CategoriesEvent()
+        data class ShowUndoDeleteCatMessage(val category: Category) : CategoriesEvent()
+    }
 
-    //=========EVENTS==============================================
+    //=========FUNS==============================================
 
     fun onNewCatClick() = viewModelScope.launch {
         categoriesEventChannel.send(CategoriesEvent.NavigateToAddCatScreen)
@@ -35,7 +45,7 @@ class CategoriesViewModel @Inject constructor(
     fun onAddEditResult(result: Int) {
         when (result) {
             ADD_CATEGORY_RESULT_OK -> showCatSavedConfirmSnackbar("Category saved")
-            ADD_CATEGORY_RESULT_OK -> showCatSavedConfirmSnackbar("Category updated")
+            EDIT_CATEGORY_RESULT_OK -> showCatSavedConfirmSnackbar("Category updated")
         }
     }
 
@@ -43,11 +53,13 @@ class CategoriesViewModel @Inject constructor(
         CategoriesEvent.ShowCatSavedConfirmMessage(msg)
     }
 
-    sealed class CategoriesEvent {
-        object NavigateToAddCatScreen : CategoriesEvent()
-        data class NavigateToEditCatScreen(val category: Category) : CategoriesEvent()
-        data class ShowCatSavedConfirmMessage(val msg: String) : CategoriesEvent()
-        data class ShowUndoDeleteCatMessage(val category: Category) : CategoriesEvent()
+    fun onDeleteCat(category: Category) = viewModelScope.launch {
+        repo.deleteCategory(category)
+        categoriesEventChannel.send(CategoriesEvent.ShowUndoDeleteCatMessage(category))
+    }
+
+    fun onUndoDeleteCat(category: Category) = viewModelScope.launch {
+        repo.insertCategory(category)
     }
 }
 

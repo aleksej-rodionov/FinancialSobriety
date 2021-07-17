@@ -54,7 +54,7 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
             }
 
             ItemTouchHelper(object :
-                ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+                ItemTouchHelper.SimpleCallback(0, /*ItemTouchHelper.LEFT or */ItemTouchHelper.RIGHT) {
                 override fun onMove(
                     recyclerView: RecyclerView,
                     viewHolder: RecyclerView.ViewHolder,
@@ -65,7 +65,7 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     val transaction = transAdapter.currentList[viewHolder.adapterPosition]
-                    viewModel.onTransSwiped(transaction)
+                    viewModel.onDeleteTransaction(transaction)
                 }
             }).attachToRecyclerView(recyclerView)
 

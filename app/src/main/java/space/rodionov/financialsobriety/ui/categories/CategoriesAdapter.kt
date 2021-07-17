@@ -54,9 +54,7 @@ class CategoriesAdapter(
 
         override fun areContentsTheSame(oldItem: Category, newItem: Category) =
             oldItem.catName == newItem.catName
-
     }
-
 }
 
 

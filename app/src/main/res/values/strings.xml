@@ -11,4 +11,7 @@
     <string name="have_already_debt_with_such_name">You already have debt with such name</string>
     <string name="have_already_category_with_such_name">You already have category with such name</string>
     <string name="no_categories">There is no categories</string>
+    <string name="undo">UNDO</string>
+    <string name="category_deleted">Category irrevocably deleted</string>
+    <string name="debt_deleted">Debt irrevocably deleted</string>
 </resources>

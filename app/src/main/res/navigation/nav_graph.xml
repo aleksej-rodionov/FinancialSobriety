@@ -13,17 +13,39 @@
         <action
             android:id="@+id/action_homeFragment_to_editTransactionFragment"
             app:destination="@id/editTransactionFragment" />
+        <action
+            android:id="@+id/action_frontFragment_to_editDebtFragment"
+            app:destination="@id/editDebtFragment" />
+        <action
+            android:id="@+id/action_frontFragment_to_debtsFragment"
+            app:destination="@id/debtsFragment" />
+        <action
+            android:id="@+id/action_frontFragment_to_transactionsFragment"
+            app:destination="@id/transactionsFragment" />
     </fragment>
     <fragment
         android:id="@+id/debtsFragment"
         android:name="space.rodionov.financialsobriety.ui.debt.DebtsFragment"
         android:label="fragment_debts"
-        tools:layout="@layout/fragment_debts" />
+        tools:layout="@layout/fragment_debts" >
+        <action
+            android:id="@+id/action_debtsFragment_to_editDebtFragment"
+            app:destination="@id/editDebtFragment" />
+    </fragment>
     <fragment
         android:id="@+id/editDebtFragment"
         android:name="space.rodionov.financialsobriety.ui.debt.EditDebtFragment"
         android:label="fragment_edit_debt"
-        tools:layout="@layout/fragment_edit_debt" />
+        tools:layout="@layout/fragment_edit_debt" >
+        <argument
+            android:name="title"
+            app:argType="string" />
+        <argument
+            android:name="debt"
+            app:argType="space.rodionov.financialsobriety.data.Debt"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
     <fragment
         android:id="@+id/transactionsFragment"
         android:name="space.rodionov.financialsobriety.ui.transaction.TransactionsFragment"
@@ -53,11 +75,7 @@
         android:id="@+id/recyclerTransactionsFragment"
         android:name="space.rodionov.financialsobriety.ui.transaction.recycler.RecyclerTransactionsFragment"
         android:label="fragment_transactions_recycler"
-        tools:layout="@layout/fragment_transactions_recycler" >
-        <action
-            android:id="@+id/action_recyclerTransactionsFragment_to_editTransactionFragment"
-            app:destination="@id/editTransactionFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_transactions_recycler" />
     <fragment
         android:id="@+id/calendarTransactionsFragment"
         android:name="space.rodionov.financialsobriety.ui.transaction.calendar.CalendarTransactionsFragment"
@@ -75,7 +93,7 @@
             app:argType="string"
             app:nullable="true"
             android:defaultValue="null" />
-    </dialog><action android:id="@+id/action_global_chooseCategoryDialogFragment" app:destination="@id/chooseCategoryDialogFragment"/>
+    </dialog>
     <fragment
         android:id="@+id/datePickerDialogFragment"
         android:name="space.rodionov.financialsobriety.ui.transaction.edittransaction.DatePickerDialogFragment"
@@ -83,7 +101,7 @@
         <argument
             android:name="dateFormatted"
             app:argType="string" />
-    </fragment><action android:id="@+id/action_global_datePickerDialogFragment" app:destination="@id/datePickerDialogFragment"/>
+    </fragment>
     <dialog
         android:id="@+id/chooseDebtDialogFragment"
         android:name="space.rodionov.financialsobriety.ui.transaction.edittransaction.ChooseDebtDialogFragment"

@@ -24,12 +24,28 @@ class HomeViewModel @Inject constructor(
     val homeEvent = homeEventChannel.receiveAsFlow()
 
     sealed class HomeEvent {
+        object NavigateToSpendsScreen : HomeEvent()
+        object NavigateToIncomesScreen : HomeEvent()
+        object NavigateToDebtsScreen : HomeEvent()
         object NavigateToAddSpendScreen : HomeEvent()
         object NavigateToAddIncomeScreen : HomeEvent()
+        object NavigateToAddDebtScreen : HomeEvent()
         data class ShowTransactionSavedConfirmationMessage(val msg: String) : HomeEvent()
     }
 
     //========================================METHODS===================================
+
+    fun onSpendsClick() = viewModelScope.launch {
+        homeEventChannel.send(HomeEvent.NavigateToSpendsScreen)
+    }
+
+    fun onIncomesClick() = viewModelScope.launch {
+        homeEventChannel.send(HomeEvent.NavigateToIncomesScreen)
+    }
+
+    fun onDebtsClick() = viewModelScope.launch {
+        homeEventChannel.send(HomeEvent.NavigateToDebtsScreen)
+    }
 
     fun onAddSpendClick() = viewModelScope.launch {
         homeEventChannel.send(HomeEvent.NavigateToAddSpendScreen)
@@ -39,10 +55,14 @@ class HomeViewModel @Inject constructor(
         homeEventChannel.send(HomeEvent.NavigateToAddIncomeScreen)
     }
 
+    fun onAddDebtClick() = viewModelScope.launch {
+        homeEventChannel.send(HomeEvent.NavigateToAddDebtScreen)
+    }
+
     fun onAddEditResult(result: Int) {
         when (result) {
-            ADD_TRANSACTION_RESULT_OK ->showTransactionSavedConfirmationMessage("Task added")
-            EDIT_TRANSACTION_RESULT_OK ->showTransactionSavedConfirmationMessage("Task updated")
+            ADD_TRANSACTION_RESULT_OK ->showTransactionSavedConfirmationMessage("Transaction added")
+            EDIT_TRANSACTION_RESULT_OK ->showTransactionSavedConfirmationMessage("Transaction updated")
         }
     }
 
