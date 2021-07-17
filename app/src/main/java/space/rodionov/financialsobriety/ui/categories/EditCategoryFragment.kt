@@ -23,7 +23,7 @@ import space.rodionov.financialsobriety.util.exhaustive
 import java.util.*
 
 @AndroidEntryPoint
-class EditCategoryFragment : BottomSheetDialogFragment()/*(R.layout.fragment_edit_category)*/ {
+class EditCategoryFragment : BottomSheetDialogFragment() {
     private val viewModel: EditCategoryViewModel by viewModels()
     private var _binding: FragmentEditCategoryBinding? = null
     private val binding get() = _binding!!

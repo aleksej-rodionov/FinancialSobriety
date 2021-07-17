@@ -52,6 +52,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     }
                     is HomeViewModel.HomeEvent.NavigateToAddDebtScreen -> {
                         val action = HomeFragmentDirections.actionFrontFragmentToEditDebtFragment("New debt", null)
+                        findNavController().navigate(action)
                     }
                     is HomeViewModel.HomeEvent.NavigateToSpendsScreen -> {
                         val action =

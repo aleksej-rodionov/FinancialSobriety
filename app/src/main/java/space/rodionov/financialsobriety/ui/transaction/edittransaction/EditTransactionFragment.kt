@@ -69,7 +69,7 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
                 viewModel.onChooseDateClick()
             }
             etTransactionSum.addTextChangedListener {
-                if (!it.toString().isBlank()) viewModel.tSum = it.toString().toFloat() else 0f
+                if (!it.toString().isBlank()) viewModel.tSum = it.toString().toFloat()
             }
             layoutChooseCategory.setOnClickListener {
                 viewModel.onChooseCategoryClick()

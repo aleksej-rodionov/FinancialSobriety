@@ -18,6 +18,7 @@
                     android:layout_height="wrap_content"
                     android:text="Укажите название (для ясности) и сумму долга/кредита"
                     android:textSize="24sp"
+                    android:id="@+id/tv_title"
                     android:textAlignment="center"
                     android:padding="16dp"
                     android:textColor="@color/blue"
