@@ -31,6 +31,7 @@ class DebtsAdapter(
             binding.apply {
                 tvCategory.text = debt.debtName
                 tvType.text = "Debt"
+                tvSum.text = debt.debtSum.toString()
             }
         }
     }
