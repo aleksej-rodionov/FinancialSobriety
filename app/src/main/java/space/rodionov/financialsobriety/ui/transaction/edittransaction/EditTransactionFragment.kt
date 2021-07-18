@@ -52,14 +52,17 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
                 if (it.isNotBlank()) tvCategory.setText(it)
             }
             etTransactionComment.setText(viewModel.tComment)
-            viewModel.debtReduced.observe(viewLifecycleOwner) {
-                    if (it.isNotBlank()) tvCutDebt.setText("Cut down debt: $it")
-            }
+
 
             if (viewModel.tType == TransactionType.INCOME.name) {
                 etTransactionComment.setTextColor(resources.getColor(R.color.green))
                 etTransactionSum.setTextColor(resources.getColor(R.color.green))
                 fabSave.backgroundTintList = ColorStateList.valueOf(green)
+                layoutChooseDebt.visibility = View.GONE
+            } else {
+                viewModel.debtReduced.observe(viewLifecycleOwner) {
+                    if (it.isNotBlank()) tvCutDebt.setText("Cut down debt: $it")
+                }
             }
 
 

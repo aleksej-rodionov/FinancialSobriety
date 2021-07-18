@@ -9,8 +9,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.data.Category
 import space.rodionov.financialsobriety.databinding.FragmentDialogRecyclerBinding
@@ -63,9 +65,16 @@ class ChooseCategoryDialogFragment : DialogFragment(), ChooseCategoryAdapter.OnI
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = chooseCatAdapter
             }
-            viewModel.getCategoriesByType(enumValueOf(viewModel.tType)).observe(viewLifecycleOwner) {
-                chooseCatAdapter.submitList(it)
-                tvNoItems.isVisible = it.isNullOrEmpty()
+//            viewModel.getCategoriesByType(enumValueOf(viewModel.tType)).observe(viewLifecycleOwner) {
+//                chooseCatAdapter.submitList(it)
+//                tvNoItems.isVisible = it.isNullOrEmpty()
+//            }
+            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                viewModel.getCategoriesByType(enumValueOf(viewModel.tType)).collect {
+                    val catsByType = it ?: return@collect
+                    chooseCatAdapter.submitList(catsByType)
+                    tvNoItems.isVisible = catsByType.isEmpty()
+                }
             }
         }
     }

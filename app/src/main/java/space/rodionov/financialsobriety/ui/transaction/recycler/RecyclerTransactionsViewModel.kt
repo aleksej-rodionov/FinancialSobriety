@@ -22,31 +22,26 @@ class RecyclerTransactionsViewModel @Inject constructor(
     private val state: SavedStateHandle
 ) : ViewModel() {
 
-    private val recTransEventChannel = Channel<RecTransEvent>()
-    val recTransEvent = recTransEventChannel.receiveAsFlow()
-
-
-
-    val spends = repo.getAllSpends()
+    val spends = repo.getAllTransactions()
         .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
 
+//================================EVENT CHANNEL=========================================
 
-
-    fun onUndoDeleteClick(transaction: Transaction) = viewModelScope.launch {
-        repo.insertSpend(transaction)
+    private val recTransEventChannel = Channel<RecTransEvent>()
+    val recTransEvent = recTransEventChannel.receiveAsFlow()
+    sealed class RecTransEvent {
+        object NavigateToAddTransactionScreen : RecTransEvent()
+        data class NavigateToEditTransactionScreen(val transaction: Transaction) : RecTransEvent()
+        data class ShowUndoDeleteTransactionMessage(val transaction: Transaction) : RecTransEvent()
+        data class ShowEditTransConfirmMsg(val msg: String) : RecTransEvent()
     }
 
 
-    //=======================================================================================
+    //===================================METHODS=========================================
 
     fun onTransactionSelected(transaction: Transaction) = viewModelScope.launch {
         recTransEventChannel.send(RecTransEvent.NavigateToEditTransactionScreen(transaction))
-    }
-
-    fun onTransactionDeleted(transaction: Transaction) = viewModelScope.launch {
-        repo.deleteSpend(transaction)
-        recTransEventChannel.send(RecTransEvent.ShowUndoDeleteTransactionMessage(transaction))
     }
 
     fun addTransaction() = viewModelScope.launch {
@@ -71,13 +66,6 @@ class RecyclerTransactionsViewModel @Inject constructor(
 
     fun undoDeleteClick(transaction: Transaction) = viewModelScope.launch {
         repo.insertSpend(transaction)
-    }
-
-    sealed class RecTransEvent {
-        object NavigateToAddTransactionScreen : RecTransEvent()
-        data class NavigateToEditTransactionScreen(val transaction: Transaction) : RecTransEvent()
-        data class ShowUndoDeleteTransactionMessage(val transaction: Transaction) : RecTransEvent()
-        data class ShowEditTransConfirmMsg(val msg: String) : RecTransEvent()
     }
 }
 

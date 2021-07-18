@@ -45,7 +45,7 @@ class EditCategoryFragment : BottomSheetDialogFragment() {
             tvTitle.text = viewModel.title
             etCatName.setText(viewModel.catName)
             switchButton.isChecked = viewModel.catType == TransactionType.INCOME
-            switchButton.text = viewModel.catType.name.capitalize(Locale.getDefault())
+            switchButton.text = viewModel.catType.name.toLowerCase(Locale.getDefault()).capitalize(Locale.getDefault())
 
             //====================LISTENERS================================================
             etCatName.addTextChangedListener {

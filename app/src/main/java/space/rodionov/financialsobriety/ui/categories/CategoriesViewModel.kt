@@ -5,7 +5,9 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import space.rodionov.financialsobriety.data.Category
 import space.rodionov.financialsobriety.data.FinRepository
@@ -17,7 +19,7 @@ import javax.inject.Inject
 class CategoriesViewModel @Inject constructor(
     private val repo: FinRepository
 ) : ViewModel() {
-    val categories = repo.getAllCategories().asLiveData()
+    val categories = repo.getAllCategories().stateIn(viewModelScope, SharingStarted.Lazily, null)
 
 
     //=================EVENT CHANNEL================================

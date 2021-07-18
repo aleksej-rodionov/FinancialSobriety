@@ -7,7 +7,9 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import space.rodionov.financialsobriety.data.*
 import space.rodionov.financialsobriety.ui.ADD_TRANSACTION_RESULT_OK
@@ -25,9 +27,11 @@ class EditTransactionViewModel @Inject constructor(
     private val editTransactionEventChannel = Channel<EditTransactionEvent>()
     val editTransactionEvent = editTransactionEventChannel.receiveAsFlow()
 
-    val categories = repo.getAllCategories().asLiveData()
-    fun getCategoriesByType(type: TransactionType) = repo.getCategoriesByType(type).asLiveData()
-    val debts = repo.getAllDebts().asLiveData()
+    //    fun getCategoriesByType(type: TransactionType) = repo.getCategoriesByType(type).asLiveData()
+    fun getCategoriesByType(type: TransactionType) = repo.getCategoriesByType(type)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
+
+    val debts = repo.getAllDebts().stateIn(viewModelScope, SharingStarted.Lazily, null)
 
 
     //==========SAVED STATE HANDLE===========================================
@@ -78,7 +82,11 @@ class EditTransactionViewModel @Inject constructor(
             updateSpend(updatedSpend) // EVENT caller
         } else {
             val newSpend = Transaction(
-                tSum, tCategoryName.value, calendar.timeInMillis / 1000, tComment, enumValueOf(tType)
+                tSum,
+                tCategoryName.value,
+                calendar.timeInMillis / 1000,
+                tComment,
+                enumValueOf(tType)
             )
             insertSpend(newSpend) // EVENT caller
         }

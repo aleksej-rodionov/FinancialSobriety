@@ -59,8 +59,11 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories),
             }
         }
 
-        viewModel.categories.observe(viewLifecycleOwner) {
-            catAdapter.submitList(it)
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.categories.collect {
+                val cats = it ?: return@collect
+                catAdapter.submitList(cats)
+            }
         }
 
         setFragmentResultListener("add_edit_request") { _, bundle ->

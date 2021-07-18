@@ -11,7 +11,7 @@ class FinRepository @Inject constructor(
 
     //===========================TRANSACTIONS
 
-    fun getAllSpends(): Flow<List<Transaction>> = finDao.getAllSpends()
+    fun getAllTransactions(): Flow<List<Transaction>> = finDao.getAllSpends()
 
     //=========================CATEGORIES===================================
 

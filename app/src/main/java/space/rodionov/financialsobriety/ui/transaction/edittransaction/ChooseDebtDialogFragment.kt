@@ -9,8 +9,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.data.Debt
 import space.rodionov.financialsobriety.databinding.FragmentDialogRecyclerBinding
@@ -58,12 +60,15 @@ class ChooseDebtDialogFragment : DialogFragment(), ChooseDebtAdapter.OnDebtItemC
 
         binding.apply {
             recyclerView.apply {
-                viewModel.debts.observe(viewLifecycleOwner) {
-                    chooseDebtAdapter.submitList(it)
-                    tvNoItems.isVisible = it.isNullOrEmpty()
-                }
                 adapter = chooseDebtAdapter
                 layoutManager = LinearLayoutManager(requireContext())
+            }
+            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                viewModel.debts.collect {
+                    val debts = it ?: return@collect
+                    chooseDebtAdapter.submitList(debts)
+                    tvNoItems.isVisible = debts.isEmpty()
+                }
             }
         }
 
