@@ -43,8 +43,8 @@ abstract class FinDatabase : RoomDatabase() {
                 dao.insertSpend(Transaction(411.9f, "Food", 1623690678, null))
                 dao.insertSpend(Transaction(4060f, "Brother", 1623960680, null))
 
+                dao.insertDebt(Debt("Tinkoff", 57542.27f))
             }
-
         }
     }
 

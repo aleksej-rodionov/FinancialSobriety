@@ -1,13 +1,10 @@
 package space.rodionov.financialsobriety.ui.transaction.edittransaction
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
@@ -15,7 +12,6 @@ import kotlinx.coroutines.launch
 import space.rodionov.financialsobriety.data.*
 import space.rodionov.financialsobriety.ui.ADD_TRANSACTION_RESULT_OK
 import space.rodionov.financialsobriety.ui.EDIT_TRANSACTION_RESULT_OK
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -38,7 +34,7 @@ class EditTransactionViewModel @Inject constructor(
 
 
     //==========SAVED STATE HANDLE===========================================
-    val tType = state.get<String>("type") ?: "OUTCOME"
+    val tType = state.get<String>("type") ?: "Outcome"
 
     val transaction = state.get<Transaction>("transaction")
 
@@ -53,7 +49,7 @@ class EditTransactionViewModel @Inject constructor(
             state.set("spendSum", value)
         }
 
-    var tCategoryName = state.getLiveData("spendCategoryName", transaction?.categoryName ?: "")
+    var tCategoryName = state.getLiveData("spendCategoryName", transaction?.catName ?: "")
 
     var tComment = state.get<String?>("spendComment") ?: transaction?.comment ?: ""
         set(value) {
@@ -77,7 +73,7 @@ class EditTransactionViewModel @Inject constructor(
         if (transaction != null) {
             val updatedSpend = transaction.copy(
                 sum = tSum,
-                categoryName = tCategoryName.value,
+                catName = tCategoryName.value,
                 timestamp = calendar.timeInMillis / 1000,
                 comment = tComment,
                 type = enumValueOf(tType)

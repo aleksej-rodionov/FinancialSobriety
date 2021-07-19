@@ -114,6 +114,9 @@
         <action
             android:id="@+id/action_categoriesFragment_to_editCategoryFragment"
             app:destination="@id/editCategoryFragment" />
+        <action
+            android:id="@+id/action_categoriesFragment_to_deleteCategoryDialog"
+            app:destination="@id/deleteCategoryDialog" />
     </fragment>
     <dialog
         android:id="@+id/editCategoryFragment"
@@ -128,5 +131,16 @@
         <argument
             android:name="title"
             app:argType="string" />
+    </dialog>
+    <dialog
+        android:id="@+id/deleteCategoryDialog"
+        android:name="space.rodionov.financialsobriety.ui.categories.DeleteCategoryDialog"
+        android:label="DeleteCategoryDialog" >
+        <action
+            android:id="@+id/action_deleteCategoryDialog_to_editCategoryFragment"
+            app:destination="@id/editCategoryFragment" />
+        <argument
+            android:name="category"
+            app:argType="space.rodionov.financialsobriety.data.Category" />
     </dialog>
 </navigation>

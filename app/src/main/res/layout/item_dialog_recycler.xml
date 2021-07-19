@@ -23,7 +23,7 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textSize="20sp"/>
+        android:textSize="18sp"/>
 
 
 </RelativeLayout>

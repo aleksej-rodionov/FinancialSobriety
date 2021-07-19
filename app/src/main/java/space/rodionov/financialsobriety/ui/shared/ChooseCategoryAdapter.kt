@@ -1,4 +1,4 @@
-package space.rodionov.financialsobriety.ui.transaction.edittransaction
+package space.rodionov.financialsobriety.ui.shared
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +9,7 @@ import space.rodionov.financialsobriety.data.Category
 import space.rodionov.financialsobriety.databinding.ItemDialogRecyclerBinding
 
 class ChooseCategoryAdapter(
-    private val listener: OnItemClickListener,
+    private val listener: OnCatClickListener,
     private val curCatName: String?
 ) : ListAdapter<Category, ChooseCategoryAdapter.ChooseCatViewHolder>(ChooseCatComparator()) {
 
@@ -57,7 +57,7 @@ class ChooseCategoryAdapter(
         }
     }
 
-    interface OnItemClickListener {
+    interface OnCatClickListener {
         fun onItemClick(category: Category)
     }
 

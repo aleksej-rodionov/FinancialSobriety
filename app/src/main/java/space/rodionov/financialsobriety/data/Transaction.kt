@@ -12,7 +12,7 @@ import java.util.*
 @Parcelize
 data class Transaction(
     var sum: Float,
-    var categoryName: String?,
+    var catName: String?,
     var timestamp: Long = 0L,
     var comment: String?,
     var type: TransactionType = TransactionType.OUTCOME,

@@ -8,9 +8,9 @@ import kotlinx.android.parcel.Parcelize
 @Entity(tableName = "category_table")
 @Parcelize
 data class Category(
+    @PrimaryKey(autoGenerate = false)
     val catName: String,
     val catType: TransactionType,
-    @PrimaryKey(autoGenerate = true) val catId: Int = 0
 ) : Parcelable {
 
     override fun toString(): String {

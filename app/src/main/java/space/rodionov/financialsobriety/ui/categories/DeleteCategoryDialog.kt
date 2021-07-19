@@ -1,4 +1,4 @@
-package space.rodionov.financialsobriety.ui.transaction.edittransaction
+package space.rodionov.financialsobriety.ui.categories
 
 import android.app.Dialog
 import android.os.Bundle
@@ -15,27 +15,19 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.data.Category
-import space.rodionov.financialsobriety.databinding.FragmentDialogRecyclerBinding
+import space.rodionov.financialsobriety.databinding.FragmentDialogCategoryDeletionBinding
 import space.rodionov.financialsobriety.ui.shared.ChooseCategoryAdapter
 
-private const val TAG = "ChooseCategoryDialog LOGS"
-
 @AndroidEntryPoint
-class ChooseCategoryDialogFragment : DialogFragment(), ChooseCategoryAdapter.OnCatClickListener {
-
-    companion object {
-        const val TAG = "chooseCategoryDialog"
-        const val KEY_CAT_LIST = "keyCatList"
-    }
-
-    private val viewModel: EditTransactionViewModel by viewModels({ requireParentFragment() })
-    private var _binding: FragmentDialogRecyclerBinding? = null
+class DeleteCategoryDialog : DialogFragment(), ChooseCategoryAdapter.OnCatClickListener {
+    private val viewModel: DeleteCategoryViewModel by viewModels()
+    private var _binding: FragmentDialogCategoryDeletionBinding? = null
     private val binding get() = _binding!!
     private lateinit var chooseCatAdapter: ChooseCategoryAdapter
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)
-        _binding = FragmentDialogRecyclerBinding.inflate(LayoutInflater.from(context))
+        _binding = FragmentDialogCategoryDeletionBinding.inflate(LayoutInflater.from(context))
 
         return AlertDialog.Builder(requireContext())
             .setTitle(requireContext().resources.getString(R.string.choose_category))
@@ -55,31 +47,39 @@ class ChooseCategoryDialogFragment : DialogFragment(), ChooseCategoryAdapter.OnC
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val category = viewModel.tCategoryName.value
-        chooseCatAdapter = ChooseCategoryAdapter(this, category)
+        val catName = viewModel.categoryName.value
+        val catType = viewModel.categoryType.value ?: "Outcome"
+        chooseCatAdapter = ChooseCategoryAdapter(this, catName)
 
         binding.apply {
             recyclerView.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = chooseCatAdapter
             }
-//            viewModel.getCategoriesByType(enumValueOf(viewModel.tType)).observe(viewLifecycleOwner) {
-//                chooseCatAdapter.submitList(it)
-//                tvNoItems.isVisible = it.isNullOrEmpty()
-//            }
+
             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                viewModel.getCategoriesByType(enumValueOf(viewModel.tType)).collect {
+                viewModel.getCategoriesByType(enumValueOf(catType)).collect {
                     val catsByType = it ?: return@collect
                     chooseCatAdapter.submitList(catsByType)
-                    tvNoItems.isVisible = catsByType.isEmpty()
                 }
+            }
+
+            layoutNewCategory.setOnClickListener {
+
+            }
+
+            layoutDeleteAllContent.setOnClickListener {
+
+            }
+
+            layoutCancelDeletion.setOnClickListener {
+                this@DeleteCategoryDialog.dismiss()
             }
         }
     }
 
     override fun onItemClick(category: Category) {
-        viewModel.onCategoryResult(category)
-        this.dismiss()
+        TODO("Not yet implemented")
     }
 
     override fun onDestroyView() {
@@ -87,17 +87,3 @@ class ChooseCategoryDialogFragment : DialogFragment(), ChooseCategoryAdapter.OnC
         _binding = null
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

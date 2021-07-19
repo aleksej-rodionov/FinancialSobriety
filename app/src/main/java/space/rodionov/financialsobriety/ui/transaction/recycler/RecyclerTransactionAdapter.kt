@@ -1,7 +1,6 @@
 package space.rodionov.financialsobriety.ui.transaction.recycler
 
 import android.content.Context
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -48,7 +47,7 @@ class RecyclerTransactionAdapter(
 
         fun bind(transaction: Transaction) {
             binding.apply {
-                tvCategory.text = transaction.categoryName
+                tvCategory.text = transaction.catName
                 tvComment.text = transaction.comment
                 tvSum.text = transaction.sum.toString()
                 if (transaction.type == TransactionType.INCOME) {
