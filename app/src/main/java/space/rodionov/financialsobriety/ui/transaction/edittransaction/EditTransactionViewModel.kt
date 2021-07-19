@@ -1,5 +1,6 @@
 package space.rodionov.financialsobriety.ui.transaction.edittransaction
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -17,6 +18,8 @@ import space.rodionov.financialsobriety.ui.EDIT_TRANSACTION_RESULT_OK
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+
+private const val TAG = "EditTransViewModl TAGS"
 
 @HiltViewModel
 class EditTransactionViewModel @Inject constructor(
@@ -116,9 +119,12 @@ class EditTransactionViewModel @Inject constructor(
     }
 
     fun onDebtResult(resultDebt: Debt) {
-        debtReduced.value = resultDebt?.debtName ?: ""
+        debtReduced.value = resultDebt.debtName
     }
 
+    fun onClearDebt() {
+        debtReduced.value = ""
+    }
 
     private fun updateSpend(transaction: Transaction) = viewModelScope.launch {
         repo.updateSpend(transaction)

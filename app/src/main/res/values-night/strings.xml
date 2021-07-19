@@ -4,4 +4,5 @@
     <string name="undo">UNDO</string>
     <string name="category_deleted">Category irrevocably deleted</string>
     <string name="debt_deleted">Debt irrevocably deleted</string>
+    <string name="debts">Debts</string>
 </resources>

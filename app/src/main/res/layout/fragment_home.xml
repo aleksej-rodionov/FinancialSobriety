@@ -74,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:text="Траты"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="19sp" />
 
                 <TextView
                     android:id="@+id/tv_currency"
@@ -94,7 +94,7 @@
                     android:layout_below="@id/tv_spends"
                     android:layout_marginTop="8dp"
                     android:text="За июнь:"
-                    android:textSize="18sp"
+                    android:textSize="17sp"
                     android:textStyle="italic" />
 
                 <TextView
@@ -150,7 +150,7 @@
                     android:layout_height="wrap_content"
                     android:text="Доходы"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="19sp" />
 
                 <TextView
                     android:id="@+id/tv_income_currency"
@@ -170,7 +170,7 @@
                     android:layout_below="@id/tv_income"
                     android:layout_marginTop="8dp"
                     android:text="За июнь:"
-                    android:textSize="19sp"
+                    android:textSize="17sp"
                     android:textStyle="italic" />
 
                 <TextView
@@ -226,7 +226,7 @@
                     android:layout_height="wrap_content"
                     android:text="Долги"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="19sp" />
 
                 <TextView
                     android:id="@+id/tv_debt_currency"
@@ -246,7 +246,7 @@
                     android:layout_below="@id/tv_debt"
                     android:layout_marginTop="8dp"
                     android:text="За июнь:"
-                    android:textSize="18sp"
+                    android:textSize="17sp"
                     android:textStyle="italic" />
 
                 <TextView

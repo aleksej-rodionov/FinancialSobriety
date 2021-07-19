@@ -2,6 +2,7 @@ package space.rodionov.financialsobriety.ui.transaction.edittransaction
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +22,7 @@ import timber.log.Timber
 @AndroidEntryPoint
 class ChooseDebtDialogFragment : DialogFragment(), ChooseDebtAdapter.OnDebtItemClickListener {
     companion object {
-        const val TAG = "ChooseDebtDialog"
+        const val TAG = "ChooseDebtDialog LOGS"
     }
     private val viewModel: EditTransactionViewModel by viewModels({ requireParentFragment() })
     private var _binding: FragmentDialogRecyclerBinding? = null
@@ -75,8 +76,13 @@ class ChooseDebtDialogFragment : DialogFragment(), ChooseDebtAdapter.OnDebtItemC
 
     }
 
-    override fun onItemClick(debt: Debt) {
+    override fun onDebtChosen(debt: Debt) {
         viewModel.onDebtResult(debt)
+        this.dismiss()
+    }
+
+    override fun onDebtCancelled() {
+        viewModel.onClearDebt()
         this.dismiss()
     }
 

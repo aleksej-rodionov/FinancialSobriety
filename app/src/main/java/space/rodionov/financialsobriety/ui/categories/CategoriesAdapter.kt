@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import space.rodionov.financialsobriety.data.Category
 import space.rodionov.financialsobriety.databinding.ItemCategoryBinding
+import java.util.*
 
 class CategoriesAdapter(
     private val listener: OnItemClickListener,
@@ -29,7 +30,7 @@ class CategoriesAdapter(
         fun bind(category: Category) {
             binding.apply {
                 tvCategory.text = category.catName
-                tvType.text = category.catType.name
+                tvType.text = category.catType.name.toLowerCase(Locale.ROOT).capitalize(Locale.ROOT)
             }
         }
     }

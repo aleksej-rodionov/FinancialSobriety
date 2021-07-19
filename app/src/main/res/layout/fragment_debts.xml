@@ -19,7 +19,7 @@
             android:text="Общая сумма долгов: 0.00 RUB"
             android:textAlignment="center"
             android:textColor="@color/blue"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textStyle="italic" />
 
         <androidx.recyclerview.widget.RecyclerView

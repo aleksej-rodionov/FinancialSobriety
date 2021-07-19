@@ -7,14 +7,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import space.rodionov.financialsobriety.data.Category
 import space.rodionov.financialsobriety.data.Debt
-import space.rodionov.financialsobriety.databinding.ItemCategoryBinding
+import space.rodionov.financialsobriety.databinding.ItemDebtBinding
 import space.rodionov.financialsobriety.ui.categories.CategoriesAdapter
 
 class DebtsAdapter(
     private val listener: OnDebtClickListener,
 ) : ListAdapter<Debt, DebtsAdapter.DebtsViewHolder>(DebtsComparator()){
 
-    inner class DebtsViewHolder(private val binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class DebtsViewHolder(private val binding: ItemDebtBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
             binding.apply {
                 root.setOnClickListener {
@@ -29,15 +29,14 @@ class DebtsAdapter(
 
         fun bind(debt: Debt) {
             binding.apply {
-                tvCategory.text = debt.debtName
-                tvType.text = "Debt"
-                tvSum.text = debt.debtSum.toString()
+                tvDebtName.text = debt.debtName
+                tvDebtSum.text = debt.debtSum.toString()
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DebtsViewHolder {
-        val binding = ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemDebtBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return DebtsViewHolder(binding)
     }
 

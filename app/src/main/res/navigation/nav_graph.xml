@@ -26,7 +26,7 @@
     <fragment
         android:id="@+id/debtsFragment"
         android:name="space.rodionov.financialsobriety.ui.debt.DebtsFragment"
-        android:label="fragment_debts"
+        android:label="@string/debts"
         tools:layout="@layout/fragment_debts" >
         <action
             android:id="@+id/action_debtsFragment_to_editDebtFragment"

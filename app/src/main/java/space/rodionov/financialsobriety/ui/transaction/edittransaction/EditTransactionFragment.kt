@@ -37,11 +37,9 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "onViewCreated: viewModel.tType = ${viewModel.tType}")
         _binding = FragmentEditTransactionBinding.bind(view)
 
-        var green = Color.parseColor(resources.getString(0 + R.color.green))
-        Log.d(TAG, "onViewCreated: green = rarseColor(${resources.getString(0 + R.color.green)})")
+        val green = Color.parseColor(resources.getString(0 + R.color.green))
 
         binding.apply {
             viewModel.tDateFormatted.observe(viewLifecycleOwner) {
@@ -61,7 +59,7 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
                 layoutChooseDebt.visibility = View.GONE
             } else {
                 viewModel.debtReduced.observe(viewLifecycleOwner) {
-                    if (it.isNotBlank()) tvCutDebt.setText("Cut down debt: $it")
+                    if (it.isNotBlank()) tvCutDebt.setText("Cut down debt: $it") else tvCutDebt.setText("No debt chosen")
                 }
             }
 

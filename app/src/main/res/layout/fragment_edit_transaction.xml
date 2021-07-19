@@ -206,7 +206,7 @@
                             android:layout_alignParentStart="true"
                             android:layout_toStartOf="@+id/iv_cut_debt"
                             android:padding="12dp"
-                            android:text="Is debt repayment?"
+                            android:text="No debt chosen"
                             android:textAlignment="textStart"
                             android:textAppearance="@style/TextAppearance.AppCompat"
                             android:textColor="@color/black"
@@ -218,7 +218,7 @@
                         android:layout_height="wrap_content"
                         android:paddingHorizontal="12dp"
                         android:paddingVertical="6dp"
-                        android:text="Reduce debt by the sum entered"
+                        android:text="You can reduce debt by the sum entered. For this, choose the debt."
                         android:textSize="17sp" />
 
                 </LinearLayout>
