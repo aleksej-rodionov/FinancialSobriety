@@ -14,13 +14,22 @@ interface FinDao {
     @Query("SELECT * FROM category_table WHERE catName = :catName")
     fun getCatWithTransactions(catName: String) : Flow<List<CategoryWithTransactions>>
 
-    //===============================GET CATEGORIES==========================
+    @Query("DELETE FROM spend_table WHERE catName = :catName")
+    suspend fun deleteTransactionsByCat(catName: String)
+
+    //===============================CATEGORIES==========================
 
     @Query("SELECT * FROM category_table ORDER BY catType DESC")
     fun getAllCategories(): Flow<List<Category>>
 
     @Query("SELECT * FROM category_table WHERE catType = :type ORDER BY catName")
     fun getCategoriesByType(type: String): Flow<List<Category>>
+
+    @Query("SELECT * FROM category_table WHERE catType = :type AND catName != :catName ORDER BY catName")
+    fun getCategoriesByTypeExcept(type: String, catName: String): Flow<List<Category>>
+
+    @Query("DELETE FROM category_table WHERE catName = :catName")
+    suspend fun deleteCatByName(catName: String)
 
     //==================================GET DEBTS============================
 

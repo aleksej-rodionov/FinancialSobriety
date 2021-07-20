@@ -9,14 +9,17 @@ class FinRepository @Inject constructor(
 ) {
     private val finDao = finDb.finDao()
 
-    //===========================TRANSACTIONS
+    //===========================TRANSACTIONS==============================
 
     fun getAllTransactions(): Flow<List<Transaction>> = finDao.getAllSpends()
+    suspend fun deleteTransactionsByCat(catName: String) = finDao.deleteTransactionsByCat(catName)
 
     //=========================CATEGORIES===================================
 
     fun getAllCategories(): Flow<List<Category>> = finDao.getAllCategories()
     fun getCategoriesByType(type: TransactionType): Flow<List<Category>> = finDao.getCategoriesByType(type.name)
+    fun getCategoriesByTypeExcept(type: TransactionType, catName: String): Flow<List<Category>> = finDao.getCategoriesByTypeExcept(type.name, catName)
+    suspend fun deleteCatByName(catName: String) = finDao.deleteCatByName(catName)
 
     //=========================DEBTS===================================
 

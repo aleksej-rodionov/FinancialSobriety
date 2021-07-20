@@ -1,6 +1,7 @@
 package space.rodionov.financialsobriety.ui.categories
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -17,6 +18,8 @@ import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.data.Category
 import space.rodionov.financialsobriety.databinding.FragmentCategoriesBinding
 import space.rodionov.financialsobriety.util.exhaustive
+
+private const val TAG = "CategoriesFragment LOGS"
 
 @AndroidEntryPoint
 class CategoriesFragment : Fragment(R.layout.fragment_categories),
@@ -39,7 +42,10 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories),
             }
 
             ItemTouchHelper(object :
-                ItemTouchHelper.SimpleCallback(0, /*ItemTouchHelper.LEFT or */ItemTouchHelper.RIGHT) {
+                ItemTouchHelper.SimpleCallback(
+                    0, /*ItemTouchHelper.LEFT or */
+                    ItemTouchHelper.RIGHT
+                ) {
                 override fun onMove(
                     recyclerView: RecyclerView,
                     viewHolder: RecyclerView.ViewHolder,
@@ -69,6 +75,13 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories),
         setFragmentResultListener("add_edit_request") { _, bundle ->
             val result = bundle.getInt("add_edit_result")
             viewModel.onAddEditResult(result)
+            Log.d(TAG, "CatDelResult = $result ")
+        }
+
+        setFragmentResultListener("cat_del_request") { _, bundle ->
+            val result = bundle.getInt("cat_del_result")
+            viewModel.onCatDelResult(result)
+            Log.d(TAG, "CatDelResult = $result ")
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
@@ -77,27 +90,33 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories),
                     CategoriesViewModel.CategoriesEvent.NavigateToAddCatScreen -> {
                         val action =
                             CategoriesFragmentDirections.actionCategoriesFragmentToEditCategoryFragment(
-                                null,
-                                "New category"
+                                null, "New category", null
                             )
                         findNavController().navigate(action)
                     }
                     is CategoriesViewModel.CategoriesEvent.NavigateToEditCatScreen -> {
                         val action =
                             CategoriesFragmentDirections.actionCategoriesFragmentToEditCategoryFragment(
-                                event.category,
-                                "Edit category"
+                                event.category, "Edit category", null
                             )
                         findNavController().navigate(action)
                     }
                     is CategoriesViewModel.CategoriesEvent.ShowCatSavedConfirmMessage -> {
-                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
                     }
-                    is CategoriesViewModel.CategoriesEvent.ShowUndoDeleteCatMessage -> {
-                        Snackbar.make(requireView(), requireContext().resources.getString(R.string.category_deleted), Snackbar.LENGTH_LONG)
+                    is CategoriesViewModel.CategoriesEvent.ShowUndoDeleteCatMessage -> { // THIS WILL BE REPLACED BY DEL CAT DIALOG
+                        Snackbar.make(
+                            requireView(),
+                            requireContext().resources.getString(R.string.category_deleted),
+                            Snackbar.LENGTH_LONG
+                        )
                             .setAction(requireContext().resources.getString(R.string.undo)) {
                                 viewModel.onUndoDeleteCat(event.category)
                             }.show()
+                    }
+                    is CategoriesViewModel.CategoriesEvent.NavigateToDelCatDialog -> {
+                        val action = CategoriesFragmentDirections.actionCategoriesFragmentToDeleteCategoryDialog(event.category)
+                        findNavController().navigate(action)
                     }
                 }.exhaustive
             }

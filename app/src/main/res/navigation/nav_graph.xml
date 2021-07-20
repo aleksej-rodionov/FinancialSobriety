@@ -131,6 +131,11 @@
         <argument
             android:name="title"
             app:argType="string" />
+        <argument
+            android:name="onlyType"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="null" />
     </dialog>
     <dialog
         android:id="@+id/deleteCategoryDialog"
@@ -142,5 +147,21 @@
         <argument
             android:name="category"
             app:argType="space.rodionov.financialsobriety.data.Category" />
+        <action
+            android:id="@+id/action_deleteCategoryDialog_to_deleteAllTransInCatDialog"
+            app:destination="@id/deleteAllTransInCatDialog" />
+    </dialog>
+    <dialog
+        android:id="@+id/deleteAllTransInCatDialog"
+        android:name="space.rodionov.financialsobriety.ui.categories.DeleteAllTransInCatDialog"
+        android:label="DeleteAllTransInCatDialog" >
+        <argument
+            android:name="catName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_deleteAllTransInCatDialog_to_categoriesFragment"
+            app:destination="@id/categoriesFragment"
+            app:popUpTo="@id/categoriesFragment"
+            app:popUpToInclusive="true"/>
     </dialog>
 </navigation>

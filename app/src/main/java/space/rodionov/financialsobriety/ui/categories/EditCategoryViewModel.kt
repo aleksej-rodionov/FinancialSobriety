@@ -20,6 +20,7 @@ class EditCategoryViewModel @Inject constructor(
     private val state: SavedStateHandle
 ) : ViewModel() {
     val title = state.get<String>("title")
+    val onlyType = state.get<String>("onlyType")
     val category = state.get<Category>("category")
     var catName = state.get<String>("catName") ?: category?.catName ?: ""
         set(value) {
@@ -27,7 +28,7 @@ class EditCategoryViewModel @Inject constructor(
             state.set("catName", value)
         }
     var catType =
-        state.get<TransactionType>("catType") ?: category?.catType ?: TransactionType.OUTCOME
+        state.get<TransactionType>("catType") ?: category?.catType ?: enumValueOf(onlyType ?: "OUTCOME")
         set(value) {
             field = value
             state.set("catType", value)
