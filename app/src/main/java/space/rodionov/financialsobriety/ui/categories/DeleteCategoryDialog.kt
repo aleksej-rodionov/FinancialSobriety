@@ -68,40 +68,21 @@ class DeleteCategoryDialog : DialogFragment(), ChooseCategoryAdapter.OnCatClickL
                 }
             }
 
-            layoutNewCategory.setOnClickListener {
-
-            }
-
             layoutDeleteAllContent.setOnClickListener {
                 viewModel.deleteTransactionsByCat()
             }
 
             layoutCancelDeletion.setOnClickListener {
-//                viewModel.onUndoDeleteCat(viewModel.category)
                 this@DeleteCategoryDialog.dismiss()
             }
-        }
-
-        setFragmentResultListener("confirm_del_request") { _, bundle ->
-            val result = bundle.getInt("confirm_del_result")
-            Log.d(TAG, "onViewCreated: FragmentResult = $result")
-            viewModel.onConfirmDelResult(result)
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.deleteCatEvent.collect { event ->
                 when (event) {
                     is DeleteCategoryViewModel.DeleteCategoryEvent.NavigateToDeleteAllTransByCat -> {
-                        val action = DeleteCategoryDialogDirections.actionDeleteCategoryDialogToDeleteAllTransInCatDialog(event.catName)
+                        val action = DeleteCategoryDialogDirections.actionDeleteCategoryDialogToDeleteAllTransInCatDialog(event.delCat, event.alterCat, event.resultCode)
                         findNavController().navigate(action)
-                    }
-                    is DeleteCategoryViewModel.DeleteCategoryEvent.NavigateBackWithDeletionResult -> {
-                        setFragmentResult(
-                            "confirm_del_request",
-                            bundleOf("confirm_del_request" to event.result)
-                        )
-                        findNavController().popBackStack()
-//                        onDestroyView()
                     }
                 }.exhaustive
             }
@@ -109,12 +90,11 @@ class DeleteCategoryDialog : DialogFragment(), ChooseCategoryAdapter.OnCatClickL
     }
 
     override fun onItemClick(category: Category) {
-        TODO("Not yet implemented")
+        viewModel.onAlterCatChosen(category)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-//        viewModel.onUndoDeleteCat(viewModel.category)
         _binding = null
     }
 }

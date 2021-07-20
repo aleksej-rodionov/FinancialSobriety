@@ -19,7 +19,7 @@ class FinRepository @Inject constructor(
     fun getAllCategories(): Flow<List<Category>> = finDao.getAllCategories()
     fun getCategoriesByType(type: TransactionType): Flow<List<Category>> = finDao.getCategoriesByType(type.name)
     fun getCategoriesByTypeExcept(type: TransactionType, catName: String): Flow<List<Category>> = finDao.getCategoriesByTypeExcept(type.name, catName)
-    suspend fun deleteCatByName(catName: String) = finDao.deleteCatByName(catName)
+    suspend fun moveContentFromCatToCat(catNameOld: String, catNameNew: String) = finDao.moveTransactionsFromCatToCat(catNameOld, catNameNew)
 
     //=========================DEBTS===================================
 

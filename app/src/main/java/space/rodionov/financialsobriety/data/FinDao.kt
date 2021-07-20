@@ -17,6 +17,9 @@ interface FinDao {
     @Query("DELETE FROM spend_table WHERE catName = :catName")
     suspend fun deleteTransactionsByCat(catName: String)
 
+    @Query("UPDATE spend_table SET catName = :catNameNew WHERE catName = :catNameOld")
+    suspend fun moveTransactionsFromCatToCat(catNameOld: String, catNameNew: String)
+
     //===============================CATEGORIES==========================
 
     @Query("SELECT * FROM category_table ORDER BY catType DESC")
