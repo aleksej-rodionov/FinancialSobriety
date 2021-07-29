@@ -14,6 +14,10 @@ class FinRepository @Inject constructor(
     fun getAllTransactions(): Flow<List<Transaction>> = finDao.getAllSpends()
     suspend fun deleteTransactionsByCat(catName: String) = finDao.deleteTransactionsByCat(catName)
 
+    //============================CATEGORIES WITH TRANSACTIONS==============
+
+    fun getAllCategoriesWithTransactions(): Flow<List<CategoryWithTransactions>> = finDao.getAllCategoriesWithTransactions()
+
     //=========================CATEGORIES===================================
 
     fun getAllCategories(): Flow<List<Category>> = finDao.getAllCategories()

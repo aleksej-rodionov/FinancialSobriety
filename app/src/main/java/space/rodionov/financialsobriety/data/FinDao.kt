@@ -10,15 +10,21 @@ interface FinDao {
     @Query("SELECT * FROM spend_table ORDER BY timestamp DESC")
     fun getAllSpends(): Flow<List<Transaction>>
 
-    @androidx.room.Transaction
-    @Query("SELECT * FROM category_table WHERE catName = :catName")
-    fun getCatWithTransactions(catName: String) : Flow<List<CategoryWithTransactions>>
-
     @Query("DELETE FROM spend_table WHERE catName = :catName")
     suspend fun deleteTransactionsByCat(catName: String)
 
     @Query("UPDATE spend_table SET catName = :catNameNew WHERE catName = :catNameOld")
     suspend fun moveTransactionsFromCatToCat(catNameOld: String, catNameNew: String)
+
+    //============================CATEGORIES WITH TRANSACTIONS==============
+
+    @androidx.room.Transaction
+    @Query("SELECT * FROM category_table WHERE catName = :catName")
+    fun getCatWithTransactions(catName: String) : Flow<List<CategoryWithTransactions>>
+
+    @androidx.room.Transaction
+    @Query("SELECT * FROM category_table")
+    fun getAllCategoriesWithTransactions() : Flow<List<CategoryWithTransactions>>
 
     //===============================CATEGORIES==========================
 

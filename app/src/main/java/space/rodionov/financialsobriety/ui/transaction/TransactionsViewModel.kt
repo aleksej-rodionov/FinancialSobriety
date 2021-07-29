@@ -30,11 +30,15 @@ class TransactionsViewModel @Inject constructor(
     val allTransactions = repo.getAllTransactions()
         .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
+    val allCatsWithTransactions = repo.getAllCategoriesWithTransactions()
+        .stateIn(viewModelScope, SharingStarted.Lazily, null)
+
 
 //================================RECYCLER EVENT CHANNEL=========================================
 
     private val recTransEventChannel = Channel<RecTransEvent>()
     val recTransEvent = recTransEventChannel.receiveAsFlow()
+
     sealed class RecTransEvent {
         object NavigateToAddTransactionScreen : RecTransEvent()
         data class NavigateToEditTransactionScreen(val transaction: Transaction) : RecTransEvent()
