@@ -78,7 +78,7 @@
         tools:layout="@layout/fragment_transactions_recycler" />
     <fragment
         android:id="@+id/calendarTransactionsFragment"
-        android:name="space.rodionov.financialsobriety.ui.transaction.calendar.CalendarTransactionsFragment"
+        android:name="space.rodionov.financialsobriety.ui.transaction.barchart.BarChartTransactionsFragment"
         android:label="CalendarTransactionsFragment" />
     <fragment
         android:id="@+id/diagramTransactionsFragment"

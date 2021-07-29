@@ -19,22 +19,29 @@ import space.rodionov.financialsobriety.data.Transaction
 import space.rodionov.financialsobriety.data.TransactionType
 import space.rodionov.financialsobriety.databinding.FragmentTransactionsRecyclerBinding
 import space.rodionov.financialsobriety.ui.transaction.TransactionsFragmentDirections
+import space.rodionov.financialsobriety.ui.transaction.TransactionsViewModel
 import space.rodionov.financialsobriety.util.exhaustive
 import java.util.*
 
 @AndroidEntryPoint
-class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_recycler),
-    RecyclerTransactionAdapter.OnItemClickListener {
+class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_recycler) {
 
     private lateinit var binding: FragmentTransactionsRecyclerBinding
 
-    private val viewModel: RecyclerTransactionsViewModel by viewModels()
+    private val viewModel: TransactionsViewModel by viewModels({ requireParentFragment() })
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentTransactionsRecyclerBinding.bind(view)
 
-        val transAdapter = RecyclerTransactionAdapter(this, requireContext())
+        val transAdapter = RecTransParentAdapter(
+            requireContext(),
+            viewModel.allTransactions,
+            viewLifecycleOwner.lifecycleScope,
+            onTransactionClick = {
+                onItemClick(it)
+            }
+        )
 
         binding.apply {
             recyclerView.apply {
@@ -44,30 +51,30 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
             }
 
             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                viewModel.spends.collect {
-                    val spends = it ?: return@collect
-
-                    transAdapter.submitList(spends)
-                    tvNoTransactions.isVisible = spends.isEmpty()
-                    recyclerView.isVisible = spends.isNotEmpty()
+                viewModel.monthListFlow.collect {
+                    val months = it ?: return@collect
+                    transAdapter.submitList(months)
                 }
             }
 
-            ItemTouchHelper(object :
-                ItemTouchHelper.SimpleCallback(0, /*ItemTouchHelper.LEFT or */ItemTouchHelper.RIGHT) {
-                override fun onMove(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder,
-                    target: RecyclerView.ViewHolder
-                ): Boolean {
-                    return false
-                }
-
-                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    val transaction = transAdapter.currentList[viewHolder.adapterPosition]
-                    viewModel.onDeleteTransaction(transaction)
-                }
-            }).attachToRecyclerView(recyclerView)
+//            ItemTouchHelper(object :
+//                ItemTouchHelper.SimpleCallback(
+//                    0, /*ItemTouchHelper.LEFT or */
+//                    ItemTouchHelper.RIGHT
+//                ) {
+//                override fun onMove(
+//                    recyclerView: RecyclerView,
+//                    viewHolder: RecyclerView.ViewHolder,
+//                    target: RecyclerView.ViewHolder
+//                ): Boolean {
+//                    return false
+//                }
+//
+//                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+//                    val transaction = transAdapter.currentList[viewHolder.adapterPosition]
+//                    viewModel.onDeleteTransaction(transaction)
+//                }
+//            }).attachToRecyclerView(recyclerView)
 
             btnAdd.setOnClickListener {
                 viewModel.addTransaction()
@@ -82,7 +89,7 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.recTransEvent.collect { event ->
                 when (event) {
-                    is RecyclerTransactionsViewModel.RecTransEvent.NavigateToAddTransactionScreen -> {
+                    is TransactionsViewModel.RecTransEvent.NavigateToAddTransactionScreen -> {
                         val action =
                             TransactionsFragmentDirections.actionTransactionsFragmentToEditTransactionFragment(
                                 null,
@@ -91,7 +98,7 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
                             )
                         findNavController().navigate(action)
                     }
-                    is RecyclerTransactionsViewModel.RecTransEvent.NavigateToEditTransactionScreen -> {
+                    is TransactionsViewModel.RecTransEvent.NavigateToEditTransactionScreen -> {
                         val action =
                             TransactionsFragmentDirections.actionTransactionsFragmentToEditTransactionFragment(
                                 event.transaction,
@@ -100,7 +107,7 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
                             )
                         findNavController().navigate(action)
                     }
-                    is RecyclerTransactionsViewModel.RecTransEvent.ShowUndoDeleteTransactionMessage -> {
+                    is TransactionsViewModel.RecTransEvent.ShowUndoDeleteTransactionMessage -> {
                         Snackbar.make(
                             requireView(),
                             "Transaction deleted for good",
@@ -109,7 +116,7 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
                             .setAction("UNDO") { viewModel.undoDeleteClick(event.transaction) }
                             .show()
                     }
-                    is RecyclerTransactionsViewModel.RecTransEvent.ShowEditTransConfirmMsg -> {
+                    is TransactionsViewModel.RecTransEvent.ShowEditTransConfirmMsg -> {
                         Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_SHORT).show()
                     }
                 }.exhaustive
@@ -117,7 +124,7 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
         }
     }
 
-    override fun onItemClick(transaction: Transaction) {
+    fun onItemClick(transaction: Transaction) {
         viewModel.onTransactionSelected(transaction)
     }
 }
