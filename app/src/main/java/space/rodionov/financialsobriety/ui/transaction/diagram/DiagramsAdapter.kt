@@ -1,8 +1,12 @@
 package space.rodionov.financialsobriety.ui.transaction.diagram
 
 import android.graphics.Color
+import android.graphics.Typeface
+import android.graphics.Typeface.ITALIC
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -17,10 +21,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.data.CategoryWithTransactions
 import space.rodionov.financialsobriety.data.Month
 import space.rodionov.financialsobriety.databinding.ItemDiagramBinding
 import timber.log.Timber
+import java.util.*
 
 class DiagramsAdapter(
     private val allCatsWithTransactionsFlow: StateFlow<List<CategoryWithTransactions>?>,
@@ -44,7 +50,8 @@ class DiagramsAdapter(
                 scope.launch {
                     allCatsWithTransactionsFlow.collect {
                         val allCatsWithTransactions = it ?: return@collect
-                        pieChart.loadPieChartData(createMonthPieEntryList(allCatsWithTransactions, month))
+                        val pieEntries = createMonthPieEntryList(allCatsWithTransactions, month)
+                        pieChart.loadPieChartData(pieEntries, month)
                     }
                 }
             }
@@ -74,7 +81,6 @@ class DiagramsAdapter(
                 pieEntries.add(PieEntry(monthSumByCat, cwt.category.catName))
             }
         }
-        Timber.d("LOGS Entrys: $pieEntries")
         return pieEntries
     }
 
@@ -85,9 +91,9 @@ class DiagramsAdapter(
         this.setUsePercentValues(true)
         this.setEntryLabelTextSize(12f)
         this.setEntryLabelColor(Color.BLACK)
-        this.centerText = "Fuck you"
         this.setCenterTextSize(24f)
-        !this.description.isEnabled
+        this.description.isEnabled = false
+        this.isRotationEnabled = false
 
         val legend = this.legend
         legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
@@ -97,7 +103,7 @@ class DiagramsAdapter(
         legend.isEnabled
     }
 
-    private fun PieChart.loadPieChartData(entries: List<PieEntry>) {
+    private fun PieChart.loadPieChartData(entries: List<PieEntry>, month: Month) {
         val colors = mutableListOf<Int>()
         for (i in ColorTemplate.VORDIPLOM_COLORS) {
             colors.add(i)
@@ -106,16 +112,28 @@ class DiagramsAdapter(
             colors.add(i)
         }
 
-        val dataset = PieDataSet(entries, "Expense Category")
+        val dataset = PieDataSet(entries, "(Categories)")
         dataset.setColors(colors)
 
         val data = PieData(dataset)
         data.setDrawValues(true)
         data.setValueFormatter(PercentFormatter(this))
-        data.setValueTextSize(12f)
+        data.setValueTextSize(14f)
         data.setValueTextColor(Color.BLACK)
 
         this.data = data
         this.invalidate()
+
+        val monthSum = entries.map {
+            it.value
+        }.sumByDouble {
+            it.toDouble()
+        }.toFloat()
+        val monthText = "${month.toAbbrString().capitalize(Locale.ROOT)}\n$monthSum"
+        this.centerText = monthText
+        this.setCenterTextSize(19f)
+        this.setCenterTextColor(resources.getColor(R.color.blue))
+        val font = Typeface.create(Typeface.SANS_SERIF, ITALIC)
+        this.setCenterTextTypeface(font)
     }
 }

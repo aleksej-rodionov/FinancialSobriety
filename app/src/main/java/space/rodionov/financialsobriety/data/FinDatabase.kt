@@ -38,10 +38,16 @@ abstract class FinDatabase : RoomDatabase() {
                 dao.insertCategory(Category("Hata O1", TransactionType.INCOME))
                 dao.insertCategory(Category("Hata 2shka", TransactionType.INCOME))
 
-                dao.insertSpend(Transaction(5267f, "Healthcare", 1623960680, "Витаминки с iHerbs"))
-                dao.insertSpend(Transaction(2202.18f, "Food", 1623777078, null))
-                dao.insertSpend(Transaction(411.9f, "Food", 1623690678, null))
-                dao.insertSpend(Transaction(4060f, "Brother", 1623960680, null))
+                dao.insertSpend(Transaction(5267f, "Healthcare", 1623960680000, "Витаминки с iHerbs"))
+                dao.insertSpend(Transaction(2202.18f, "Food", 1623777078000, null))
+                dao.insertSpend(Transaction(411.9f, "Food", 1623690678000, null))
+                dao.insertSpend(Transaction(4060f, "Brother", 1623960680000, null))
+                dao.insertSpend(Transaction(2560f, "Food", 1627050698000, null))
+                dao.insertSpend(Transaction(1000f, "Healthcare", 1621780298000, null))
+                dao.insertSpend(Transaction(3060f, "Food", 1621780298000, null))
+                dao.insertSpend(Transaction(4160f, "Other", 1621780298000, null))
+                dao.insertSpend(Transaction(4060f, "Other", 1627050698000, null))
+                dao.insertSpend(Transaction(960f, "Transport", 1627050698000, null))
 
                 dao.insertDebt(Debt("Tinkoff", 57542.27f))
             }
