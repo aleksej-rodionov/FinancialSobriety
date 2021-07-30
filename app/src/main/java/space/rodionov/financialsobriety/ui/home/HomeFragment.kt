@@ -26,8 +26,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomeBinding.bind(view)
         binding.apply {
-            cardViewSpend.setOnClickListener { viewModel.onSpendsClick() }
-            cardViewIncome.setOnClickListener { viewModel.onIncomesClick() }
+            cardViewSpend.setOnClickListener { viewModel.onSpendsClick(TransactionType.OUTCOME.name) }
+            cardViewIncome.setOnClickListener { viewModel.onIncomesClick(TransactionType.INCOME.name) }
             cardViewDebt.setOnClickListener { viewModel.onDebtsClick() }
             fabAddSpend.setOnClickListener { viewModel.onAddSpendClick() }
             fabAddIncome.setOnClickListener { viewModel.onAddIncomeClick() }
@@ -56,11 +56,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     }
                     is HomeViewModel.HomeEvent.NavigateToSpendsScreen -> {
                         val action =
-                            HomeFragmentDirections.actionFrontFragmentToTransactionsFragment() // ADD ONLY SPENDS VARIABLE
+                            HomeFragmentDirections.actionFrontFragmentToTransactionsFragment(TransactionType.OUTCOME.name) // ADD ONLY SPENDS VARIABLE
                         findNavController().navigate(action)
                     }
                     is HomeViewModel.HomeEvent.NavigateToIncomesScreen -> {
-                        val action = HomeFragmentDirections.actionFrontFragmentToTransactionsFragment() // ADD ONLY INCOMES VARIABLE
+                        val action = HomeFragmentDirections.actionFrontFragmentToTransactionsFragment(TransactionType.INCOME.name) // ADD ONLY INCOMES VARIABLE
                         findNavController().navigate(action)
                     }
                     is HomeViewModel.HomeEvent.NavigateToDebtsScreen -> {
@@ -70,6 +70,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     is HomeViewModel.HomeEvent.ShowTransactionSavedConfirmationMessage -> {
                         Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_SHORT).show()
                     }
+//                    is HomeViewModel.HomeEvent.NavigateToTransactionsScreen -> {
+//                        val action = HomeFragmentDirections.actionFrontFragmentToTransactionsFragment(event.typeName)
+//                        findNavController().navigate(action)
+//                    }
                 }.exhaustive
             }
         }

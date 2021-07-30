@@ -1,16 +1,14 @@
 package space.rodionov.financialsobriety.ui.transaction.recycler
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -21,39 +19,44 @@ import space.rodionov.financialsobriety.databinding.FragmentTransactionsRecycler
 import space.rodionov.financialsobriety.ui.transaction.TransactionsFragmentDirections
 import space.rodionov.financialsobriety.ui.transaction.TransactionsViewModel
 import space.rodionov.financialsobriety.util.exhaustive
+import timber.log.Timber
 import java.util.*
+
+private const val TAG = "RecTransFr LOGS"
 
 @AndroidEntryPoint
 class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_recycler) {
-
     private lateinit var binding: FragmentTransactionsRecyclerBinding
-
     private val viewModel: TransactionsViewModel by viewModels({ requireParentFragment() })
+
+    lateinit var parentAdapter: RecTransParentAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentTransactionsRecyclerBinding.bind(view)
+        Timber.d("LOGS Recycler vonViewCreated genType = ${viewModel.typeName.value}")
 
-        val transAdapter = RecTransParentAdapter(
+        parentAdapter = RecTransParentAdapter(
             requireContext(),
-            viewModel.allTransactions,
+            viewModel.transactionsByType,
             viewLifecycleOwner.lifecycleScope,
             onTransactionClick = {
                 onItemClick(it)
+                Timber.d("logs ontransclick called")
+                Log.d(TAG, "logs onTransClick: called ($it)")
             }
         )
 
         binding.apply {
             recyclerView.apply {
-                adapter = transAdapter
+                adapter = parentAdapter
                 layoutManager = LinearLayoutManager(requireContext())
-                setHasFixedSize(true)
             }
 
             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
                 viewModel.monthListFlow.collect {
                     val months = it ?: return@collect
-                    transAdapter.submitList(months)
+                    parentAdapter.submitList(months)
                 }
             }
 
@@ -81,7 +84,7 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
             }
         }
 
-        setFragmentResultListener("add_edit_result") { _, bundle ->
+        setFragmentResultListener("add_edit_request") { _, bundle ->
             val result = bundle.getInt("add_edit_result")
             viewModel.onAddEditResult(result)
         }
@@ -124,7 +127,7 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
         }
     }
 
-    fun onItemClick(transaction: Transaction) {
+    private fun onItemClick(transaction: Transaction) {
         viewModel.onTransactionSelected(transaction)
     }
 }

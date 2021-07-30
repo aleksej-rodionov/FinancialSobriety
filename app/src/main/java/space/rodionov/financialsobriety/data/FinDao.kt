@@ -8,7 +8,10 @@ interface FinDao {
     //===========================GET TRANSACTIONS==============================
 
     @Query("SELECT * FROM spend_table ORDER BY timestamp DESC")
-    fun getAllSpends(): Flow<List<Transaction>>
+    fun getAllTransactions(): Flow<List<Transaction>>
+
+    @Query("SELECT * FROM spend_table WHERE type = :type ORDER BY timestamp DESC")
+    fun getTransactionsByType(type: String): Flow<List<Transaction>>
 
     @Query("DELETE FROM spend_table WHERE catName = :catName")
     suspend fun deleteTransactionsByCat(catName: String)
@@ -26,6 +29,10 @@ interface FinDao {
     @Query("SELECT * FROM category_table")
     fun getAllCategoriesWithTransactions() : Flow<List<CategoryWithTransactions>>
 
+    @androidx.room.Transaction
+    @Query("SELECT * FROM category_table WHERE catType = :type ORDER BY catName")
+    fun getCatsWithTransactionsByType(type: String): Flow<List<CategoryWithTransactions>>
+
     //===============================CATEGORIES==========================
 
     @Query("SELECT * FROM category_table ORDER BY catType DESC")
@@ -37,8 +44,8 @@ interface FinDao {
     @Query("SELECT * FROM category_table WHERE catType = :type AND catName != :catName ORDER BY catName")
     fun getCategoriesByTypeExcept(type: String, catName: String): Flow<List<Category>>
 
-    @Query("DELETE FROM category_table WHERE catName = :catName")
-    suspend fun deleteCatByName(catName: String)
+    @Query("SELECT * FROM category_table WHERE catType = :type ORDER BY catName")
+    suspend fun getCategoriesByTypeSus(type: String): List<Category>
 
     //==================================GET DEBTS============================
 

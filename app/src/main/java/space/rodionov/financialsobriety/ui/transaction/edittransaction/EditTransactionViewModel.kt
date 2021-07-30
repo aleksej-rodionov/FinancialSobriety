@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import space.rodionov.financialsobriety.data.*
 import space.rodionov.financialsobriety.ui.ADD_TRANSACTION_RESULT_OK
 import space.rodionov.financialsobriety.ui.EDIT_TRANSACTION_RESULT_OK
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -34,7 +35,7 @@ class EditTransactionViewModel @Inject constructor(
 
 
     //==========SAVED STATE HANDLE===========================================
-    val tType = state.get<String>("type") ?: "Outcome"
+    val tType = state.get<String>("type") ?: "OUTCOME"
 
     val transaction = state.get<Transaction>("transaction")
 
@@ -74,21 +75,25 @@ class EditTransactionViewModel @Inject constructor(
             val updatedSpend = transaction.copy(
                 sum = tSum,
                 catName = tCategoryName.value,
-                timestamp = calendar.timeInMillis / 1000,
+                timestamp = calendar.timeInMillis,
                 comment = tComment,
                 type = enumValueOf(tType)
             )
             updateSpend(updatedSpend) // EVENT caller
+            Timber.d("LOGS edited trans = ${updatedSpend}")
         } else {
             val newSpend = Transaction(
                 tSum,
                 tCategoryName.value,
-                calendar.timeInMillis / 1000,
+                calendar.timeInMillis,
                 tComment,
                 enumValueOf(tType)
             )
             insertSpend(newSpend) // EVENT caller
+            Timber.d("LOGS edited trans = ${newSpend}")
         }
+        Timber.d("LOGS etvm type = ${tType}")
+
     }
 
 

@@ -31,7 +31,6 @@ private const val TAG = "EditTransaction TAGS"
 class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
     private val viewModel: EditTransactionViewModel by viewModels()
 
-    //    private lateinit var binding: FragmentEditTransactionBinding
     private var _binding: FragmentEditTransactionBinding? = null
     private val binding get() = _binding!!
 

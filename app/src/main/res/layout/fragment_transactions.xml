@@ -8,16 +8,23 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
+        style="@style/AppTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/AppTabLayout"
-        app:tabTextAppearance="@style/AppTabTextAppearance"/>
+        app:tabTextAppearance="@style/AppTabTextAppearance" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/chip_group"
         android:layout_below="@id/tab_layout" />
 
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chip_group"
+        style="@style/CustomChipStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

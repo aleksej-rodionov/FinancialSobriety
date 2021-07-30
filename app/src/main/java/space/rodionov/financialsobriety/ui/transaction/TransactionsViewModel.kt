@@ -5,17 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import space.rodionov.financialsobriety.data.FinDao
-import space.rodionov.financialsobriety.data.FinRepository
-import space.rodionov.financialsobriety.data.Month
-import space.rodionov.financialsobriety.data.Transaction
+import space.rodionov.financialsobriety.data.*
 import space.rodionov.financialsobriety.ui.ADD_TRANSACTION_RESULT_OK
 import space.rodionov.financialsobriety.ui.EDIT_TRANSACTION_RESULT_OK
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -24,14 +19,30 @@ class TransactionsViewModel @Inject constructor(
     private val repo: FinRepository,
     private val state: SavedStateHandle
 ) : ViewModel() {
+    val typeName = state.getLiveData("typeName", TransactionType.OUTCOME.name)
+    private fun tt() : TransactionType {
+        Timber.d("LOGS sharedViewModel typeName = ${typeName.value}")
+        return TransactionType.valueOf(typeName.value ?: TransactionType.OUTCOME.name)
+    }
+
     private var _monthListFlow = MutableStateFlow<List<Month>>(createMonthList())
     val monthListFlow = _monthListFlow.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     val allTransactions = repo.getAllTransactions()
         .stateIn(viewModelScope, SharingStarted.Lazily, null)
+    val transactionsByType = repo.getTransactionsByType(tt())
+        .stateIn(viewModelScope, SharingStarted.Lazily, null)
+
 
     val allCatsWithTransactions = repo.getAllCategoriesWithTransactions()
         .stateIn(viewModelScope, SharingStarted.Lazily, null)
+    val catsWithTransactionsByType = repo.getCatsWithTransactionsByType(tt())
+        .stateIn(viewModelScope, SharingStarted.Lazily, null)
+
+
+//===============================PARENT FRAGMENT===============================================
+
+
 
 
 //================================RECYCLER EVENT CHANNEL=========================================

@@ -1,5 +1,6 @@
 package space.rodionov.financialsobriety.ui.home
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -7,13 +8,15 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import space.rodionov.financialsobriety.data.FinRepository
+import space.rodionov.financialsobriety.data.PrefManager
 import space.rodionov.financialsobriety.ui.ADD_TRANSACTION_RESULT_OK
 import space.rodionov.financialsobriety.ui.EDIT_TRANSACTION_RESULT_OK
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repo: FinRepository
+    private val repo: FinRepository,
+    private val prefManager: PrefManager
 ) : ViewModel() {
 
 
@@ -26,6 +29,7 @@ class HomeViewModel @Inject constructor(
     sealed class HomeEvent {
         object NavigateToSpendsScreen : HomeEvent()
         object NavigateToIncomesScreen : HomeEvent()
+//        data class NavigateToTransactionsScreen(val typeName: String) : HomeEvent()
         object NavigateToDebtsScreen : HomeEvent()
         object NavigateToAddSpendScreen : HomeEvent()
         object NavigateToAddIncomeScreen : HomeEvent()
@@ -35,12 +39,16 @@ class HomeViewModel @Inject constructor(
 
     //========================================METHODS===================================
 
-    fun onSpendsClick() = viewModelScope.launch {
+    fun onSpendsClick(typeName: String) = viewModelScope.launch {
         homeEventChannel.send(HomeEvent.NavigateToSpendsScreen)
+        prefManager.updateTypeName(typeName)
+//        homeEventChannel.send(HomeEvent.NavigateToTransactionsScreen(typeName))
     }
 
-    fun onIncomesClick() = viewModelScope.launch {
+    fun onIncomesClick(typeName: String) = viewModelScope.launch {
         homeEventChannel.send(HomeEvent.NavigateToIncomesScreen)
+        prefManager.updateTypeName(typeName)
+//        homeEventChannel.send(HomeEvent.NavigateToTransactionsScreen(typeName))
     }
 
     fun onDebtsClick() = viewModelScope.launch {

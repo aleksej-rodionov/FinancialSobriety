@@ -15,9 +15,13 @@ class RecTransChildAdapter(
     private val context: Context,
     private val onTransactionClick: (Transaction) -> Unit
 ) : ListAdapter<Transaction, RecTransChildAdapter.RecChildViewHolder>(RecTransComparator()) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecChildViewHolder {
-        val binding =
-            ItemTransactionBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemTransactionBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         return RecChildViewHolder(
             binding,
             onItemClick = {
@@ -39,12 +43,6 @@ class RecTransChildAdapter(
         private val onItemClick: (Int) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        init {
-            binding.apply {
-                // ADD LISTENERS
-            }
-        }
-
         fun bind(transaction: Transaction) {
             binding.apply {
                 tvCategory.text = transaction.catName
@@ -53,6 +51,17 @@ class RecTransChildAdapter(
                 if (transaction.type == TransactionType.INCOME) {
                     tvSum.setTextColor(context.resources.getColor(R.color.green))
                     tvSum.text = "+ ${tvSum.text}"
+                }
+            }
+        }
+
+        init {
+            binding.apply {
+                root.setOnClickListener {
+                    val position = adapterPosition
+                    if (position != RecyclerView.NO_POSITION) {
+                        onItemClick(position)
+                    }
                 }
             }
         }

@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/frontFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
-        android:id="@+id/frontFragment"
+        android:id="@+id/homeFragment"
         android:name="space.rodionov.financialsobriety.ui.home.HomeFragment"
         android:label="Главная"
         tools:layout="@layout/fragment_home">
@@ -49,11 +49,14 @@
     <fragment
         android:id="@+id/transactionsFragment"
         android:name="space.rodionov.financialsobriety.ui.transaction.TransactionsFragment"
-        android:label="My transactions"
+        android:label="{typeName}"
         tools:layout="@layout/fragment_transactions" >
         <action
             android:id="@+id/action_transactionsFragment_to_editTransactionFragment"
             app:destination="@id/editTransactionFragment" />
+        <argument
+            android:name="typeName"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/editTransactionFragment"
@@ -75,7 +78,11 @@
         android:id="@+id/recyclerTransactionsFragment"
         android:name="space.rodionov.financialsobriety.ui.transaction.recycler.RecyclerTransactionsFragment"
         android:label="fragment_transactions_recycler"
-        tools:layout="@layout/fragment_transactions_recycler" />
+        tools:layout="@layout/fragment_transactions_recycler" >
+        <argument
+            android:name="typeNameRec"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/calendarTransactionsFragment"
         android:name="space.rodionov.financialsobriety.ui.transaction.barchart.BarChartTransactionsFragment"

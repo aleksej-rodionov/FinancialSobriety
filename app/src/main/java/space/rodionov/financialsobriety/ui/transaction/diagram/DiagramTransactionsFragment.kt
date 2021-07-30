@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.collect
 import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.databinding.FragmentTransactionsDiagramBinding
 import space.rodionov.financialsobriety.ui.transaction.TransactionsViewModel
+import timber.log.Timber
 
 @AndroidEntryPoint
 class DiagramTransactionsFragment : Fragment(R.layout.fragment_transactions_diagram) {
@@ -21,9 +22,10 @@ class DiagramTransactionsFragment : Fragment(R.layout.fragment_transactions_diag
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentTransactionsDiagramBinding.bind(view)
+        Timber.d("LOGS Diagrams vonViewCreated genType = ${viewModel.typeName}")
 
         val diagramAdapter = DiagramsAdapter(
-            viewModel.allCatsWithTransactions,
+            viewModel.catsWithTransactionsByType,
             viewLifecycleOwner.lifecycleScope
         )
 
