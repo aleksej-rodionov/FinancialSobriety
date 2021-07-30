@@ -17,13 +17,16 @@ import javax.inject.Inject
 @HiltViewModel
 class TransactionsViewModel @Inject constructor(
     private val repo: FinRepository,
-    private val state: SavedStateHandle
+    private val state: SavedStateHandle,
+    private val prefManager: PrefManager
 ) : ViewModel() {
     val typeName = state.getLiveData("typeName", TransactionType.OUTCOME.name)
     private fun tt() : TransactionType {
         Timber.d("LOGS sharedViewModel typeName = ${typeName.value}")
         return TransactionType.valueOf(typeName.value ?: TransactionType.OUTCOME.name)
     }
+
+    val typeNameFlow = prefManager.typeNameFlow
 
     private var _monthListFlow = MutableStateFlow<List<Month>>(createMonthList())
     val monthListFlow = _monthListFlow.stateIn(viewModelScope, SharingStarted.Lazily, null)
