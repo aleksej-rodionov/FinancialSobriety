@@ -4,6 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.github.mikephil.charting.utils.ColorTemplate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import space.rodionov.financialsobriety.di.ApplicationScope
@@ -27,16 +28,16 @@ abstract class FinDatabase : RoomDatabase() {
             val dao = database.get().finDao()
 
             applicationScope.launch {
-                dao.insertCategory(Category("Food", TransactionType.OUTCOME))
-                dao.insertCategory(Category("Transport", TransactionType.OUTCOME))
-                dao.insertCategory(Category("Communication", TransactionType.OUTCOME))
-                dao.insertCategory(Category("Healthcare", TransactionType.OUTCOME))
-                dao.insertCategory(Category("Other", TransactionType.OUTCOME, false))
-                dao.insertCategory(Category("Brother", TransactionType.OUTCOME, false))
+                dao.insertCategory(Category("Food", TransactionType.OUTCOME, getColors()[0]))
+                dao.insertCategory(Category("Transport", TransactionType.OUTCOME, getColors()[1]))
+                dao.insertCategory(Category("Communication", TransactionType.OUTCOME, getColors()[2]))
+                dao.insertCategory(Category("Healthcare", TransactionType.OUTCOME, getColors()[3]))
+                dao.insertCategory(Category("Other", TransactionType.OUTCOME, getColors()[4], false))
+                dao.insertCategory(Category("Brother", TransactionType.OUTCOME, getColors()[5], false))
 
-                dao.insertCategory(Category("Hata Holmy", TransactionType.INCOME))
-                dao.insertCategory(Category("Hata O1", TransactionType.INCOME))
-                dao.insertCategory(Category("Hata 2shka", TransactionType.INCOME))
+                dao.insertCategory(Category("Hata Holmy", TransactionType.INCOME, getColors()[0]))
+                dao.insertCategory(Category("Hata O1", TransactionType.INCOME, getColors()[1]))
+                dao.insertCategory(Category("Hata 2shka", TransactionType.INCOME, getColors()[2]))
 
                 dao.insertSpend(Transaction(5267f, "Healthcare", 1623960680000, "Витаминки с iHerbs"))
                 dao.insertSpend(Transaction(2202.18f, "Food", 1623777078000, null))

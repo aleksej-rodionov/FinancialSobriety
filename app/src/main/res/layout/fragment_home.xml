@@ -245,7 +245,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_debt"
                     android:layout_marginTop="8dp"
-                    android:text="За июнь:"
+                    android:text="На данный момент:"
                     android:textSize="17sp"
                     android:textStyle="italic" />
 

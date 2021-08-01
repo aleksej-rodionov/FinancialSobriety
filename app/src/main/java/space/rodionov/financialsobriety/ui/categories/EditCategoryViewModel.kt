@@ -10,8 +10,10 @@ import kotlinx.coroutines.launch
 import space.rodionov.financialsobriety.data.Category
 import space.rodionov.financialsobriety.data.FinRepository
 import space.rodionov.financialsobriety.data.TransactionType
+import space.rodionov.financialsobriety.data.getColors
 import space.rodionov.financialsobriety.ui.ADD_CATEGORY_RESULT_OK
 import space.rodionov.financialsobriety.ui.EDIT_CATEGORY_RESULT_OK
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,12 +29,18 @@ class EditCategoryViewModel @Inject constructor(
             field = value
             state.set("catName", value)
         }
+    var catColor = state.get<Int>("catColor") ?: category?.catColor ?: getColors()[0]
+        set(value) {
+            field = value
+            state.set("catColor", value)
+        }
     var catType =
         state.get<TransactionType>("catType") ?: category?.catType ?: enumValueOf(onlyType ?: "OUTCOME")
         set(value) {
             field = value
             state.set("catType", value)
         }
+
 
     //==========EVENT CHANNEL==========================================
     private val editCatEventChannel = Channel<EditCatEvent>()
@@ -50,17 +58,20 @@ class EditCategoryViewModel @Inject constructor(
             return
         }
         if (category != null) {
-            val updatedCat = category.copy(catName = catName, catType = catType)
+            val updatedCat = category.copy(
+                catName = catName,
+                catType = catType,
+                catColor = catColor
+            )
             updateCategory(updatedCat)
         } else {
-            val newCat = Category(catName, catType)
-            createCategory(newCat)
+//            val newCat = Category(
+//                catName = catName,
+//                catType = catType,
+//                catColor = chooseCatColor()
+//            )
+            createCategory()
         }
-    }
-
-    private fun createCategory(category: Category) = viewModelScope.launch {
-        repo.insertCategory(category)
-        editCatEventChannel.send(EditCatEvent.NavigateBackWithResult(ADD_CATEGORY_RESULT_OK))
     }
 
     private fun updateCategory(category: Category) = viewModelScope.launch {
@@ -68,7 +79,36 @@ class EditCategoryViewModel @Inject constructor(
         editCatEventChannel.send(EditCatEvent.NavigateBackWithResult(EDIT_CATEGORY_RESULT_OK))
     }
 
+    private fun createCategory(category: Category) = viewModelScope.launch {
+        repo.insertCategory(category)
+        editCatEventChannel.send(EditCatEvent.NavigateBackWithResult(ADD_CATEGORY_RESULT_OK))
+    }
+
+    private fun createCategory() = viewModelScope.launch {
+        val newCat = Category(
+            catName = catName,
+            catType = catType,
+            catColor = chooseCatColor()
+        )
+        repo.insertCategory(newCat)
+        Timber.d("logs color of new category = ${newCat.catColor}")
+        editCatEventChannel.send(EditCatEvent.NavigateBackWithResult(ADD_CATEGORY_RESULT_OK))
+    }
+
     private fun showInvalidInputMsg(msg: String) = viewModelScope.launch {
         editCatEventChannel.send(EditCatEvent.ShowInvalidInputMsg(msg))
     }
+
+    private suspend fun chooseCatColor() : Int {
+        val numberOfCategories = repo.getNumberOfCatsByType(catType)
+        var colorIndex: Int
+        if (numberOfCategories >= getColors().size) {
+            colorIndex = numberOfCategories.toString().removeRange(0, numberOfCategories.toString().length - 1).toInt()
+        } else {
+            colorIndex = numberOfCategories
+        }
+        Timber.d("logs colorIndex = $colorIndex")
+        return getColors()[colorIndex]
+    }
 }
+

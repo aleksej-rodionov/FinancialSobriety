@@ -74,9 +74,6 @@ class HomeViewModel @Inject constructor(
     fun showTransactionSavedConfirmationMessage(text: String) = viewModelScope.launch {
         homeEventChannel.send(HomeEvent.ShowTransactionSavedConfirmationMessage(text))
     }
-
-
-
 }
 
 

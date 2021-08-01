@@ -44,14 +44,16 @@ interface FinDao {
     @Query("SELECT * FROM category_table WHERE catType = :type AND catName != :catName ORDER BY catName")
     fun getCategoriesByTypeExcept(type: String, catName: String): Flow<List<Category>>
 
-    @Query("SELECT * FROM category_table WHERE catType = :type ORDER BY catName")
-    suspend fun getCategoriesByTypeSus(type: String): List<Category>
+    @Query("SELECT COUNT(*) FROM category_table WHERE catType = :type")
+    suspend fun getCatNumberByType(type: String): Int
 
     @Query("UPDATE category_table SET catShown = :catShown WHERE catName = :catName")
     suspend fun changeCatShown(catName: String, catShown: Boolean)
 
     @Query("SELECT * FROM category_table WHERE catName = :catName")
     suspend fun getCatByName(catName: String) : Category
+
+
 
     //==================================GET DEBTS============================
 

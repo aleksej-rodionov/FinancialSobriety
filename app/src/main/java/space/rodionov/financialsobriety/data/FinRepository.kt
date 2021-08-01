@@ -37,8 +37,8 @@ class FinRepository @Inject constructor(
     suspend fun moveContentFromCatToCat(catNameOld: String, catNameNew: String) =
         finDao.moveTransactionsFromCatToCat(catNameOld, catNameNew)
 
-    suspend fun getCategoriesByTypeSus(type: TransactionType): List<Category> =
-        finDao.getCategoriesByTypeSus(type.name)
+    suspend fun getNumberOfCatsByType(type: TransactionType): Int =
+        finDao.getCatNumberByType(type.name)
 
     suspend fun changeCatShown(catName: String, catShown: Boolean) = finDao.changeCatShown(catName, catShown)
 

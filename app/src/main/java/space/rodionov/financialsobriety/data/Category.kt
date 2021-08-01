@@ -12,19 +12,18 @@ data class Category(
     @PrimaryKey(autoGenerate = false)
     val catName: String,
     val catType: TransactionType,
+    val catColor: Int,
     val catShown: Boolean = true
 ) : Parcelable {
 
     override fun toString(): String {
         return "$catName ($catType)"
     }
-
-    val colorList = ColorTemplate.VORDIPLOM_COLORS + ColorTemplate.VORDIPLOM_COLORS
-
 }
 
 enum class TransactionType {
     INCOME, OUTCOME
 }
 
+fun getColors() : IntArray = ColorTemplate.VORDIPLOM_COLORS + ColorTemplate.LIBERTY_COLORS
 

@@ -124,25 +124,30 @@ class BarChartsAdapter(
         entries: List<BarEntry>,
         categories: List<CategoryWithTransactions>
     ) {
-        val colorList = mutableListOf<Int>()
-        for (i in ColorTemplate.VORDIPLOM_COLORS) {
-            colorList.add(i)
-        }
-        for (i in ColorTemplate.LIBERTY_COLORS) {
-            colorList.add(i)
-        }
-        while (colorList.size < categories.size) {
-            colorList.addAll(colorList)
-        }
-        val colors = IntArray(categories.size)
-        Timber.d("logs categories.size = ${categories.size}")
-        System.arraycopy(colorList.toIntArray(), 0, colors, 0, categories.size)
-        Timber.d("logs colors.size = ${colors.size}")
+//        val colorList = mutableListOf<Int>()
+//        for (i in ColorTemplate.VORDIPLOM_COLORS) {
+//            colorList.add(i)
+//        }
+//        for (i in ColorTemplate.LIBERTY_COLORS) {
+//            colorList.add(i)
+//        }
+//        while (colorList.size < categories.size) {
+//            colorList.addAll(colorList)
+//        }
+//        val colors = IntArray(categories.size)
+//        Timber.d("logs categories.size = ${categories.size}")
+//        System.arraycopy(colorList.toIntArray(), 0, colors, 0, categories.size)
+//        Timber.d("logs colors.size = ${colors.size}")
 
         val catNames = categories.map {
             it.category.catName
         }.toTypedArray()
         Timber.d("logs catNames.size = ${catNames.size}")
+
+        val catColors = categories.map {
+            it.category.catColor
+        }
+        Timber.d("logs catColors.size = ${catColors.size}")
 
         if (this.getData() != null &&
             this.getData().getDataSetCount() > 0
@@ -155,9 +160,7 @@ class BarChartsAdapter(
             val barDataSet = BarDataSet(entries, "In year")
             barDataSet.setDrawIcons(false)
 //            barDataSet.colors = getColors(catNames.size, colorList.toIntArray())?.toList()
-            barDataSet.colors = colors.toList()
-            Timber.d("logs colorList.size = ${colorList.size}")
-            Timber.d("logs colors.size = ${colors.size}")
+            barDataSet.colors = catColors
 
             barDataSet.stackLabels = catNames
 
