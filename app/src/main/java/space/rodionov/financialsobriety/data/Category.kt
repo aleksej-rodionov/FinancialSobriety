@@ -19,7 +19,7 @@ data class Category(
         return "$catName ($catType)"
     }
 
-//    val colorList = ColorTemplate.VORDIPLOM_COLORS.toMutableList()
+    val colorList = ColorTemplate.VORDIPLOM_COLORS + ColorTemplate.VORDIPLOM_COLORS
 
 }
 
