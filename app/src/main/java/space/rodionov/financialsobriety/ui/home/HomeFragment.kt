@@ -1,12 +1,14 @@
 package space.rodionov.financialsobriety.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -14,24 +16,56 @@ import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.data.TransactionType
 import space.rodionov.financialsobriety.databinding.FragmentHomeBinding
 import space.rodionov.financialsobriety.util.exhaustive
+import timber.log.Timber
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val viewModel: HomeViewModel by viewModels()
-
-    private lateinit var binding: FragmentHomeBinding
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentHomeBinding.bind(view)
-        binding.apply {
-            cardViewSpend.setOnClickListener { viewModel.onSpendsClick(TransactionType.OUTCOME.name) }
+        _binding = FragmentHomeBinding.bind(view)
+
+        val homeMonthAdapter = HomeAdapter()
+
+        binding.apply { cardViewSpend.setOnClickListener { viewModel.onSpendsClick(TransactionType.OUTCOME.name) }
+            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                viewModel.monthNames.collect {
+                    tvBalance.text = "Баланс за ${it.first}"
+                    tvMonth.text = "За ${it.second}"
+                    tvIncomeMonth.text = "За ${it.second}"
+                }
+                viewModel.monthValues.collect {
+                    tvSumMonth.text = it.first.toString()
+                    tvIncomeSumMonth.text = it.second.toString()
+                    tvDebtSumMonth.text = it.third.toString()
+                }
+            }
+
             cardViewIncome.setOnClickListener { viewModel.onIncomesClick(TransactionType.INCOME.name) }
             cardViewDebt.setOnClickListener { viewModel.onDebtsClick() }
             fabAddSpend.setOnClickListener { viewModel.onAddSpendClick() }
             fabAddIncome.setOnClickListener { viewModel.onAddIncomeClick() }
             fabAddDebt.setOnClickListener { viewModel.onAddDebtClick() }
+
+            viewPagerHome.adapter = homeMonthAdapter
+            viewPagerHome.setRotationY(180f);
+
+            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                viewModel.monthListFlow.collect {
+                    val months = it?: return@collect
+                    homeMonthAdapter.submitList(months)
+                }
+            }
+
+            viewPagerHome.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    viewModel.setMonthValues(position)
+                }
+            })
         }
 
         setFragmentResultListener("add_edit_result") { _, bundle ->
@@ -73,10 +107,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 }.exhaustive
             }
         }
-
-
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
 
 

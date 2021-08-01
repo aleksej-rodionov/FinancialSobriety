@@ -16,12 +16,12 @@ import kotlinx.coroutines.flow.collect
 import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.data.Category
 import space.rodionov.financialsobriety.databinding.FragmentDialogRecyclerBinding
-import space.rodionov.financialsobriety.ui.shared.ChooseCategoryAdapter
+import space.rodionov.financialsobriety.ui.shared.DialogChooseItemAdapter
 
 private const val TAG = "ChooseCategoryDialog LOGS"
 
 @AndroidEntryPoint
-class ChooseCategoryDialogFragment : DialogFragment(), ChooseCategoryAdapter.OnCatClickListener {
+class ChooseCategoryDialogFragment : DialogFragment(), DialogChooseItemAdapter.OnCatClickListener {
 
     companion object {
         const val TAG = "chooseCategoryDialog"
@@ -31,7 +31,7 @@ class ChooseCategoryDialogFragment : DialogFragment(), ChooseCategoryAdapter.OnC
     private val viewModel: EditTransactionViewModel by viewModels({ requireParentFragment() })
     private var _binding: FragmentDialogRecyclerBinding? = null
     private val binding get() = _binding!!
-    private lateinit var chooseCatAdapter: ChooseCategoryAdapter
+    private lateinit var dialogChooseCatAdapter: DialogChooseItemAdapter
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)
@@ -56,12 +56,12 @@ class ChooseCategoryDialogFragment : DialogFragment(), ChooseCategoryAdapter.OnC
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val category = viewModel.tCategoryName.value
-        chooseCatAdapter = ChooseCategoryAdapter(this, category)
+        dialogChooseCatAdapter = DialogChooseItemAdapter(this, category)
 
         binding.apply {
             recyclerView.apply {
                 layoutManager = LinearLayoutManager(requireContext())
-                adapter = chooseCatAdapter
+                adapter = dialogChooseCatAdapter
             }
 //            viewModel.getCategoriesByType(enumValueOf(viewModel.tType)).observe(viewLifecycleOwner) {
 //                chooseCatAdapter.submitList(it)
@@ -70,7 +70,7 @@ class ChooseCategoryDialogFragment : DialogFragment(), ChooseCategoryAdapter.OnC
             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
                 viewModel.getCategoriesByType(enumValueOf(viewModel.tType)).collect {
                     val catsByType = it ?: return@collect
-                    chooseCatAdapter.submitList(catsByType)
+                    dialogChooseCatAdapter.submitList(catsByType)
                     tvNoItems.isVisible = catsByType.isEmpty()
                 }
             }

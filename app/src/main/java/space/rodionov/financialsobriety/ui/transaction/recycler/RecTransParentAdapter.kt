@@ -15,6 +15,7 @@ import space.rodionov.financialsobriety.data.CategoryWithTransactions
 import space.rodionov.financialsobriety.data.Month
 import space.rodionov.financialsobriety.data.Transaction
 import space.rodionov.financialsobriety.databinding.ItemRecMonthBinding
+import space.rodionov.financialsobriety.ui.shared.MonthComparator
 import java.util.*
 
 class RecTransParentAdapter(
@@ -22,7 +23,7 @@ class RecTransParentAdapter(
     private val catsWithTransactions: StateFlow<List<CategoryWithTransactions>?>,
     private val scope: CoroutineScope,
     private val onTransactionClick: (Transaction) -> Unit
-) : ListAdapter<Month, RecTransParentAdapter.RecParentViewHolder>(RecMonthComparator()) {
+) : ListAdapter<Month, RecTransParentAdapter.RecParentViewHolder>(MonthComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecParentViewHolder {
         val binding = ItemRecMonthBinding.inflate(
@@ -61,10 +62,10 @@ class RecTransParentAdapter(
         }
     }
 
-    class RecMonthComparator : DiffUtil.ItemCallback<Month>() {
-        override fun areItemsTheSame(oldItem: Month, newItem: Month) =
-            oldItem.mmSlashYear == newItem.mmSlashYear
-
-        override fun areContentsTheSame(oldItem: Month, newItem: Month) = oldItem == newItem
-    }
+//    class RecMonthComparator : DiffUtil.ItemCallback<Month>() {
+//        override fun areItemsTheSame(oldItem: Month, newItem: Month) =
+//            oldItem.mmSlashYear == newItem.mmSlashYear
+//
+//        override fun areContentsTheSame(oldItem: Month, newItem: Month) = oldItem == newItem
+//    }
 }

@@ -23,12 +23,13 @@ import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.data.CategoryWithTransactions
 import space.rodionov.financialsobriety.data.Month
 import space.rodionov.financialsobriety.databinding.ItemDiagramBinding
+import space.rodionov.financialsobriety.ui.shared.MonthComparator
 import java.util.*
 
 class DiagramsAdapter(
     private val catsWithTransactionsFlow: StateFlow<List<CategoryWithTransactions>?>,
     private val scope: CoroutineScope
-) : ListAdapter<Month, DiagramsAdapter.DiagramViewHolder>(DiagramsComparator()) {
+) : ListAdapter<Month, DiagramsAdapter.DiagramViewHolder>(MonthComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DiagramViewHolder {
         val binding = ItemDiagramBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -55,12 +56,12 @@ class DiagramsAdapter(
         }
     }
 
-    class DiagramsComparator : DiffUtil.ItemCallback<Month>() {
-        override fun areItemsTheSame(oldItem: Month, newItem: Month) =
-            oldItem.mmSlashYear == newItem.mmSlashYear
-
-        override fun areContentsTheSame(oldItem: Month, newItem: Month) = oldItem == newItem
-    }
+//    class DiagramsComparator : DiffUtil.ItemCallback<Month>() {
+//        override fun areItemsTheSame(oldItem: Month, newItem: Month) =
+//            oldItem.mmSlashYear == newItem.mmSlashYear
+//
+//        override fun areContentsTheSame(oldItem: Month, newItem: Month) = oldItem == newItem
+//    }
 
     //=======================CREATING ENTRIES FUNS==========================================
 

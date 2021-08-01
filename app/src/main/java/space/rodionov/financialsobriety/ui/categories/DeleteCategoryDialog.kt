@@ -2,15 +2,11 @@ package space.rodionov.financialsobriety.ui.categories
 
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -19,17 +15,17 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import space.rodionov.financialsobriety.data.Category
 import space.rodionov.financialsobriety.databinding.FragmentDialogCategoryDeletionBinding
-import space.rodionov.financialsobriety.ui.shared.ChooseCategoryAdapter
+import space.rodionov.financialsobriety.ui.shared.DialogChooseItemAdapter
 import space.rodionov.financialsobriety.util.exhaustive
 
 private const val TAG = "DeleteCatDialog LOGS"
 
 @AndroidEntryPoint
-class DeleteCategoryDialog : DialogFragment(), ChooseCategoryAdapter.OnCatClickListener {
+class DeleteCategoryDialog : DialogFragment(), DialogChooseItemAdapter.OnCatClickListener {
     private val viewModel: DeleteCategoryViewModel by viewModels()
     private var _binding: FragmentDialogCategoryDeletionBinding? = null
     private val binding get() = _binding!!
-    private lateinit var chooseCatAdapter: ChooseCategoryAdapter
+    private lateinit var dialogChooseCatAdapter: DialogChooseItemAdapter
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         super.onCreateDialog(savedInstanceState)
@@ -53,18 +49,18 @@ class DeleteCategoryDialog : DialogFragment(), ChooseCategoryAdapter.OnCatClickL
         super.onViewCreated(view, savedInstanceState)
         val catName = viewModel.categoryName
         val catType = viewModel.categoryType
-        chooseCatAdapter = ChooseCategoryAdapter(this, catName)
+        dialogChooseCatAdapter = DialogChooseItemAdapter(this, catName)
 
         binding.apply {
             recyclerView.apply {
                 layoutManager = LinearLayoutManager(requireContext())
-                adapter = chooseCatAdapter
+                adapter = dialogChooseCatAdapter
             }
 
             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
                 viewModel.getCategoriesByTypeExcept(enumValueOf(catType), catName).collect {
                     val catsByType = it ?: return@collect
-                    chooseCatAdapter.submitList(catsByType)
+                    dialogChooseCatAdapter.submitList(catsByType)
                 }
             }
 

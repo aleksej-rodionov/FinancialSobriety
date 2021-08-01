@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import space.rodionov.financialsobriety.data.Category
 import space.rodionov.financialsobriety.databinding.ItemDialogRecyclerBinding
 
-class ChooseCategoryAdapter(
+class DialogChooseItemAdapter(
     private val listener: OnCatClickListener,
     private val curCatName: String?
-) : ListAdapter<Category, ChooseCategoryAdapter.ChooseCatViewHolder>(ChooseCatComparator()) {
+) : ListAdapter<Category, DialogChooseItemAdapter.ChooseCatViewHolder>(ChooseCatComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChooseCatViewHolder {
         val binding = ItemDialogRecyclerBinding.inflate(
