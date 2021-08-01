@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginHorizontal="10dp"
     android:layout_marginVertical="6dp"
-    app:cardCornerRadius="6dp"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardCornerRadius="6dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="14dp"
-        >
+        android:padding="14dp">
 
         <TextView
             android:id="@+id/tv_debt_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@+id/tv_debt_sum"
             android:maxLines="3"
             android:text="Кредит Тиньков:"
-            android:textStyle="italic"
             android:textSize="20sp"
-            android:layout_toStartOf="@+id/tv_debt_sum"
-            android:layout_marginEnd="10dp"/>
+            android:textStyle="italic" />
 
         <TextView
             android:id="@+id/tv_debt_sum"
@@ -32,12 +33,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:text="0.00"
-            android:textStyle="italic|bold"
+            android:textAlignment="viewEnd"
             android:textColor="@color/blue"
             android:textSize="20sp"
-            android:textAlignment="viewEnd"
-            />
+            android:textStyle="italic|bold" />
 
     </RelativeLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

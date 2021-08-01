@@ -22,7 +22,6 @@ class DiagramTransactionsFragment : Fragment(R.layout.fragment_transactions_diag
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentTransactionsDiagramBinding.bind(view)
-        Timber.d("LOGS Diagrams vonViewCreated genType = ${viewModel.typeName}")
 
         val diagramAdapter = DiagramsAdapter(
             viewModel.catsWithTransactionsByType,

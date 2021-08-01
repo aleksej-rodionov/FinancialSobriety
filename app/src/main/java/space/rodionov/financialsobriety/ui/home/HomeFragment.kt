@@ -56,11 +56,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     }
                     is HomeViewModel.HomeEvent.NavigateToSpendsScreen -> {
                         val action =
-                            HomeFragmentDirections.actionFrontFragmentToTransactionsFragment(TransactionType.OUTCOME.name) // ADD ONLY SPENDS VARIABLE
+                            HomeFragmentDirections.actionFrontFragmentToTransactionsFragment()
                         findNavController().navigate(action)
                     }
                     is HomeViewModel.HomeEvent.NavigateToIncomesScreen -> {
-                        val action = HomeFragmentDirections.actionFrontFragmentToTransactionsFragment(TransactionType.INCOME.name) // ADD ONLY INCOMES VARIABLE
+                        val action = HomeFragmentDirections.actionFrontFragmentToTransactionsFragment()
                         findNavController().navigate(action)
                     }
                     is HomeViewModel.HomeEvent.NavigateToDebtsScreen -> {
@@ -70,10 +70,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     is HomeViewModel.HomeEvent.ShowTransactionSavedConfirmationMessage -> {
                         Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_SHORT).show()
                     }
-//                    is HomeViewModel.HomeEvent.NavigateToTransactionsScreen -> {
-//                        val action = HomeFragmentDirections.actionFrontFragmentToTransactionsFragment(event.typeName)
-//                        findNavController().navigate(action)
-//                    }
                 }.exhaustive
             }
         }

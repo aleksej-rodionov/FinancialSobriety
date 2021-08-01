@@ -49,14 +49,10 @@
     <fragment
         android:id="@+id/transactionsFragment"
         android:name="space.rodionov.financialsobriety.ui.transaction.TransactionsFragment"
-        android:label="{typeName}"
-        tools:layout="@layout/fragment_transactions" >
+        tools:layout="@layout/fragment_transactions">
         <action
             android:id="@+id/action_transactionsFragment_to_editTransactionFragment"
             app:destination="@id/editTransactionFragment" />
-        <argument
-            android:name="typeName"
-            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/editTransactionFragment"

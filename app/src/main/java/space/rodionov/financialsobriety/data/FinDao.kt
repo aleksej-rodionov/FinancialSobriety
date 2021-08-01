@@ -30,7 +30,7 @@ interface FinDao {
     fun getAllCategoriesWithTransactions() : Flow<List<CategoryWithTransactions>>
 
     @androidx.room.Transaction
-    @Query("SELECT * FROM category_table WHERE catType = :type ORDER BY catName")
+    @Query("SELECT * FROM category_table WHERE catType = :type AND catShown = 1 ORDER BY catName")
     fun getCatsWithTransactionsByType(type: String): Flow<List<CategoryWithTransactions>>
 
     //===============================CATEGORIES==========================
@@ -46,6 +46,12 @@ interface FinDao {
 
     @Query("SELECT * FROM category_table WHERE catType = :type ORDER BY catName")
     suspend fun getCategoriesByTypeSus(type: String): List<Category>
+
+    @Query("UPDATE category_table SET catShown = :catShown WHERE catName = :catName")
+    suspend fun changeCatShown(catName: String, catShown: Boolean)
+
+    @Query("SELECT * FROM category_table WHERE catName = :catName")
+    suspend fun getCatByName(catName: String) : Category
 
     //==================================GET DEBTS============================
 

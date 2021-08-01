@@ -34,16 +34,13 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentTransactionsRecyclerBinding.bind(view)
-        Timber.d("LOGS Recycler vonViewCreated genType = ${viewModel.typeName.value}")
 
         parentAdapter = RecTransParentAdapter(
             requireContext(),
-            viewModel.transactionsByType,
+            viewModel.catsWithTransactionsByType,
             viewLifecycleOwner.lifecycleScope,
             onTransactionClick = {
                 onItemClick(it)
-                Timber.d("logs ontransclick called")
-                Log.d(TAG, "logs onTransClick: called ($it)")
             }
         )
 
@@ -78,10 +75,6 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
 //                    viewModel.onDeleteTransaction(transaction)
 //                }
 //            }).attachToRecyclerView(recyclerView)
-
-            btnAdd.setOnClickListener {
-                viewModel.addTransaction()
-            }
         }
 
         setFragmentResultListener("add_edit_request") { _, bundle ->

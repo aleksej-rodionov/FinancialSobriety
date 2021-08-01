@@ -20,11 +20,20 @@
         android:layout_above="@+id/chip_group"
         android:layout_below="@id/tab_layout" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_above="@+id/chip_group"
+        android:background="@drawable/shape_shadow"/>
+
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/chip_group"
         style="@style/CustomChipStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:padding="16dp"
+        app:chipSpacingHorizontal="8dp" />
+
 
 </RelativeLayout>

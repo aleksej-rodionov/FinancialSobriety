@@ -20,31 +20,15 @@ private val Context.dataStore by preferencesDataStore("user_prefs")
 @Singleton
 class PrefManager @Inject constructor(@ApplicationContext context: Context) {
 
-    //    private val dataStore = context.createDataStore("user_prefs")
     private val prefsDataStore = context.dataStore
 
     private object PrefKeys {
-        val CAT_FILTER_JSON = stringPreferencesKey("cat_filter_json")
         val TYPE_NAME = stringPreferencesKey("type_name")
         val FIRST_DATE = stringPreferencesKey("first_date")
         val LAST_DATE = stringPreferencesKey("last_date")
     }
 
     //============================GETTERS=================================
-
-    val catFilterJsonFlow = prefsDataStore.data
-        .catch { exception ->
-            if (exception is IOException) {
-                Log.e(TAG, "Error reading preferences", exception)
-                emit(emptyPreferences())
-            } else {
-                throw exception
-            }
-        }
-        .map {
-            val catFilterJson = it[PrefKeys.CAT_FILTER_JSON] ?: ""
-            catFilterJson
-        }
 
     val typeNameFlow = prefsDataStore.data
         .catch { exception ->
@@ -89,12 +73,6 @@ class PrefManager @Inject constructor(@ApplicationContext context: Context) {
         }
 
     //==============================SETTERS==================================
-
-    suspend fun updateCatFilterJson(catFilterJson: String) {
-        prefsDataStore.edit {
-            it[PrefKeys.CAT_FILTER_JSON] = catFilterJson
-        }
-    }
 
     suspend fun updateTypeName(typeName: String) {
         prefsDataStore.edit {

@@ -20,32 +20,37 @@ class TransactionsViewModel @Inject constructor(
     private val state: SavedStateHandle,
     private val prefManager: PrefManager
 ) : ViewModel() {
-    val typeName = state.getLiveData("typeName", TransactionType.OUTCOME.name)
-    private fun tt() : TransactionType {
-        Timber.d("LOGS sharedViewModel typeName = ${typeName.value}")
-        return TransactionType.valueOf(typeName.value ?: TransactionType.OUTCOME.name)
-    }
 
     val typeNameFlow = prefManager.typeNameFlow
+
+//====================================RECYCLER FLOWS=======================================
 
     private var _monthListFlow = MutableStateFlow<List<Month>>(createMonthList())
     val monthListFlow = _monthListFlow.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
-    val allTransactions = repo.getAllTransactions()
-        .stateIn(viewModelScope, SharingStarted.Lazily, null)
-    val transactionsByType = repo.getTransactionsByType(tt())
-        .stateIn(viewModelScope, SharingStarted.Lazily, null)
+    private val transactionsByTypeFlow = typeNameFlow.flatMapLatest {
+        repo.getTransactionsByType(TransactionType.valueOf(it))
+    }
+    val transactionsByType = transactionsByTypeFlow.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
+//===============================DIAGRAMS FLOWS===============================================
 
-    val allCatsWithTransactions = repo.getAllCategoriesWithTransactions()
-        .stateIn(viewModelScope, SharingStarted.Lazily, null)
-    val catsWithTransactionsByType = repo.getCatsWithTransactionsByType(tt())
-        .stateIn(viewModelScope, SharingStarted.Lazily, null)
+    private val catsWithTransactionsByTypeFlow = typeNameFlow.flatMapLatest {
+        repo.getCatsWithTransactionsByType(TransactionType.valueOf(it))
+    }
+    val catsWithTransactionsByType = catsWithTransactionsByTypeFlow.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
+    private val catsByTypeFlow = typeNameFlow.flatMapLatest {
+        repo.getCategoriesByType(TransactionType.valueOf(it))
+    }
+    val catsByType = catsByTypeFlow.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
-//===============================PARENT FRAGMENT===============================================
+//===============================PARENT FRAGMENT FUNCTIONS===============================================
 
-
+    fun onCatShownCheckedChanged(name: String, shown: Boolean) = viewModelScope.launch {
+        repo.updateCategory(repo.getCatByName(name).copy(catShown = shown))
+        Timber.d("logs catshown of cat = ${repo.getCatByName(name).catShown}")
+    }
 
 
 //================================RECYCLER EVENT CHANNEL=========================================

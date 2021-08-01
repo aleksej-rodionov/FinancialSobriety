@@ -31,8 +31,8 @@ abstract class FinDatabase : RoomDatabase() {
                 dao.insertCategory(Category("Transport", TransactionType.OUTCOME))
                 dao.insertCategory(Category("Communication", TransactionType.OUTCOME))
                 dao.insertCategory(Category("Healthcare", TransactionType.OUTCOME))
-                dao.insertCategory(Category("Other", TransactionType.OUTCOME))
-                dao.insertCategory(Category("Brother", TransactionType.OUTCOME))
+                dao.insertCategory(Category("Other", TransactionType.OUTCOME, false))
+                dao.insertCategory(Category("Brother", TransactionType.OUTCOME, false))
 
                 dao.insertCategory(Category("Hata Holmy", TransactionType.INCOME))
                 dao.insertCategory(Category("Hata O1", TransactionType.INCOME))

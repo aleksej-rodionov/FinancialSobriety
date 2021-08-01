@@ -12,15 +12,17 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import space.rodionov.financialsobriety.R
+import space.rodionov.financialsobriety.data.CategoryWithTransactions
 import space.rodionov.financialsobriety.data.Month
 import space.rodionov.financialsobriety.data.Transaction
 import space.rodionov.financialsobriety.data.TransactionType
 import space.rodionov.financialsobriety.databinding.ItemRecMonthBinding
 import space.rodionov.financialsobriety.databinding.ItemTransactionBinding
+import java.util.*
 
 class RecTransParentAdapter(
     private val context: Context,
-    private val allTransactionsFlow: StateFlow<List<Transaction>?>,
+    private val allTransactionsFlow: StateFlow<List<CategoryWithTransactions>?>,
     private val scope: CoroutineScope,
     private val onTransactionClick: (Transaction) -> Unit
 ) : ListAdapter<Month, RecTransParentAdapter.RecParentViewHolder>(RecMonthComparator()) {
@@ -44,14 +46,18 @@ class RecTransParentAdapter(
 
         fun bind(month: Month) {
             binding.apply {
-                tvDateDivider.text = month.toString()
+                tvDateDivider.text = month.toAbbrString().capitalize(Locale.ROOT)
                 val recTransChildAdapter = RecTransChildAdapter(context, onTransactionClick)
                 childRecyclerView.layoutManager = LinearLayoutManager(context)
                 childRecyclerView.adapter = recTransChildAdapter
                 scope.launch {
                     allTransactionsFlow.collect {
-                        val allTransactions =  it ?: return@collect
-                        recTransChildAdapter.submitList(month.getTransactionsOfMonth(allTransactions))
+                        val catsWithTransactions =  it ?: return@collect
+                        val transactions = mutableListOf<Transaction>()
+                        for (cwt in catsWithTransactions) {
+                            transactions.addAll(cwt.transactions)
+                        }
+                        recTransChildAdapter.submitList(month.getTransactionsOfMonth(transactions))
                     }
                 }
             }
