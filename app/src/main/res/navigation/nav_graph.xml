@@ -80,12 +80,12 @@
             app:argType="string" />
     </fragment>
     <fragment
-        android:id="@+id/calendarTransactionsFragment"
-        android:name="space.rodionov.financialsobriety.ui.transaction.barchart.BarChartTransactionsFragment"
+        android:id="@+id/barchartsFragment"
+        android:name="space.rodionov.financialsobriety.ui.transaction.barchart.BarChartsFragment"
         android:label="CalendarTransactionsFragment" />
     <fragment
-        android:id="@+id/diagramTransactionsFragment"
-        android:name="space.rodionov.financialsobriety.ui.transaction.diagram.DiagramTransactionsFragment"
+        android:id="@+id/diagramsFragment"
+        android:name="space.rodionov.financialsobriety.ui.transaction.diagram.DiagramsFragment"
         android:label="DiagramTransactionsFragment" />
     <dialog
         android:id="@+id/chooseCategoryDialogFragment"

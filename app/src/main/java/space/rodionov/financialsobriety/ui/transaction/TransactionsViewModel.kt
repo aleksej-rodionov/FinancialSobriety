@@ -21,35 +21,50 @@ class TransactionsViewModel @Inject constructor(
     private val prefManager: PrefManager
 ) : ViewModel() {
 
-    val typeNameFlow = prefManager.typeNameFlow
+//==================================SHARED FLOWS====================================================
 
-//====================================RECYCLER FLOWS=======================================
+    val typeNameFlow = prefManager.typeNameFlow // All three
 
     private var _monthListFlow = MutableStateFlow<List<Month>>(createMonthList())
-    val monthListFlow = _monthListFlow.stateIn(viewModelScope, SharingStarted.Lazily, null)
-
-    private val transactionsByTypeFlow = typeNameFlow.flatMapLatest {
-        repo.getTransactionsByType(TransactionType.valueOf(it))
-    }
-    val transactionsByType = transactionsByTypeFlow.stateIn(viewModelScope, SharingStarted.Lazily, null)
-
-//===============================DIAGRAMS FLOWS===============================================
+    val monthListFlow = _monthListFlow.stateIn(viewModelScope, SharingStarted.Lazily, null) // Rec, Dia
 
     private val catsWithTransactionsByTypeFlow = typeNameFlow.flatMapLatest {
         repo.getCatsWithTransactionsByType(TransactionType.valueOf(it))
     }
-    val catsWithTransactionsByType = catsWithTransactionsByTypeFlow.stateIn(viewModelScope, SharingStarted.Lazily, null)
+    val catsWithTransactionsByType = catsWithTransactionsByTypeFlow
+        .stateIn(viewModelScope, SharingStarted.Lazily, null) // Rec, Dia
+
+
+//==================================BARCHART FLOWS========================================
+
+    private var _yearListFlow = MutableStateFlow(createYearList())
+    val yearListFlow = _yearListFlow.stateIn(viewModelScope, SharingStarted.Lazily, null)
+
+
+
+//===============================PARENT FLOWS===============================================
 
     private val catsByTypeFlow = typeNameFlow.flatMapLatest {
         repo.getCategoriesByType(TransactionType.valueOf(it))
     }
     val catsByType = catsByTypeFlow.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
+//==============================PARENT EVENT CHANNEL==============================================
+
+    private val transEventChannel = Channel<TransEvent>()
+    val transEvent = transEventChannel.receiveAsFlow()
+
+    sealed class TransEvent {
+        data class ShowInvalidCatNumberMsg(val msg: String) : TransEvent()
+    }
+
 //===============================PARENT FRAGMENT FUNCTIONS===============================================
 
     fun onCatShownCheckedChanged(name: String, shown: Boolean) = viewModelScope.launch {
         repo.updateCategory(repo.getCatByName(name).copy(catShown = shown))
-        Timber.d("logs catshown of cat = ${repo.getCatByName(name).catShown}")
+    }
+    fun showInvalidAmountOfCatsMsg() = viewModelScope.launch {
+        transEventChannel.send(TransEvent.ShowInvalidCatNumberMsg("You cannot observe less than 1 category"))
     }
 
 
@@ -97,7 +112,21 @@ class TransactionsViewModel @Inject constructor(
     }
 
 
-    //=======================SHARED FUNCTIONS==================================
+    //=======================BARCHARTS FUNCTIONS==================================
+
+    private fun createYearList() : List<Year> {
+        val yearList = mutableListOf<Year>()
+        val calToday = Calendar.getInstance()
+        calToday.timeInMillis = System.currentTimeMillis()
+        val curYear = calToday.get(Calendar.YEAR)
+        for (yyyy in 1970..curYear) {
+            yearList.add(Year(yyyy.toString()))
+        }
+        yearList.reverse()
+        return yearList
+    }
+
+    //========================PIECHARTS FUNCTIONS=====================================
 
     private fun createMonthList(): List<Month> {
         val monthList = mutableListOf<Month>()

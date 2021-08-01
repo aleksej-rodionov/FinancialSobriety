@@ -8,20 +8,19 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import space.rodionov.financialsobriety.R
-import space.rodionov.financialsobriety.databinding.FragmentTransactionsDiagramBinding
+import space.rodionov.financialsobriety.databinding.FragmentDiagramsBinding
 import space.rodionov.financialsobriety.ui.transaction.TransactionsViewModel
-import timber.log.Timber
 
 @AndroidEntryPoint
-class DiagramTransactionsFragment : Fragment(R.layout.fragment_transactions_diagram) {
+class DiagramsFragment : Fragment(R.layout.fragment_diagrams) {
 
     private val viewModel: TransactionsViewModel by viewModels({requireParentFragment()})
-    private var _binding: FragmentTransactionsDiagramBinding? = null
+    private var _binding: FragmentDiagramsBinding? = null
     private val binding get() = _binding!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentTransactionsDiagramBinding.bind(view)
+        _binding = FragmentDiagramsBinding.bind(view)
 
         val diagramAdapter = DiagramsAdapter(
             viewModel.catsWithTransactionsByType,

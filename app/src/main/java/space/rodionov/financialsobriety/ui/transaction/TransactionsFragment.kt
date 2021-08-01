@@ -3,22 +3,22 @@ package space.rodionov.financialsobriety.ui.transaction
 import android.os.Bundle
 import android.view.View
 import android.widget.CompoundButton
-import androidx.core.view.allViews
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.chip.Chip
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import space.rodionov.financialsobriety.R
-import space.rodionov.financialsobriety.data.Category
 import space.rodionov.financialsobriety.databinding.FragmentTransactionsBinding
-import space.rodionov.financialsobriety.ui.transaction.barchart.BarChartTransactionsFragment
-import space.rodionov.financialsobriety.ui.transaction.diagram.DiagramTransactionsFragment
+import space.rodionov.financialsobriety.ui.transaction.barchart.BarChartsFragment
+import space.rodionov.financialsobriety.ui.transaction.diagram.DiagramsFragment
 import space.rodionov.financialsobriety.ui.transaction.recycler.RecyclerTransactionsFragment
+import space.rodionov.financialsobriety.util.exhaustive
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -28,8 +28,8 @@ class TransactionsFragment : Fragment(R.layout.fragment_transactions), CompoundB
 
     private val binding get() = _binding!!
     private lateinit var recyclerTransactionsFragment: RecyclerTransactionsFragment
-    private lateinit var diagramTransactionsFragment: DiagramTransactionsFragment
-    private lateinit var barChartTransactionsFragment: BarChartTransactionsFragment
+    private lateinit var diagramsFragment: DiagramsFragment
+    private lateinit var barChartsFragment: BarChartsFragment
 
     private val viewModel: TransactionsViewModel by viewModels()
 
@@ -42,10 +42,10 @@ class TransactionsFragment : Fragment(R.layout.fragment_transactions), CompoundB
         val tabTitles = listOf("Список", "Диаграммы", "Графики")
 
         recyclerTransactionsFragment = RecyclerTransactionsFragment()
-        diagramTransactionsFragment = DiagramTransactionsFragment()
-        barChartTransactionsFragment = BarChartTransactionsFragment()
+        diagramsFragment = DiagramsFragment()
+        barChartsFragment = BarChartsFragment()
 
-        val fragments = listOf(recyclerTransactionsFragment, diagramTransactionsFragment, barChartTransactionsFragment)
+        val fragments = listOf(recyclerTransactionsFragment, diagramsFragment, barChartsFragment)
 
         val adapter = ViewPagerAdapter(this, fragments)
 
@@ -75,12 +75,30 @@ class TransactionsFragment : Fragment(R.layout.fragment_transactions), CompoundB
                     }
                 }
             }
+
+            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                viewModel.transEvent.collect { event ->
+                    when (event) {
+                        is TransactionsViewModel.TransEvent.ShowInvalidCatNumberMsg -> {
+                            Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_SHORT).show()
+                        }
+                    }.exhaustive
+                }
+            }
         }
     }
 
     override fun onCheckedChanged(compoundButton: CompoundButton, isChecked: Boolean) {
-        viewModel.onCatShownCheckedChanged(compoundButton.text.toString(), isChecked)
-        Timber.d("logs oncatshownchanged called")
+        if (isChecked) {
+            viewModel.onCatShownCheckedChanged(compoundButton.text.toString(), isChecked)
+        } else {
+            if (binding.chipGroup.checkedChipIds.size < 1) {
+                compoundButton.isChecked = true
+                viewModel.showInvalidAmountOfCatsMsg()
+            } else {
+                viewModel.onCatShownCheckedChanged(compoundButton.text.toString(), isChecked)
+            }
+        }
     }
 
     override fun onDestroyView() {

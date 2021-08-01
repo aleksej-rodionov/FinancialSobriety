@@ -3,10 +3,8 @@ package space.rodionov.financialsobriety.ui.transaction.diagram
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.Typeface.ITALIC
-import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -25,11 +23,10 @@ import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.data.CategoryWithTransactions
 import space.rodionov.financialsobriety.data.Month
 import space.rodionov.financialsobriety.databinding.ItemDiagramBinding
-import timber.log.Timber
 import java.util.*
 
 class DiagramsAdapter(
-    private val allCatsWithTransactionsFlow: StateFlow<List<CategoryWithTransactions>?>,
+    private val catsWithTransactionsFlow: StateFlow<List<CategoryWithTransactions>?>,
     private val scope: CoroutineScope
 ) : ListAdapter<Month, DiagramsAdapter.DiagramViewHolder>(DiagramsComparator()) {
 
@@ -48,9 +45,9 @@ class DiagramsAdapter(
             binding.apply {
                 pieChart.setupPieChart()
                 scope.launch {
-                    allCatsWithTransactionsFlow.collect {
-                        val allCatsWithTransactions = it ?: return@collect
-                        val pieEntries = createMonthPieEntryList(allCatsWithTransactions, month)
+                    catsWithTransactionsFlow.collect {
+                        val catsWithTransactions = it ?: return@collect
+                        val pieEntries = createMonthPieEntryList(catsWithTransactions, month)
                         pieChart.loadPieChartData(pieEntries, month)
                     }
                 }
@@ -65,7 +62,7 @@ class DiagramsAdapter(
         override fun areContentsTheSame(oldItem: Month, newItem: Month) = oldItem == newItem
     }
 
-    //=======================UNIQUE FUNS==========================================
+    //=======================CREATING ENTRIES FUNS==========================================
 
     private fun createMonthPieEntryList(
         allCatsWithTransactions: List<CategoryWithTransactions>,
