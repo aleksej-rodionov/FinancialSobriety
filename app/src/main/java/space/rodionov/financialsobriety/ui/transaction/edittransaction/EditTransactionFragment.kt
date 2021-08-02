@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
@@ -50,6 +51,7 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
             }
             etTransactionComment.setText(viewModel.tComment)
 
+            layoutChooseDebt.visibility = View.GONE
 
             if (viewModel.tType == TransactionType.INCOME.name) {
                 etTransactionComment.setTextColor(resources.getColor(R.color.green))

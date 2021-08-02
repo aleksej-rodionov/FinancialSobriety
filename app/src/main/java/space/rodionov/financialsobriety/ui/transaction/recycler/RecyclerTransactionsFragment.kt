@@ -41,6 +41,9 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
             viewLifecycleOwner.lifecycleScope,
             onTransactionClick = {
                 onItemClick(it)
+            },
+            onDeleteTransaction = {
+                viewModel.onDeleteTransaction(it)
             }
         )
 
@@ -56,25 +59,6 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
                     parentAdapter.submitList(months)
                 }
             }
-
-//            ItemTouchHelper(object :
-//                ItemTouchHelper.SimpleCallback(
-//                    0, /*ItemTouchHelper.LEFT or */
-//                    ItemTouchHelper.RIGHT
-//                ) {
-//                override fun onMove(
-//                    recyclerView: RecyclerView,
-//                    viewHolder: RecyclerView.ViewHolder,
-//                    target: RecyclerView.ViewHolder
-//                ): Boolean {
-//                    return false
-//                }
-//
-//                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-//                    val transaction = transAdapter.currentList[viewHolder.adapterPosition]
-//                    viewModel.onDeleteTransaction(transaction)
-//                }
-//            }).attachToRecyclerView(recyclerView)
         }
 
         setFragmentResultListener("add_edit_request") { _, bundle ->

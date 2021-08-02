@@ -3,10 +3,7 @@ package space.rodionov.financialsobriety.ui.transaction.recycler
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -22,7 +19,8 @@ class RecTransParentAdapter(
     private val context: Context,
     private val catsWithTransactions: StateFlow<List<CategoryWithTransactions>?>,
     private val scope: CoroutineScope,
-    private val onTransactionClick: (Transaction) -> Unit
+    private val onTransactionClick: (Transaction) -> Unit,
+    private val onDeleteTransaction: (Transaction) -> Unit
 ) : ListAdapter<Month, RecTransParentAdapter.RecParentViewHolder>(MonthComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecParentViewHolder {
@@ -50,7 +48,7 @@ class RecTransParentAdapter(
                 childRecyclerView.adapter = recTransChildAdapter
                 scope.launch {
                     catsWithTransactions.collect {
-                        val catsWithTransactions =  it ?: return@collect
+                        val catsWithTransactions = it ?: return@collect
                         val transactions = mutableListOf<Transaction>()
                         for (cwt in catsWithTransactions) {
                             transactions.addAll(cwt.transactions)
@@ -58,14 +56,27 @@ class RecTransParentAdapter(
                         recTransChildAdapter.submitList(month.getTransactionsOfMonth(transactions))
                     }
                 }
+
+                ItemTouchHelper(object :
+                    ItemTouchHelper.SimpleCallback(
+                        0, /*ItemTouchHelper.LEFT or */
+                        ItemTouchHelper.RIGHT
+                    ) {
+                    override fun onMove(
+                        recyclerView: RecyclerView,
+                        viewHolder: RecyclerView.ViewHolder,
+                        target: RecyclerView.ViewHolder
+                    ): Boolean {
+                        return false
+                    }
+
+                    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                        val transaction =
+                            recTransChildAdapter.currentList[viewHolder.adapterPosition]
+                        onDeleteTransaction(transaction)
+                    }
+                }).attachToRecyclerView(childRecyclerView)
             }
         }
     }
-
-//    class RecMonthComparator : DiffUtil.ItemCallback<Month>() {
-//        override fun areItemsTheSame(oldItem: Month, newItem: Month) =
-//            oldItem.mmSlashYear == newItem.mmSlashYear
-//
-//        override fun areContentsTheSame(oldItem: Month, newItem: Month) = oldItem == newItem
-//    }
 }

@@ -67,7 +67,7 @@ class DeleteCategoryViewModel @Inject constructor(
         category?.let {
             deleteCatEventChannel.send(
                 DeleteCategoryEvent.NavigateToDeleteAllTransByCat(
-                    category!!, null, CAT_DEL_RESULT_COMPLETE_DELETION
+                    it, null, CAT_DEL_RESULT_COMPLETE_DELETION
                 )
             )
         }
@@ -86,11 +86,12 @@ class DeleteCategoryViewModel @Inject constructor(
 //        deleteCatEventChannel.send(DeleteCategoryEvent.NavigateBackWithDeletionResult(result))
 //    }
 
-//    fun onUndoDeleteCat(category: Category?) = viewModelScope.launch {
-//        category?.let {
-//            repo.insertCategory(category)
-//        }
-//    }
+    fun onUndoDeleteCat() = viewModelScope.launch {
+        category?.let {
+            repo.deleteCategory(it)
+            repo.insertCategory(it)
+        }
+    }
 }
 
 

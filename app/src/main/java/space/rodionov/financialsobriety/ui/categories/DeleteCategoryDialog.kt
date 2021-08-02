@@ -69,6 +69,7 @@ class DeleteCategoryDialog : DialogFragment(), DialogChooseItemAdapter.OnCatClic
             }
 
             layoutCancelDeletion.setOnClickListener {
+                viewModel.onUndoDeleteCat()
                 this@DeleteCategoryDialog.dismiss()
             }
         }
