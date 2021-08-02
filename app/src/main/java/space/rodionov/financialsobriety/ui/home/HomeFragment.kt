@@ -3,6 +3,7 @@ package space.rodionov.financialsobriety.ui.home
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -31,17 +32,24 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         val homeMonthAdapter = HomeAdapter()
 
-        binding.apply { cardViewSpend.setOnClickListener { viewModel.onSpendsClick(TransactionType.OUTCOME.name) }
+        binding.apply {
+            cardViewSpend.setOnClickListener { viewModel.onSpendsClick(TransactionType.OUTCOME.name) }
             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                viewModel.monthNames.collect {
-                    tvBalance.text = "Баланс за ${it.first}"
-                    tvMonth.text = "За ${it.second}"
-                    tvIncomeMonth.text = "За ${it.second}"
+                viewModel.monthData.collect {
+                    val monthData = it ?: return@collect
+                    tvBalance.text = "Баланс за ${monthData.first.first}"
+                    tvMonth.text = "За ${monthData.first.second}"
+                    tvIncomeMonth.text = "За ${monthData.first.second}"
+                    tvSumMonth.text = monthData.second.first.toString()
+                    tvIncomeSumMonth.text = monthData.second.second.toString()
+                    tvBalanceSumMonth.text = monthData.second.third.toString()
                 }
-                viewModel.monthValues.collect {
-                    tvSumMonth.text = it.first.toString()
-                    tvIncomeSumMonth.text = it.second.toString()
-                    tvDebtSumMonth.text = it.third.toString()
+            }
+
+            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                viewModel.debtsSum.collect {
+                    val debtSum = it ?: return@collect
+                    tvDebtSumMonth.text = debtSum.toString()
                 }
             }
 
@@ -56,14 +64,24 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
                 viewModel.monthListFlow.collect {
-                    val months = it?: return@collect
+                    val months = it ?: return@collect
                     homeMonthAdapter.submitList(months)
                 }
             }
 
+            ivLeft.setOnClickListener {
+                viewPagerHome.setCurrentItem(viewPagerHome.currentItem + 1, true)
+                Timber.d("logs left click called")
+            }
+
+            ivRight.setOnClickListener {
+                viewPagerHome.setCurrentItem(viewPagerHome.currentItem - 1, true)
+                Timber.d("logs right click called")
+            }
+
             viewPagerHome.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
-                    viewModel.setMonthValues(position)
+                    viewModel.setMonthIndex(position)
                 }
             })
         }
@@ -77,15 +95,28 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             viewModel.homeEvent.collect { event ->
                 when (event) {
                     is HomeViewModel.HomeEvent.NavigateToAddSpendScreen -> {
-                        val action = HomeFragmentDirections.actionHomeFragmentToEditTransactionFragment(null, "New spending", TransactionType.OUTCOME.name)
+                        val action =
+                            HomeFragmentDirections.actionHomeFragmentToEditTransactionFragment(
+                                null,
+                                "New spending",
+                                TransactionType.OUTCOME.name
+                            )
                         findNavController().navigate(action)
                     }
                     is HomeViewModel.HomeEvent.NavigateToAddIncomeScreen -> {
-                        val action = HomeFragmentDirections.actionHomeFragmentToEditTransactionFragment(null, "New income", TransactionType.INCOME.name)
+                        val action =
+                            HomeFragmentDirections.actionHomeFragmentToEditTransactionFragment(
+                                null,
+                                "New income",
+                                TransactionType.INCOME.name
+                            )
                         findNavController().navigate(action)
                     }
                     is HomeViewModel.HomeEvent.NavigateToAddDebtScreen -> {
-                        val action = HomeFragmentDirections.actionFrontFragmentToEditDebtFragment("New debt", null)
+                        val action = HomeFragmentDirections.actionFrontFragmentToEditDebtFragment(
+                            "New debt",
+                            null
+                        )
                         findNavController().navigate(action)
                     }
                     is HomeViewModel.HomeEvent.NavigateToSpendsScreen -> {
@@ -94,7 +125,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         findNavController().navigate(action)
                     }
                     is HomeViewModel.HomeEvent.NavigateToIncomesScreen -> {
-                        val action = HomeFragmentDirections.actionFrontFragmentToTransactionsFragment()
+                        val action =
+                            HomeFragmentDirections.actionFrontFragmentToTransactionsFragment()
                         findNavController().navigate(action)
                     }
                     is HomeViewModel.HomeEvent.NavigateToDebtsScreen -> {

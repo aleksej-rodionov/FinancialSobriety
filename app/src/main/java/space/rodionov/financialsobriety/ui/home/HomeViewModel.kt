@@ -11,6 +11,7 @@ import space.rodionov.financialsobriety.data.*
 import space.rodionov.financialsobriety.ui.ADD_TRANSACTION_RESULT_OK
 import space.rodionov.financialsobriety.ui.EDIT_TRANSACTION_RESULT_OK
 import space.rodionov.financialsobriety.ui.shared.createMonthList
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -22,25 +23,33 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 //================================FLOWS===============================
 
-    private var _monthNames = MutableStateFlow<Pair<String, String>>(Pair(monthFullSdf.format(Calendar.getInstance().time), monthAbbrSdf.format(Calendar.getInstance().time)))
-    val monthNames: StateFlow<Pair<String, String>> = _monthNames.asStateFlow()
-
-    private var _monthValues = MutableStateFlow<Triple<Float, Float, Float>>(Triple(0f,0f,0f))
-    val monthValues: StateFlow<Triple<Float, Float, Float>> = _monthValues.asStateFlow()
-
     private var _monthListFlow = MutableStateFlow(createMonthList())
     val monthListFlow = _monthListFlow.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
+    var _monthIndex = MutableStateFlow<Int>(0)
+    private val monthIndex: StateFlow<Int> = _monthIndex.asStateFlow()
+
     private val spendCatsWithTransactionsFlow =
         repo.getCatsWithTransactionsByType(TransactionType.OUTCOME)
-    val spendCatsWithTransactions = spendCatsWithTransactionsFlow
-        .stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     private val incomeCatsWithTransactionsFlow =
-        repo.getCatsWithTransactionsByType(TransactionType.OUTCOME)
-    val incomeCatsWithTransactions = incomeCatsWithTransactionsFlow
-        .stateIn(viewModelScope, SharingStarted.Lazily, null)
+        repo.getCatsWithTransactionsByType(TransactionType.INCOME)
 
+    private val monthDataFlow = combine(
+        monthIndex,
+        spendCatsWithTransactionsFlow,
+        incomeCatsWithTransactionsFlow
+    ) { monthIndex, spendCats, incomeCats ->
+        Triple(monthIndex, spendCats, incomeCats)
+    }.flatMapLatest {
+        setMonthValues(it.first, it.second, it.third)
+    }
+    val monthData = monthDataFlow.stateIn(viewModelScope, SharingStarted.Lazily, null)
+
+    private val debtsSumFlow = repo.getAllDebts().flatMapLatest { debtList ->
+        debtsSumFlow(debtList)
+    }
+    val debtsSum = debtsSumFlow.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     //==================EVENT CHANNEL AND SEALED CLASS==================
     private val homeEventChannel = Channel<HomeEvent>()
@@ -58,33 +67,49 @@ class HomeViewModel @Inject constructor(
 
     //========================================METHODS===================================
 
-    fun setMonthValues(
-        monthIndex: Int
-    ) {
-        val month = _monthListFlow.value[monthIndex]
-        val spendCats = spendCatsWithTransactions.value
-        val incomeCats = incomeCatsWithTransactions.value
+    fun debtsSumFlow(debts: List<Debt>) : Flow<Float> {
+        val sum = debts.map {
+            it.debtSum
+        }.sum()
+        return MutableStateFlow(sum)
+    }
 
-        val monthSpendSum = spendCats?.let { sc ->
+    fun setMonthIndex(index: Int) {
+        _monthIndex.value = index
+    }
+
+    fun setMonthValues(
+        monthIndex: Int,
+        spendCats: List<CategoryWithTransactions>,
+        incomeCats: List<CategoryWithTransactions>
+    ): Flow<Pair<Pair<String, String>, Triple<Float, Float, Float>>> {
+        val month = _monthListFlow.value[monthIndex]
+        Timber.d("logs spend-cwt.value.size = ${spendCats.size}")
+        Timber.d("logs income-cwt.value.size = ${incomeCats.size}")
+
+        val monthSpendSum = spendCats.let { sc ->
             month.getTransactionsOfMonth(sc.flatMap {
                 it.transactions
             }).map {
                 it.sum
             }.sum()
-        } ?: 0f
+        }
 
-        val monthIncomeSum = incomeCats?.let { ic ->
+        val monthIncomeSum = incomeCats.let { ic ->
             month.getTransactionsOfMonth(ic.flatMap {
                 it.transactions
             }).map {
                 it.sum
             }.sum()
-        } ?: 0f
+        }
 
+        Timber.d("logs monthSpendSum = $monthSpendSum")
+        Timber.d("logs monthIncomeSum = $monthIncomeSum")
         val monthBalance = monthIncomeSum - monthSpendSum
 
-        _monthNames.value = Pair(month.toString(), month.toAbbrString())
-        _monthValues.value = Triple(monthSpendSum, monthIncomeSum, monthBalance)
+        val monthNamesValue = Pair(month.toString(), month.toAbbrString())
+        val monthValuesValue = Triple(monthSpendSum, monthIncomeSum, monthBalance)
+        return MutableStateFlow(Pair(monthNamesValue, monthValuesValue))
     }
 
     fun onSpendsClick(typeName: String) = viewModelScope.launch {

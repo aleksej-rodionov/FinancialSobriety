@@ -22,7 +22,8 @@ import space.rodionov.financialsobriety.util.exhaustive
 import timber.log.Timber
 
 @AndroidEntryPoint
-class TransactionsFragment : Fragment(R.layout.fragment_transactions), CompoundButton.OnCheckedChangeListener {
+class TransactionsFragment : Fragment(R.layout.fragment_transactions),
+    CompoundButton.OnCheckedChangeListener {
 
     private var _binding: FragmentTransactionsBinding? = null
 
@@ -60,15 +61,12 @@ class TransactionsFragment : Fragment(R.layout.fragment_transactions), CompoundB
             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
                 viewModel.catsByType.collect {
                     val categories = it ?: return@collect
+                    chipGroup.removeAllViews()
                     for (c in categories) {
-                        if (!chipGroup.children.map {
-                                (it as Chip).text.toString()
-                            }.contains(c.catName)) {
-                            val chip = Chip(requireContext())
-                            chip.text = c.catName
-                            chip.isChecked = c.catShown
-                            chipGroup.addView(chip)
-                        }
+                        val chip = Chip(requireContext())
+                        chip.text = c.catName
+                        chip.isChecked = c.catShown
+                        chipGroup.addView(chip)
                         chipGroup.children.forEach {
                             (it as Chip).setOnCheckedChangeListener(this@TransactionsFragment)
                         }
