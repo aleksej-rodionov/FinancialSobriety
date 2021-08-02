@@ -4,13 +4,16 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import space.rodionov.financialsobriety.data.Category
 import space.rodionov.financialsobriety.data.FinRepository
+import space.rodionov.financialsobriety.di.ApplicationScope
 import space.rodionov.financialsobriety.ui.ADD_CATEGORY_RESULT_OK
 import space.rodionov.financialsobriety.ui.CAT_DEL_RESULT_COMPLETE_DELETION
 import space.rodionov.financialsobriety.ui.CAT_DEL_RESULT_CONTENT_RELOCATED
@@ -21,7 +24,8 @@ private const val TAG = "CatViewModel LOGS"
 
 @HiltViewModel
 class CategoriesViewModel @Inject constructor(
-    private val repo: FinRepository
+    private val repo: FinRepository,
+    @ApplicationScope private val applicationScope: CoroutineScope
 ) : ViewModel() {
     val categories = repo.getAllCategories().stateIn(viewModelScope, SharingStarted.Lazily, null)
 
@@ -37,6 +41,7 @@ class CategoriesViewModel @Inject constructor(
         data class ShowCatSavedConfirmMessage(val msg: String) : CategoriesEvent()
         data class ShowUndoDeleteCatMessage(val category: Category) : CategoriesEvent()
         data class NavigateToDelCatDialog(val category: Category) : CategoriesEvent()
+        data class ShowCatDeletedConfirmMessage(val msg: String) : CategoriesEvent()
     }
 
     //=========FUNS==============================================
@@ -57,20 +62,22 @@ class CategoriesViewModel @Inject constructor(
     }
 
     fun onCatDelResult(result: Int) {
-        Log.d(TAG, "onCatDelResult: called with result $result")
         when (result) {
-            CAT_DEL_RESULT_COMPLETE_DELETION -> showCatSavedConfirmSnackbar("Category deleted with all its content")
-            CAT_DEL_RESULT_CONTENT_RELOCATED -> showCatSavedConfirmSnackbar("All the content of deleted category has been successfully relocated to another category")
+            CAT_DEL_RESULT_COMPLETE_DELETION -> showCatDeletedConfirmSnackbar("Category deleted with all its content")
+            CAT_DEL_RESULT_CONTENT_RELOCATED -> showCatDeletedConfirmSnackbar("All the content of deleted category has been successfully relocated to another category")
         }
     }
 
     private fun showCatSavedConfirmSnackbar(msg: String) = viewModelScope.launch {
         categoriesEventChannel.send(CategoriesEvent.ShowCatSavedConfirmMessage(msg))
-        Log.d(TAG, "showCatSavedConfirmSnackbar: called with msg $msg")
+    }
+
+    private fun showCatDeletedConfirmSnackbar(msg: String) = applicationScope.launch {
+        categoriesEventChannel.send(CategoriesEvent.ShowCatDeletedConfirmMessage(msg))
     }
 
     fun onDeleteCat(category: Category) = viewModelScope.launch {
-//        repo.deleteCategory(category)
+        repo.deleteCategory(category)
 //        categoriesEventChannel.send(CategoriesEvent.ShowUndoDeleteCatMessage(category)) // THIS WILL BE REPLACED BY DEL CAT DIALOG
         categoriesEventChannel.send(CategoriesEvent.NavigateToDelCatDialog(category))
     }

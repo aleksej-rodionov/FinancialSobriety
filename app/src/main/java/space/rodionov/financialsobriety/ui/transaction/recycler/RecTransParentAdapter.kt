@@ -1,13 +1,17 @@
 package space.rodionov.financialsobriety.ui.transaction.recycler
 
 import android.content.Context
+import android.graphics.Canvas
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.*
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.data.CategoryWithTransactions
 import space.rodionov.financialsobriety.data.Month
 import space.rodionov.financialsobriety.data.Transaction
@@ -74,6 +78,17 @@ class RecTransParentAdapter(
                         val transaction =
                             recTransChildAdapter.currentList[viewHolder.adapterPosition]
                         onDeleteTransaction(transaction)
+                    }
+
+                    override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
+
+                        RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                            .addBackgroundColor(ContextCompat.getColor(context, R.color.red))
+                            .addActionIcon(R.drawable.ic_delete)
+                            .create()
+                            .decorate();
+
+                        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                     }
                 }).attachToRecyclerView(childRecyclerView)
             }

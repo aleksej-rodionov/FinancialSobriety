@@ -1,8 +1,10 @@
 package space.rodionov.financialsobriety.ui.categories
 
+import android.graphics.Canvas
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import kotlinx.coroutines.flow.collect
 import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.data.Category
@@ -43,8 +46,7 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories),
 
             ItemTouchHelper(object :
                 ItemTouchHelper.SimpleCallback(
-                    0, /*ItemTouchHelper.LEFT or */
-                    ItemTouchHelper.RIGHT
+                    0, ItemTouchHelper.RIGHT
                 ) {
                 override fun onMove(
                     recyclerView: RecyclerView,
@@ -57,6 +59,17 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories),
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     val category = catAdapter.currentList[viewHolder.adapterPosition]
                     viewModel.onDeleteCat(category)
+                }
+
+                override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
+
+                    RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                        .addBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
+                        .addActionIcon(R.drawable.ic_delete)
+                        .create()
+                        .decorate();
+
+                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                 }
             }).attachToRecyclerView(recyclerView)
 
@@ -75,13 +88,11 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories),
         setFragmentResultListener("add_edit_request") { _, bundle ->
             val result = bundle.getInt("add_edit_result")
             viewModel.onAddEditResult(result)
-            Log.d(TAG, "CatDelResult = $result ")
         }
 
         setFragmentResultListener("cat_del_request") { _, bundle ->
             val result = bundle.getInt("cat_del_result")
             viewModel.onCatDelResult(result)
-            Log.d(TAG, "CatDelResult = $result ")
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
@@ -117,6 +128,9 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories),
                     is CategoriesViewModel.CategoriesEvent.NavigateToDelCatDialog -> {
                         val action = CategoriesFragmentDirections.actionCategoriesFragmentToDeleteCategoryDialog(event.category)
                         findNavController().navigate(action)
+                    }
+                    is CategoriesViewModel.CategoriesEvent.ShowCatDeletedConfirmMessage -> {
+                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
                     }
                 }.exhaustive
             }

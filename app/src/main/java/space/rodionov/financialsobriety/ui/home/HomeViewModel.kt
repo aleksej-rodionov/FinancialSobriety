@@ -84,8 +84,6 @@ class HomeViewModel @Inject constructor(
         incomeCats: List<CategoryWithTransactions>
     ): Flow<Pair<Pair<String, String>, Triple<Float, Float, Float>>> {
         val month = _monthListFlow.value[monthIndex]
-        Timber.d("logs spend-cwt.value.size = ${spendCats.size}")
-        Timber.d("logs income-cwt.value.size = ${incomeCats.size}")
 
         val monthSpendSum = spendCats.let { sc ->
             month.getTransactionsOfMonth(sc.flatMap {
@@ -103,8 +101,6 @@ class HomeViewModel @Inject constructor(
             }.sum()
         }
 
-        Timber.d("logs monthSpendSum = $monthSpendSum")
-        Timber.d("logs monthIncomeSum = $monthIncomeSum")
         val monthBalance = monthIncomeSum - monthSpendSum
 
         val monthNamesValue = Pair(month.toString(), month.toAbbrString())

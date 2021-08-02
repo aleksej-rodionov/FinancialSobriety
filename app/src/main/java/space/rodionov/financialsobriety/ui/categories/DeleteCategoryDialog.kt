@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -77,9 +79,9 @@ class DeleteCategoryDialog : DialogFragment(), DialogChooseItemAdapter.OnCatClic
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.deleteCatEvent.collect { event ->
                 when (event) {
-                    is DeleteCategoryViewModel.DeleteCategoryEvent.NavigateToDeleteAllTransByCat -> {
-                        val action = DeleteCategoryDialogDirections.actionDeleteCategoryDialogToDeleteAllTransInCatDialog(event.delCat, event.alterCat, event.resultCode)
-                        findNavController().navigate(action)
+                    is DeleteCategoryViewModel.DeleteCategoryEvent.NavigateBackWithDeletionResult -> {
+                        setFragmentResult("cat_del_request", bundleOf("cat_del_result" to event.result))
+                        findNavController().popBackStack()
                     }
                 }.exhaustive
             }
