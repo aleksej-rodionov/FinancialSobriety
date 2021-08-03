@@ -6,24 +6,28 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IAxisValueFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
-import com.github.mikephil.charting.utils.ColorTemplate
+import com.google.android.material.slider.LabelFormatter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.data.CategoryWithTransactions
 import space.rodionov.financialsobriety.data.Month
 import space.rodionov.financialsobriety.data.Transaction
 import space.rodionov.financialsobriety.data.Year
 import space.rodionov.financialsobriety.databinding.ItemBarChartBinding
 import timber.log.Timber
-import java.util.ArrayList
+import java.util.*
+
 
 class BarChartsAdapter(
     private val catsWithTransactionsFlow: StateFlow<List<CategoryWithTransactions>?>,
@@ -31,7 +35,11 @@ class BarChartsAdapter(
 ) : ListAdapter<Year, BarChartsAdapter.BarChartViewHolder>(BarChartComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BarChartViewHolder {
-        val binding = ItemBarChartBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemBarChartBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         return BarChartViewHolder(binding)
     }
 
@@ -40,9 +48,12 @@ class BarChartsAdapter(
         holder.bind(curYear)
     }
 
-    inner class BarChartViewHolder(private val binding: ItemBarChartBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class BarChartViewHolder(private val binding: ItemBarChartBinding) : RecyclerView.ViewHolder(
+        binding.root
+    ) {
         fun bind(year: Year) {
             binding.apply {
+                tvYear.text = year.yyyy
                 barChart.setupBarChart()
                 scope.launch {
                     catsWithTransactionsFlow.collect {
@@ -78,12 +89,12 @@ class BarChartsAdapter(
                 val sumByCat = month.getSumOfTransactionsInMonth(cwt.transactions)
                 sumsByCats.add(sumByCat)
             }
-            barEntries.add(BarEntry((index+1).toFloat(), sumsByCats.toFloatArray()))
+            barEntries.add(BarEntry((index + 1).toFloat(), sumsByCats.toFloatArray()))
         }
         return barEntries
     }
 
-    fun Month.getSumOfTransactionsInMonth(transactions: List<Transaction>) : Float {
+    private fun Month.getSumOfTransactionsInMonth(transactions: List<Transaction>) : Float {
         val transactionsOfMonth = this.getTransactionsOfMonth(transactions)
         val sumOfMonth = transactionsOfMonth.map {
             it.sum
@@ -108,6 +119,35 @@ class BarChartsAdapter(
             XAxis.XAxisPosition.TOP;      //The position of the X axis is set to down, the default is up
         this.axisRight.isEnabled = false;
 
+        this.xAxis.setDrawGridLines(false)
+        this.axisLeft.setDrawGridLines(true)
+        this.axisRight.setDrawGridLines(false)
+
+        val labels = arrayOf(
+            "",
+            resources.getString(R.string.jan),
+            resources.getString(R.string.feb),
+            resources.getString(R.string.mar),
+            resources.getString(R.string.apr),
+            resources.getString(R.string.may),
+            resources.getString(R.string.jun),
+            resources.getString(R.string.jul),
+            resources.getString(R.string.aug),
+            resources.getString(R.string.sep),
+            resources.getString(R.string.oct),
+            resources.getString(R.string.nov),
+            resources.getString(R.string.dec),
+        )
+
+        val formatter = (object: ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return labels.get(value.toInt())
+            }
+        })
+        this.xAxis.setValueFormatter(formatter);
+        this.xAxis.granularity = 1f;
+        this.xAxis.isGranularityEnabled = true;
+
 //        val l = this.getLegend();
 //        l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
 //        l.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
@@ -116,28 +156,12 @@ class BarChartsAdapter(
 //        l.formSize = 8f
 //        l.formToTextSpace = 4f
 //        l.xEntrySpace = 6f
-
-//        this.setDrawGridBackground(false)
     }
 
     private fun BarChart.loadBarChartData(
         entries: List<BarEntry>,
         categories: List<CategoryWithTransactions>
     ) {
-//        val colorList = mutableListOf<Int>()
-//        for (i in ColorTemplate.VORDIPLOM_COLORS) {
-//            colorList.add(i)
-//        }
-//        for (i in ColorTemplate.LIBERTY_COLORS) {
-//            colorList.add(i)
-//        }
-//        while (colorList.size < categories.size) {
-//            colorList.addAll(colorList)
-//        }
-//        val colors = IntArray(categories.size)
-//        Timber.d("logs categories.size = ${categories.size}")
-//        System.arraycopy(colorList.toIntArray(), 0, colors, 0, categories.size)
-//        Timber.d("logs colors.size = ${colors.size}")
 
         val catNames = categories.map {
             it.category.catName
@@ -159,7 +183,6 @@ class BarChartsAdapter(
         } else {
             val barDataSet = BarDataSet(entries, "In year")
             barDataSet.setDrawIcons(false)
-//            barDataSet.colors = getColors(catNames.size, colorList.toIntArray())?.toList()
             barDataSet.colors = catColors
 
             barDataSet.stackLabels = catNames
@@ -177,16 +200,8 @@ class BarChartsAdapter(
         this.setFitBars(true);
         this.invalidate()
     }
-
-    private fun getColors(size: Int, colorList: IntArray): IntArray {
-
-        Timber.d("logs getColors(catNamesSize = $size)")
-        // have as many colors as stack-values per entry
-        val colors = IntArray(size)
-        System.arraycopy(colorList, 0, colors, 0, size)
-        return colors
-    }
 }
+
 
 
 

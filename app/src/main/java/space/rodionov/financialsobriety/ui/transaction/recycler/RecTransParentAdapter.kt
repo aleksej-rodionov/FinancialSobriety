@@ -3,6 +3,7 @@ package space.rodionov.financialsobriety.ui.transaction.recycler
 import android.content.Context
 import android.graphics.Canvas
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.*
@@ -57,7 +58,12 @@ class RecTransParentAdapter(
                         for (cwt in catsWithTransactions) {
                             transactions.addAll(cwt.transactions)
                         }
-                        recTransChildAdapter.submitList(month.getTransactionsOfMonth(transactions))
+                        val monthTransactions = month.getTransactionsOfMonth(transactions)
+                        if (monthTransactions.isEmpty()) {
+                            tvEmpty.visibility = View.VISIBLE
+                        } else {
+                            recTransChildAdapter.submitList(monthTransactions)
+                        }
                     }
                 }
 
@@ -80,15 +86,39 @@ class RecTransParentAdapter(
                         onDeleteTransaction(transaction)
                     }
 
-                    override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
+                    override fun onChildDraw(
+                        c: Canvas,
+                        recyclerView: RecyclerView,
+                        viewHolder: RecyclerView.ViewHolder,
+                        dX: Float,
+                        dY: Float,
+                        actionState: Int,
+                        isCurrentlyActive: Boolean
+                    ) {
 
-                        RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                        RecyclerViewSwipeDecorator.Builder(
+                            c,
+                            recyclerView,
+                            viewHolder,
+                            dX,
+                            dY,
+                            actionState,
+                            isCurrentlyActive
+                        )
                             .addBackgroundColor(ContextCompat.getColor(context, R.color.red))
                             .addActionIcon(R.drawable.ic_delete)
                             .create()
                             .decorate();
 
-                        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                        super.onChildDraw(
+                            c,
+                            recyclerView,
+                            viewHolder,
+                            dX,
+                            dY,
+                            actionState,
+                            isCurrentlyActive
+                        )
                     }
                 }).attachToRecyclerView(childRecyclerView)
             }

@@ -56,13 +56,6 @@ class DiagramsAdapter(
         }
     }
 
-//    class DiagramsComparator : DiffUtil.ItemCallback<Month>() {
-//        override fun areItemsTheSame(oldItem: Month, newItem: Month) =
-//            oldItem.mmSlashYear == newItem.mmSlashYear
-//
-//        override fun areContentsTheSame(oldItem: Month, newItem: Month) = oldItem == newItem
-//    }
-
     //=======================CREATING ENTRIES FUNS==========================================
 
     private fun createMonthPieEntryList(
@@ -86,7 +79,7 @@ class DiagramsAdapter(
 
     private fun PieChart.setupPieChart() {
         this.isDrawHoleEnabled
-        this.setUsePercentValues(true)
+        this.setUsePercentValues(false)
         this.setEntryLabelTextSize(12f)
         this.setEntryLabelColor(Color.BLACK)
         this.setCenterTextSize(24f)

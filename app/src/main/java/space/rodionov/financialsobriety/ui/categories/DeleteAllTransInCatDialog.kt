@@ -9,6 +9,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.ui.CAT_DEL_RESULT_COMPLETE_DELETION
 
 @AndroidEntryPoint
@@ -18,13 +19,13 @@ class DeleteAllTransInCatDialog : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
         AlertDialog.Builder(requireContext())
-            .setTitle("Confirm deletion")
+            .setTitle(resources.getString(R.string.confirm_deletion))
             .setMessage(
-                if (viewModel.result == CAT_DEL_RESULT_COMPLETE_DELETION) "Do you really want to delete all transaction from the deleted category?"
-                else "Move all transactions from deleted category to category ${viewModel.alterCatName}?"
+                if (viewModel.result == CAT_DEL_RESULT_COMPLETE_DELETION) resources.getString(R.string.really_delete_transaction)
+                else "${resources.getString(R.string.move_content_to_category)} ${viewModel.alterCatName}?"
             )
-            .setNegativeButton("Cancel", null)
-            .setPositiveButton("Yes") { _, _ ->
+            .setNegativeButton(resources.getString(R.string.cancel_action), null)
+            .setPositiveButton(resources.getString(R.string.yes)) { _, _ ->
                 viewModel.onConfirmClick()
                 setFragmentResult("cat_del_request", bundleOf("cat_del_result" to viewModel.result))
                 val action =
@@ -32,6 +33,4 @@ class DeleteAllTransInCatDialog : DialogFragment() {
                 findNavController().navigate(action)
             }
             .create()
-
-
 }

@@ -35,7 +35,7 @@ interface FinDao {
 
     //===============================CATEGORIES==========================
 
-    @Query("SELECT * FROM category_table ORDER BY catType DESC")
+    @Query("SELECT * FROM category_table ORDER BY catName")
     fun getAllCategories(): Flow<List<Category>>
 
     @Query("SELECT * FROM category_table WHERE catType = :type ORDER BY catName")

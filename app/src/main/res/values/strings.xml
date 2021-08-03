@@ -15,6 +15,30 @@
     <string name="category_deleted">Category irrevocably deleted</string>
     <string name="debt_deleted">Debt irrevocably deleted</string>
     <string name="debts">Debts</string>
+    <string name="delete_content">Delete content</string>
+    <string name="new_category">New category</string>
+    <string name="edit_category">Edit category</string>
 
-    <string name="delete_content">Debts</string>
+
+
+
+    <string name="jan">JAN</string>
+    <string name="feb">FEB</string>
+    <string name="mar">MAR</string>
+    <string name="apr">APR</string>
+    <string name="may">MAY</string>
+    <string name="jun">JUN</string>
+    <string name="jul">JUL</string>
+    <string name="aug">AUG</string>
+    <string name="sep">SEP</string>
+    <string name="nov">OCT</string>
+    <string name="oct">NOV</string>
+    <string name="dec">DEC</string>
+    <string name="category_saved">Category saved</string>
+    <string name="category_updated">Category updated</string>
+    <string name="category_fully_deleted">Category deleted with all its content</string>
+    <string name="content_relocated">All the content of deleted category has been successfully relocated to another category</string>
+    <string name="move_content_to_category">Move all transactions from deleted category to category</string>
+
+
 </resources>

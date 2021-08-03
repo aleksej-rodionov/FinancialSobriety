@@ -1,9 +1,12 @@
 package space.rodionov.financialsobriety.ui.categories
 
+import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
@@ -11,6 +14,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.data.Category
 import space.rodionov.financialsobriety.data.FinRepository
 import space.rodionov.financialsobriety.di.ApplicationScope
@@ -19,16 +23,19 @@ import space.rodionov.financialsobriety.ui.CAT_DEL_RESULT_COMPLETE_DELETION
 import space.rodionov.financialsobriety.ui.CAT_DEL_RESULT_CONTENT_RELOCATED
 import space.rodionov.financialsobriety.ui.EDIT_CATEGORY_RESULT_OK
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 
 private const val TAG = "CatViewModel LOGS"
 
 @HiltViewModel
 class CategoriesViewModel @Inject constructor(
     private val repo: FinRepository,
-    @ApplicationScope private val applicationScope: CoroutineScope
+    @ApplicationScope private val applicationScope: CoroutineScope,
+    application: Application
 ) : ViewModel() {
-    val categories = repo.getAllCategories().stateIn(viewModelScope, SharingStarted.Lazily, null)
+    private val context = application.applicationContext
 
+    val categories = repo.getAllCategories().stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     //=================EVENT CHANNEL================================
 
@@ -39,7 +46,7 @@ class CategoriesViewModel @Inject constructor(
         object NavigateToAddCatScreen : CategoriesEvent()
         data class NavigateToEditCatScreen(val category: Category) : CategoriesEvent()
         data class ShowCatSavedConfirmMessage(val msg: String) : CategoriesEvent()
-        data class ShowUndoDeleteCatMessage(val category: Category) : CategoriesEvent()
+//        data class ShowUndoDeleteCatMessage(val category: Category) : CategoriesEvent()
         data class NavigateToDelCatDialog(val category: Category) : CategoriesEvent()
         data class ShowCatDeletedConfirmMessage(val msg: String) : CategoriesEvent()
     }
@@ -56,15 +63,15 @@ class CategoriesViewModel @Inject constructor(
 
     fun onAddEditResult(result: Int) {
         when (result) {
-            ADD_CATEGORY_RESULT_OK -> showCatSavedConfirmSnackbar("Category saved")
-            EDIT_CATEGORY_RESULT_OK -> showCatSavedConfirmSnackbar("Category updated")
+            ADD_CATEGORY_RESULT_OK -> showCatSavedConfirmSnackbar(context.resources.getString(R.string.category_saved))
+            EDIT_CATEGORY_RESULT_OK -> showCatSavedConfirmSnackbar(context.resources.getString(R.string.category_updated))
         }
     }
 
     fun onCatDelResult(result: Int) {
         when (result) {
-            CAT_DEL_RESULT_COMPLETE_DELETION -> showCatDeletedConfirmSnackbar("Category deleted with all its content")
-            CAT_DEL_RESULT_CONTENT_RELOCATED -> showCatDeletedConfirmSnackbar("All the content of deleted category has been successfully relocated to another category")
+            CAT_DEL_RESULT_COMPLETE_DELETION -> showCatDeletedConfirmSnackbar(context.resources.getString(R.string.category_fully_deleted))
+            CAT_DEL_RESULT_CONTENT_RELOCATED -> showCatDeletedConfirmSnackbar(context.resources.getString(R.string.content_relocated))
         }
     }
 

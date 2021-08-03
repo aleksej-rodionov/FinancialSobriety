@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Финансовая трезвость</string>
+    <string name="really_delete_transaction">Уверены, что хотите удалить транзакцию?</string>
+    <string name="confirm_deletion">Подтвердите удаление</string>
+    <string name="cancel_action">Отмена</string>
+    <string name="yes">Да</string>
+    <string name="no_items">Список пуст</string>
+    <string name="choose_category">Выберите категорию</string>
+    <string name="choose_debt">Выберите долг</string>
+    <string name="choose_date">Выберите дату</string>
+    <string name="have_already_debt_with_such_name">У вас уже есть долг с этим названием</string>
+    <string name="have_already_category_with_such_name">У вас уже есть категория с этим названием</string>
+    <string name="no_categories">Список категорий пуст</string>
+    <string name="undo">ВЕРНУТЬ</string>
+    <string name="category_deleted">Категория безвозвратно удалена</string>
+    <string name="debt_deleted">Долг удалён</string>
+    <string name="debts">Долги</string>
+    <string name="delete_content">Удалить содержимое</string>
+    <string name="new_category">Новая категория</string>
+    <string name="edit_category">Редактирование</string>
+
+
+
+    <string name="jan">ЯНВ</string>
+    <string name="feb">ФЕВ</string>
+    <string name="mar">МАР</string>
+    <string name="apr">АПР</string>
+    <string name="may">МАЙ</string>
+    <string name="jun">ИЮН</string>
+    <string name="jul">ИЮЛ</string>
+    <string name="aug">АВГ</string>
+    <string name="sep">СЕН</string>
+    <string name="nov">ОКТ</string>
+    <string name="oct">НОЯ</string>
+    <string name="dec">ДЕК</string>
+    <string name="category_saved">Category saved</string>
+    <string name="category_updated">Category updated</string>
+    <string name="category_fully_deleted">Category deleted with all its content</string>
+    <string name="content_relocated">All the content of deleted category has been successfully relocated to another category</string>
+    <string name="move_content_to_category">Move all transactions from deleted category to category</string>
+</resources>

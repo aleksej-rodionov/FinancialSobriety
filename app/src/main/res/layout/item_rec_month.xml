@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginVertical="16dp"
     android:orientation="vertical">
 
     <TextView
@@ -12,6 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="28dp"
+        android:paddingVertical="12dp"
+        android:background="@color/soft_gray"
         android:textSize="18sp"
         tools:text="03.02.1991" />
 
@@ -25,6 +26,16 @@
             android:layout_height="wrap_content"
             android:paddingVertical="8dp"
             tools:listitem="@layout/item_transaction" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_empty"
+            android:text="(Empty)"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_margin="8dp"
+            android:textSize="16sp"/>
 
     </FrameLayout>
 

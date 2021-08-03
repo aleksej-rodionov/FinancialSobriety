@@ -101,30 +101,30 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories),
                     CategoriesViewModel.CategoriesEvent.NavigateToAddCatScreen -> {
                         val action =
                             CategoriesFragmentDirections.actionCategoriesFragmentToEditCategoryFragment(
-                                null, "New category", null
+                                null, resources.getString(R.string.new_category), null
                             )
                         findNavController().navigate(action)
                     }
                     is CategoriesViewModel.CategoriesEvent.NavigateToEditCatScreen -> {
                         val action =
                             CategoriesFragmentDirections.actionCategoriesFragmentToEditCategoryFragment(
-                                event.category, "Edit category", null
+                                event.category, resources.getString(R.string.edit_category), null
                             )
                         findNavController().navigate(action)
                     }
                     is CategoriesViewModel.CategoriesEvent.ShowCatSavedConfirmMessage -> {
                         Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_LONG).show()
                     }
-                    is CategoriesViewModel.CategoriesEvent.ShowUndoDeleteCatMessage -> { // THIS WILL BE REPLACED BY DEL CAT DIALOG
-                        Snackbar.make(
-                            requireView(),
-                            requireContext().resources.getString(R.string.category_deleted),
-                            Snackbar.LENGTH_LONG
-                        )
-                            .setAction(requireContext().resources.getString(R.string.undo)) {
-                                viewModel.onUndoDeleteCat(event.category)
-                            }.show()
-                    }
+//                    is CategoriesViewModel.CategoriesEvent.ShowUndoDeleteCatMessage -> { // THIS WILL BE REPLACED BY DEL CAT DIALOG
+//                        Snackbar.make(
+//                            requireView(),
+//                            requireContext().resources.getString(R.string.category_deleted),
+//                            Snackbar.LENGTH_LONG
+//                        )
+//                            .setAction(requireContext().resources.getString(R.string.undo)) {
+//                                viewModel.onUndoDeleteCat(event.category)
+//                            }.show()
+//                    }
                     is CategoriesViewModel.CategoriesEvent.NavigateToDelCatDialog -> {
                         val action = CategoriesFragmentDirections.actionCategoriesFragmentToDeleteCategoryDialog(event.category)
                         findNavController().navigate(action)

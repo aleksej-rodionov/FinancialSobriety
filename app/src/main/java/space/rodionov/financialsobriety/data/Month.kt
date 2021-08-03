@@ -39,7 +39,7 @@ data class Month(
     }
 }
 
-val russianMonthNames = arrayOf("Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь")
+
 
 val monthYearSdf = SimpleDateFormat("MM/yyyy", Locale.getDefault())
 val yearSdf = SimpleDateFormat("yyyy", Locale.getDefault())
