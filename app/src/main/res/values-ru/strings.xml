@@ -65,4 +65,7 @@
     <string name="category_name">Category name</string>
     <string name="enter_name_and_sum_of_debt_or_credit">Enter name and sum of debt or credit</string>
     <string name="debt_name">Debt name</string>
+    <string name="categories">Categories</string>
+    <string name="journal">Journal</string>
+    <string name="home">Home</string>
 </resources>
