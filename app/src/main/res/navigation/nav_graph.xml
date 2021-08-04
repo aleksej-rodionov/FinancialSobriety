@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="space.rodionov.financialsobriety.ui.home.HomeFragment"
-        android:label="Главная"
+        android:label="@string/home"
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_editTransactionFragment"
@@ -112,7 +112,7 @@
     <fragment
         android:id="@+id/categoriesFragment"
         android:name="space.rodionov.financialsobriety.ui.categories.CategoriesFragment"
-        android:label="Categories"
+        android:label="@string/categories"
         tools:layout="@layout/fragment_categories">
         <action
             android:id="@+id/action_categoriesFragment_to_editCategoryFragment"

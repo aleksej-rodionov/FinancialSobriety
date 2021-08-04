@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FinDao {
-    //===========================GET TRANSACTIONS==============================
+    //===========================TRANSACTIONS==============================
 
     @Query("SELECT * FROM spend_table ORDER BY timestamp DESC")
     fun getAllTransactions(): Flow<List<Transaction>>
@@ -18,6 +18,8 @@ interface FinDao {
 
     @Query("UPDATE spend_table SET catName = :catNameNew WHERE catName = :catNameOld")
     suspend fun moveTransactionsFromCatToCat(catNameOld: String, catNameNew: String)
+
+
 
     //============================CATEGORIES WITH TRANSACTIONS==============
 

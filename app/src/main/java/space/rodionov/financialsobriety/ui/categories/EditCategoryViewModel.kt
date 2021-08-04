@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -12,6 +13,7 @@ import space.rodionov.financialsobriety.data.Category
 import space.rodionov.financialsobriety.data.FinRepository
 import space.rodionov.financialsobriety.data.TransactionType
 import space.rodionov.financialsobriety.data.getColors
+import space.rodionov.financialsobriety.di.ApplicationScope
 import space.rodionov.financialsobriety.ui.ADD_CATEGORY_RESULT_OK
 import space.rodionov.financialsobriety.ui.EDIT_CATEGORY_RESULT_OK
 import timber.log.Timber
@@ -20,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EditCategoryViewModel @Inject constructor(
     private val repo: FinRepository,
+    @ApplicationScope private val applicationScope: CoroutineScope,
     private val state: SavedStateHandle
 ) : ViewModel() {
     val title = state.get<String>("title")
@@ -64,7 +67,9 @@ class EditCategoryViewModel @Inject constructor(
                 catType = catType,
                 catColor = catColor
             )
-            updateCategory(updatedCat)
+//            updateCatNameInTransactions(updatedCat, category)
+            updateCategory(updatedCat, category)
+            Timber.d("updatedCat.name = ${updatedCat.catName}, oldCat.name = ${category.catName}")
         } else {
 //            val newCat = Category(
 //                catName = catName,
@@ -75,8 +80,13 @@ class EditCategoryViewModel @Inject constructor(
         }
     }
 
-    private fun updateCategory(category: Category) = viewModelScope.launch {
-        repo.updateCategory(category)
+//    private fun updateCatNameInTransactions(newCat: Category, oldCat: Category) = viewModelScope.launch {
+//        repo.moveContentFromCatToCat(oldCat.catName, newCat.catName)
+//    }
+
+    private fun updateCategory(newCat: Category, oldCat: Category) = applicationScope.launch {
+//        repo.moveContentFromCatToCat(oldCat.catName, newCat.catName)
+        repo.updateCategory(newCat)
         editCatEventChannel.send(EditCatEvent.NavigateBackWithResult(EDIT_CATEGORY_RESULT_OK))
     }
 

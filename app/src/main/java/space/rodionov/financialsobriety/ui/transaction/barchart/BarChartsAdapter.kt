@@ -11,6 +11,7 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.StackedValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import kotlinx.coroutines.CoroutineScope
@@ -113,14 +114,18 @@ class BarChartsAdapter(
         this.xAxis.axisMinimum = 0f;      //X-axis minimum value
         //Number of X-axis coordinates The second parameter is generally filled with false true, which means that the number of labels is mandatory, which may cause problems such as incomplete display of X-axis coordinates.
         this.xAxis.setLabelCount(12, false);
-        this.description.setEnabled(false);        //A string of English letters in the lower right corner is not displayed
+        this.description.isEnabled = false;        //A string of English letters in the lower right corner is not displayed
         this.xAxis.position =
             XAxis.XAxisPosition.TOP;      //The position of the X axis is set to down, the default is up
         this.axisRight.isEnabled = false;
 
+        this.xAxis.labelRotationAngle = -45f
+//        this.xAxis.yOffset = 5f   // отступ от оси Х до графика
+
         this.xAxis.setDrawGridLines(false)
         this.axisLeft.setDrawGridLines(true)
         this.axisRight.setDrawGridLines(false)
+
 
         val labels = arrayOf(
             "",
@@ -187,8 +192,8 @@ class BarChartsAdapter(
         } else {
             val barDataSet = BarDataSet(entries, null)
             barDataSet.setDrawIcons(false)
+//            barDataSet.setDrawValues(false)
             barDataSet.colors = catColors
-
             barDataSet.stackLabels = catNames
 
             val dataSets = ArrayList<IBarDataSet>()
@@ -201,6 +206,8 @@ class BarChartsAdapter(
             barData.barWidth = 0.9f;//The width of the column
         }
 
+        val formatterStacked = StackedValueFormatter(false, "", 2)
+
         val formatterY = (object: ValueFormatter() {
 
 
@@ -212,7 +219,11 @@ class BarChartsAdapter(
                 return ""
             }
         })
-        this.barData.setValueFormatter(formatterY)
+        this.data.setValueFormatter(formatterStacked)
+
+
+        this.xAxis.axisMaximum = this.data.xMax + 0.75f
+//        this.xAxis.axisMinimum = this.data.xMin - 0.25f
 
         this.setFitBars(true);
         this.invalidate()

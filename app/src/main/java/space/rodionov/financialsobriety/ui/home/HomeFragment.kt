@@ -17,6 +17,7 @@ import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.data.TransactionType
 import space.rodionov.financialsobriety.databinding.FragmentHomeBinding
 import space.rodionov.financialsobriety.util.exhaustive
+import space.rodionov.financialsobriety.util.roundToTwoDecimals
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -40,9 +41,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     tvBalance.text = "${resources.getString(R.string.balance_for)} ${monthData.first.first}"
                     tvMonth.text = "${resources.getString(R.string.for_)} ${monthData.first.second}"
                     tvIncomeMonth.text = "${resources.getString(R.string.for_)} ${monthData.first.second}"
-                    tvSumMonth.text = monthData.second.first.toString()
-                    tvIncomeSumMonth.text = monthData.second.second.toString()
-                    tvBalanceSumMonth.text = monthData.second.third.toString()
+                    tvSumMonth.text = monthData.second.first.roundToTwoDecimals().toString()
+                    tvIncomeSumMonth.text = monthData.second.second.roundToTwoDecimals().toString()
+                    tvBalanceSumMonth.text = monthData.second.third.roundToTwoDecimals().toString()
                 }
             }
 

@@ -10,10 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.*
-import com.github.mikephil.charting.formatter.IValueFormatter
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
-import com.github.mikephil.charting.utils.ViewPortHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -24,7 +22,6 @@ import space.rodionov.financialsobriety.data.Month
 import space.rodionov.financialsobriety.databinding.ItemDiagramBinding
 import space.rodionov.financialsobriety.ui.shared.MonthComparator
 import space.rodionov.financialsobriety.util.roundToTwoDecimals
-import java.text.DecimalFormat
 import java.util.*
 
 
@@ -84,21 +81,27 @@ class DiagramsAdapter(
 
     private fun PieChart.setupPieChart() {
         this.isDrawHoleEnabled
-//        this.setUsePercentValues(false)
-//        this.setEntryLabelTextSize(12f)
-//        this.setEntryLabelColor(Color.BLACK)
+        this.setUsePercentValues(false)
+        this.setEntryLabelTextSize(12f)
+        this.setEntryLabelColor(Color.WHITE)
         this.setCenterTextSize(24f)
         this.description.isEnabled = false
         this.isRotationEnabled = false
 
-        this.setDrawEntryLabels(false)
+        this.setDrawEntryLabels(true)
+
+        this.setTransparentCircleColor(Color.WHITE)
+        this.setTransparentCircleAlpha(110)
+        this.setHoleRadius(58f)
+        this.setTransparentCircleRadius(61f)
+        this.setExtraOffsets(12f, 12f, 12f, 12f)
 
         val legend = this.legend
         legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
         legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
         legend.orientation = Legend.LegendOrientation.HORIZONTAL
         legend.isWordWrapEnabled = true
-        legend.setDrawInside(false)
+        legend.setDrawInside(true)
         legend.isEnabled
     }
 
@@ -113,11 +116,23 @@ class DiagramsAdapter(
 
         val dataset = PieDataSet(entries, null)
         dataset.colors = catColors
+        dataset.sliceSpace = 5f
+        dataset.setSelectionShift(5f)
+
+        //dataSet.setSelectionShift(0f);
+        dataset.setValueLinePart1OffsetPercentage(80f)
+        dataset.setValueLinePart1Length(0.2f)
+        dataset.setValueLinePart2Length(0.4f)
+
+        //dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+
+        //dataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
+        dataset.setYValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE)
 
         val data = PieData(dataset)
         data.setDrawValues(true)
         data.setValueFormatter(PercentFormatter(this))
-        data.setValueTextSize(14f)
+        data.setValueTextSize(13f)
         data.setValueTextColor(Color.BLACK)
 
         // formatter

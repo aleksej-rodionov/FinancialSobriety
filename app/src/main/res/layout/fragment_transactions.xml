@@ -17,23 +17,36 @@
         android:id="@+id/view_pager_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/chip_group"
+        android:layout_above="@+id/layout_transparent"
         android:layout_below="@id/tab_layout" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="4dp"
-        android:layout_above="@+id/chip_group"
-        android:background="@drawable/shape_shadow"/>
+        android:layout_above="@+id/layout_transparent"
+        android:background="@drawable/shape_shadow" />
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chip_group"
-        style="@style/CustomChipStyle"
+    <RelativeLayout
+        android:id="@+id/layout_transparent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:padding="16dp"
-        app:chipSpacingHorizontal="8dp" />
+        android:layout_height="160dp"
+        android:layout_alignParentBottom="true">
 
+        <ScrollView
+            android:id="@+id/scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
 
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group"
+                style="@style/CustomChipStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/subtle_blue"
+                android:padding="16dp"
+                app:chipSpacingHorizontal="8dp" />
+
+        </ScrollView>
+    </RelativeLayout>
 </RelativeLayout>
