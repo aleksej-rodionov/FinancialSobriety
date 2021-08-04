@@ -55,10 +55,10 @@ class EditCategoryFragment : BottomSheetDialogFragment() {
             switchButton.setOnCheckedChangeListener { btn, isChecked ->
                 if (isChecked) {
                     viewModel.catType = TransactionType.INCOME
-                    btn.text = "Income"
+                    btn.text = resources.getString(R.string.income)
                 } else {
                     viewModel.catType = TransactionType.OUTCOME
-                    btn.text = "Outcome"
+                    btn.text = resources.getString(R.string.outcome)
                 }
             }
 

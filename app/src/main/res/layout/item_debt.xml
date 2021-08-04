@@ -23,7 +23,7 @@
             android:layout_marginEnd="10dp"
             android:layout_toStartOf="@+id/tv_debt_sum"
             android:maxLines="3"
-            android:text="Кредит Тиньков:"
+            tools:text="Кредит Тиньков:"
             android:textSize="20sp"
             android:textStyle="italic" />
 
@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:text="0.00"
+            tools:text="0.00"
             android:textAlignment="viewEnd"
             android:textColor="@color/blue"
             android:textSize="20sp"

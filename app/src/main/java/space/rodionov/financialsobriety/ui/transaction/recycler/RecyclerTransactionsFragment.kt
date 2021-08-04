@@ -82,7 +82,7 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
                         val action =
                             TransactionsFragmentDirections.actionTransactionsFragmentToEditTransactionFragment(
                                 event.transaction,
-                                "Edit ${event.transaction.type.name.toLowerCase(Locale.ROOT)}",
+                                "${getString(R.string.edit_)} ${event.transaction.type.name.toLowerCase(Locale.ROOT)}",
                                 event.transaction.type.name
                             )
                         findNavController().navigate(action)
@@ -90,7 +90,7 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
                     is TransactionsViewModel.RecTransEvent.ShowUndoDeleteTransactionMessage -> {
                         Snackbar.make(
                             requireView(),
-                            "Transaction deleted for good",
+                            getString(R.string.transaction_deleted),
                             Snackbar.LENGTH_LONG
                         )
                             .setAction("UNDO") { viewModel.undoDeleteClick(event.transaction) }

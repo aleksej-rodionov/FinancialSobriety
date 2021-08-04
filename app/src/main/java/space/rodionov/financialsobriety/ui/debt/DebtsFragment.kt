@@ -29,6 +29,13 @@ class DebtsFragment : Fragment(R.layout.fragment_debts), DebtsAdapter.OnDebtClic
         _binding = FragmentDebtsBinding.bind(view)
         val debtAdapter = DebtsAdapter(this)
         binding.apply {
+            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                viewModel.debtsSum.collect {
+                    val debtSum = it ?: return@collect
+                    tvTotalDebtSum.text = "${getString(R.string.total_debt_sum_is_)} ${debtSum.toString()}"
+                }
+            }
+
             recyclerView.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = debtAdapter
@@ -36,7 +43,7 @@ class DebtsFragment : Fragment(R.layout.fragment_debts), DebtsAdapter.OnDebtClic
             }
 
             ItemTouchHelper(object :
-                ItemTouchHelper.SimpleCallback(0, /*ItemTouchHelper.LEFT or */ItemTouchHelper.RIGHT) {
+                ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
                 override fun onMove(
                     recyclerView: RecyclerView,
                     viewHolder: RecyclerView.ViewHolder,
@@ -72,11 +79,11 @@ class DebtsFragment : Fragment(R.layout.fragment_debts), DebtsAdapter.OnDebtClic
             viewModel.debtsEvent.collect { event ->
                 when (event) {
                     is DebtsViewModel.DebtsEvent.NavigateToAddDebtScreen -> {
-                        val action = DebtsFragmentDirections.actionDebtsFragmentToEditDebtFragment("New debt", null)
+                        val action = DebtsFragmentDirections.actionDebtsFragmentToEditDebtFragment(resources.getString(R.string.new_debt), null)
                         findNavController().navigate(action)
                     }
                     is DebtsViewModel.DebtsEvent.NavigateToEditDebtScreen -> {
-                        val action = DebtsFragmentDirections.actionDebtsFragmentToEditDebtFragment("Edit debt", event.debt)
+                        val action = DebtsFragmentDirections.actionDebtsFragmentToEditDebtFragment(resources.getString(R.string.edit_debt), event.debt)
                         findNavController().navigate(action)
                     }
                     is DebtsViewModel.DebtsEvent.ShowDebtSavedConfirmMessage -> {

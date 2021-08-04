@@ -25,5 +25,5 @@ enum class TransactionType {
     INCOME, OUTCOME
 }
 
-fun getColors() : IntArray = ColorTemplate.VORDIPLOM_COLORS + ColorTemplate.LIBERTY_COLORS
+fun getColors() : IntArray = ColorTemplate.VORDIPLOM_COLORS + ColorTemplate.COLORFUL_COLORS
 

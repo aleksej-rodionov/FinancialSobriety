@@ -14,6 +14,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import space.rodionov.financialsobriety.R
+import space.rodionov.financialsobriety.data.getColors
 import space.rodionov.financialsobriety.databinding.FragmentTransactionsBinding
 import space.rodionov.financialsobriety.ui.transaction.barchart.BarChartsFragment
 import space.rodionov.financialsobriety.ui.transaction.diagram.DiagramsFragment
@@ -65,6 +66,7 @@ class TransactionsFragment : Fragment(R.layout.fragment_transactions),
                     for (c in categories) {
                         val chip = Chip(requireContext())
                         chip.text = c.catName
+//                        chip.setChipBackgroundColorResource(c.catColor)
                         chip.isChecked = c.catShown
                         chipGroup.addView(chip)
                         chipGroup.children.forEach {

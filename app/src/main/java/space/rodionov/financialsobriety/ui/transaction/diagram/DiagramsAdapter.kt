@@ -5,16 +5,15 @@ import android.graphics.Typeface
 import android.graphics.Typeface.ITALIC
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.Legend
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.formatter.IValueFormatter
 import com.github.mikephil.charting.formatter.PercentFormatter
-import com.github.mikephil.charting.utils.ColorTemplate
+import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.utils.ViewPortHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -24,7 +23,10 @@ import space.rodionov.financialsobriety.data.CategoryWithTransactions
 import space.rodionov.financialsobriety.data.Month
 import space.rodionov.financialsobriety.databinding.ItemDiagramBinding
 import space.rodionov.financialsobriety.ui.shared.MonthComparator
+import space.rodionov.financialsobriety.util.roundToTwoDecimals
+import java.text.DecimalFormat
 import java.util.*
+
 
 class DiagramsAdapter(
     private val catsWithTransactionsFlow: StateFlow<List<CategoryWithTransactions>?>,
@@ -41,15 +43,18 @@ class DiagramsAdapter(
         holder.bind(curMonth)
     }
 
-    inner class DiagramViewHolder(private val binding: ItemDiagramBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class DiagramViewHolder(private val binding: ItemDiagramBinding) : RecyclerView.ViewHolder(
+        binding.root
+    ) {
         fun bind(month: Month) {
             binding.apply {
                 pieChart.setupPieChart()
                 scope.launch {
                     catsWithTransactionsFlow.collect {
                         val catsWithTransactions = it ?: return@collect
+                        pieChart.data?.clearValues()
                         val pieEntries = createMonthPieEntryList(catsWithTransactions, month)
-                        pieChart.loadPieChartData(pieEntries, month)
+                        pieChart.loadPieChartData(pieEntries, month, catsWithTransactions)
                     }
                 }
             }
@@ -65,12 +70,12 @@ class DiagramsAdapter(
         val pieEntries = mutableListOf<PieEntry>()
         for (cwt in allCatsWithTransactions) {
             val monthTransactionsByCat = month.getTransactionsOfMonth(cwt.transactions)
-            if (!monthTransactionsByCat.isNullOrEmpty()) {
+
                 val monthSumByCat = monthTransactionsByCat.map {
                     it.sum
-                }.sum()
+                }.sum().roundToTwoDecimals()
                 pieEntries.add(PieEntry(monthSumByCat, cwt.category.catName))
-            }
+
         }
         return pieEntries
     }
@@ -79,32 +84,35 @@ class DiagramsAdapter(
 
     private fun PieChart.setupPieChart() {
         this.isDrawHoleEnabled
-        this.setUsePercentValues(false)
-        this.setEntryLabelTextSize(12f)
-        this.setEntryLabelColor(Color.BLACK)
+//        this.setUsePercentValues(false)
+//        this.setEntryLabelTextSize(12f)
+//        this.setEntryLabelColor(Color.BLACK)
         this.setCenterTextSize(24f)
         this.description.isEnabled = false
         this.isRotationEnabled = false
 
+        this.setDrawEntryLabels(false)
+
         val legend = this.legend
-        legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
-        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.RIGHT
-        legend.orientation = Legend.LegendOrientation.VERTICAL
+        legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+        legend.orientation = Legend.LegendOrientation.HORIZONTAL
+        legend.isWordWrapEnabled = true
         legend.setDrawInside(false)
         legend.isEnabled
     }
 
-    private fun PieChart.loadPieChartData(entries: List<PieEntry>, month: Month) {
-        val colors = mutableListOf<Int>()
-        for (i in ColorTemplate.VORDIPLOM_COLORS) {
-            colors.add(i)
-        }
-        for (i in ColorTemplate.LIBERTY_COLORS) {
-            colors.add(i)
+    private fun PieChart.loadPieChartData(
+        entries: List<PieEntry>,
+        month: Month,
+        categories: List<CategoryWithTransactions>
+    ) {
+        val catColors = categories.map {
+            it.category.catColor
         }
 
-        val dataset = PieDataSet(entries, "(Categories)")
-        dataset.setColors(colors)
+        val dataset = PieDataSet(entries, null)
+        dataset.colors = catColors
 
         val data = PieData(dataset)
         data.setDrawValues(true)
@@ -112,9 +120,18 @@ class DiagramsAdapter(
         data.setValueTextSize(14f)
         data.setValueTextColor(Color.BLACK)
 
+        // formatter
+        val formatter = (object: ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return if (value == 0.0f) "" else value.toString()
+            }
+        })
+        data.setValueFormatter(formatter)
+
         this.data = data
         this.invalidate()
 
+        // center text
         val monthSum = entries.map {
             it.value
         }.sumByDouble {
@@ -128,3 +145,4 @@ class DiagramsAdapter(
         this.setCenterTextTypeface(font)
     }
 }
+

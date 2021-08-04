@@ -44,5 +44,5 @@ data class Month(
 val monthYearSdf = SimpleDateFormat("MM/yyyy", Locale.getDefault())
 val yearSdf = SimpleDateFormat("yyyy", Locale.getDefault())
 val monthNameSdf = SimpleDateFormat("MMMM", Locale.getDefault());
-val monthAbbrSdf = SimpleDateFormat("MMM yyyy", Locale.getDefault());
-val monthFullSdf = SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+val monthAbbrSdf = SimpleDateFormat("LLL yyyy", Locale.getDefault());
+val monthFullSdf = SimpleDateFormat("LLLL yyyy", Locale.getDefault());

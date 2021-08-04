@@ -4,9 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import space.rodionov.financialsobriety.data.Category
 import space.rodionov.financialsobriety.data.Debt
@@ -23,6 +21,11 @@ class DebtsViewModel @Inject constructor(
 ) : ViewModel() {
     val debts = repo.getAllDebts().stateIn(viewModelScope, SharingStarted.Lazily, null)
 
+    private val debtsSumFlow = repo.getAllDebts().flatMapLatest { debtList ->
+        debtsSumFlow(debtList)
+    }
+    val debtsSum = debtsSumFlow.stateIn(viewModelScope, SharingStarted.Lazily, null)
+
     //=================EVENT CHANNEL===========================================
     private val debtsEventChannel = Channel<DebtsEvent>()
     val debtsEvent = debtsEventChannel.receiveAsFlow()
@@ -34,6 +37,7 @@ class DebtsViewModel @Inject constructor(
     }
 
     //======================FUNS===============================================
+
     fun onDebtClick(debt: Debt) = viewModelScope.launch {
         debtsEventChannel.send(DebtsEvent.NavigateToEditDebtScreen(debt))
     }
@@ -60,5 +64,12 @@ class DebtsViewModel @Inject constructor(
 
     fun onUndoDeleteDebt(debt: Debt) = viewModelScope.launch {
         repo.insertDebt(debt)
+    }
+
+    fun debtsSumFlow(debts: List<Debt>) : Flow<Float> {
+        val sum = debts.map {
+            it.debtSum
+        }.sum()
+        return MutableStateFlow(sum)
     }
 }

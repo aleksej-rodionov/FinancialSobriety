@@ -39,6 +39,32 @@
     <string name="category_fully_deleted">Category deleted with all its content</string>
     <string name="content_relocated">All the content of deleted category has been successfully relocated to another category</string>
     <string name="move_content_to_category">Move all transactions from deleted category to category</string>
+    <string name="income">Income</string>
+    <string name="outcome">Outcome</string>
+    <string name="enter_category_name">Enter category name</string>
+    <string name="new_debt">Add debt</string>
+    <string name="edit_debt">Edit debt</string>
+    <string name="data_for">Data for</string>
+    <string name="for_">For</string>
+    <string name="balance_for">Balance for</string>
+    <string name="new_spend">New spending</string>
+    <string name="new_income">New income</string>
+    <string name="edit_">Edit</string>
+    <string name="transaction_deleted">Transaction deleted for good</string>
+    <string name="category_">Category…</string>
+    <string name="sum">Sum</string>
+    <string name="comment_not_neccessary">Comment (not necessary)</string>
+    <string name="no_debt_chosen">No debt chosen</string>
+    <string name="you_can_reduce_your_debt">You can reduce debt by the sum entered. For this, choose the debt.</string>
+    <string name="ok">OK</string>
+    <string name="total_debt_sum_is_">Total debt sum is</string>
+    <string name="you_gonna_delete_category">You\'re going to delete category. Which another category you want to move all it\'s transactions to?</string>
+    <string name="delete_all_content">Delete all category\'s transactions</string>
+    <string name="cancel_deletion">Cancel deletion</string>
+    <string name="enter_category_name_and_type">Enter category name and type</string>
+    <string name="category_name">Category name</string>
+    <string name="enter_name_and_sum_of_debt_or_credit">Enter name and sum of debt or credit</string>
+    <string name="debt_name">Debt name</string>
 
 
 </resources>

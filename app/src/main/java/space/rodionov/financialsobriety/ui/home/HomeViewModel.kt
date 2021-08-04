@@ -1,9 +1,11 @@
 package space.rodionov.financialsobriety.ui.home
 
+import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -18,8 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val repo: FinRepository,
-    private val prefManager: PrefManager,
-    private val state: SavedStateHandle
+    private val prefManager: PrefManager
 ) : ViewModel() {
 //================================FLOWS===============================
 

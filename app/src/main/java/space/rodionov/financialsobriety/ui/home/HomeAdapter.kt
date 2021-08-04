@@ -1,17 +1,19 @@
 package space.rodionov.financialsobriety.ui.home
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.data.CategoryWithTransactions
 import space.rodionov.financialsobriety.data.Month
 import space.rodionov.financialsobriety.databinding.ItemMonthHomeBinding
 import space.rodionov.financialsobriety.ui.shared.MonthComparator
 
-class HomeAdapter : ListAdapter<Month, HomeAdapter.HomeMonthViewHolder>(MonthComparator()) {
+class HomeAdapter(val context: Context) : ListAdapter<Month, HomeAdapter.HomeMonthViewHolder>(MonthComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeMonthViewHolder {
         val binding = ItemMonthHomeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -26,7 +28,7 @@ class HomeAdapter : ListAdapter<Month, HomeAdapter.HomeMonthViewHolder>(MonthCom
     inner class HomeMonthViewHolder(private val binding: ItemMonthHomeBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(month: Month) {
             binding.apply {
-                tvMonth.text = "Данные за ${month}"
+                tvMonth.text = "${context.resources.getString(R.string.data_for)} ${month}"
                 tvMonth.setRotationY(180f);
             }
         }

@@ -30,16 +30,16 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentHomeBinding.bind(view)
 
-        val homeMonthAdapter = HomeAdapter()
+        val homeMonthAdapter = HomeAdapter(requireContext())
 
         binding.apply {
             cardViewSpend.setOnClickListener { viewModel.onSpendsClick(TransactionType.OUTCOME.name) }
             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
                 viewModel.monthData.collect {
                     val monthData = it ?: return@collect
-                    tvBalance.text = "Баланс за ${monthData.first.first}"
-                    tvMonth.text = "За ${monthData.first.second}"
-                    tvIncomeMonth.text = "За ${monthData.first.second}"
+                    tvBalance.text = "${resources.getString(R.string.balance_for)} ${monthData.first.first}"
+                    tvMonth.text = "${resources.getString(R.string.for_)} ${monthData.first.second}"
+                    tvIncomeMonth.text = "${resources.getString(R.string.for_)} ${monthData.first.second}"
                     tvSumMonth.text = monthData.second.first.toString()
                     tvIncomeSumMonth.text = monthData.second.second.toString()
                     tvBalanceSumMonth.text = monthData.second.third.toString()
@@ -98,7 +98,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         val action =
                             HomeFragmentDirections.actionHomeFragmentToEditTransactionFragment(
                                 null,
-                                "New spending",
+                                getString(R.string.new_spend),
                                 TransactionType.OUTCOME.name
                             )
                         findNavController().navigate(action)
@@ -107,14 +107,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         val action =
                             HomeFragmentDirections.actionHomeFragmentToEditTransactionFragment(
                                 null,
-                                "New income",
+                                getString(R.string.new_income),
                                 TransactionType.INCOME.name
                             )
                         findNavController().navigate(action)
                     }
                     is HomeViewModel.HomeEvent.NavigateToAddDebtScreen -> {
                         val action = HomeFragmentDirections.actionFrontFragmentToEditDebtFragment(
-                            "New debt",
+                            getString(R.string.new_debt),
                             null
                         )
                         findNavController().navigate(action)

@@ -33,7 +33,7 @@ class CategoriesViewModel @Inject constructor(
     @ApplicationScope private val applicationScope: CoroutineScope,
     application: Application
 ) : ViewModel() {
-    private val context = application.applicationContext
+//    private val context = application.applicationContext
 
     val categories = repo.getAllCategories().stateIn(viewModelScope, SharingStarted.Lazily, null)
 
@@ -63,15 +63,15 @@ class CategoriesViewModel @Inject constructor(
 
     fun onAddEditResult(result: Int) {
         when (result) {
-            ADD_CATEGORY_RESULT_OK -> showCatSavedConfirmSnackbar(context.resources.getString(R.string.category_saved))
-            EDIT_CATEGORY_RESULT_OK -> showCatSavedConfirmSnackbar(context.resources.getString(R.string.category_updated))
+            ADD_CATEGORY_RESULT_OK -> showCatSavedConfirmSnackbar("Category saved")
+            EDIT_CATEGORY_RESULT_OK -> showCatSavedConfirmSnackbar("Category updated")
         }
     }
 
     fun onCatDelResult(result: Int) {
         when (result) {
-            CAT_DEL_RESULT_COMPLETE_DELETION -> showCatDeletedConfirmSnackbar(context.resources.getString(R.string.category_fully_deleted))
-            CAT_DEL_RESULT_CONTENT_RELOCATED -> showCatDeletedConfirmSnackbar(context.resources.getString(R.string.content_relocated))
+            CAT_DEL_RESULT_COMPLETE_DELETION -> showCatDeletedConfirmSnackbar("Category deleted with all content")
+            CAT_DEL_RESULT_CONTENT_RELOCATED -> showCatDeletedConfirmSnackbar("All content of category relocated to another category")
         }
     }
 

@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.data.Category
 import space.rodionov.financialsobriety.data.FinRepository
 import space.rodionov.financialsobriety.data.TransactionType

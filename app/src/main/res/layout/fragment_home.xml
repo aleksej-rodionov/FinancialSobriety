@@ -9,8 +9,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.home.HomeFragment">
 
-
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,7 +21,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:text="Баланс за июнь:"
+                tools:text="Баланс за июнь:"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
