@@ -62,7 +62,10 @@ class RecTransParentAdapter(
                         if (monthTransactions.isEmpty()) {
                             tvEmpty.visibility = View.VISIBLE
                         } else {
-                            recTransChildAdapter.submitList(monthTransactions)
+                            val sortedTransactions = monthTransactions.sortedBy {
+                                it.timestamp
+                            }.asReversed()
+                            recTransChildAdapter.submitList(sortedTransactions)
                         }
                     }
                 }

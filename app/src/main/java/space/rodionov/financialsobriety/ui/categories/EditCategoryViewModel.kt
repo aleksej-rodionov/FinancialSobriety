@@ -39,7 +39,7 @@ class EditCategoryViewModel @Inject constructor(
             state.set("catColor", value)
         }
     var catType =
-        state.get<TransactionType>("catType") ?: category?.catType ?: enumValueOf(onlyType ?: "OUTCOME")
+        state.get<TransactionType>("catType") ?: category?.catType ?: enumValueOf(onlyType ?: TransactionType.OUTCOME.name)
         set(value) {
             field = value
             state.set("catType", value)
@@ -85,8 +85,9 @@ class EditCategoryViewModel @Inject constructor(
 //    }
 
     private fun updateCategory(newCat: Category, oldCat: Category) = applicationScope.launch {
-//        repo.moveContentFromCatToCat(oldCat.catName, newCat.catName)
+
         repo.updateCategory(newCat)
+        repo.moveContentFromCatToCat(oldCat.catName, newCat.catName)
         editCatEventChannel.send(EditCatEvent.NavigateBackWithResult(EDIT_CATEGORY_RESULT_OK))
     }
 

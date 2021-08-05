@@ -1,6 +1,7 @@
 package space.rodionov.financialsobriety.ui.transaction.barchart
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -58,9 +59,13 @@ class BarChartsAdapter(
                 scope.launch {
                     catsWithTransactionsFlow.collect {
                         val catsWithTransactions = it ?: return@collect
-                        val barEntries = createYearBarEntryList(catsWithTransactions, year)
-                        barChart.data?.clearValues()
-                        barChart.loadBarChartData(barEntries, catsWithTransactions)
+                        if (catsWithTransactions.isNullOrEmpty()) {
+                            tvNoCategories.visibility = View.VISIBLE
+                        } else {
+                            val barEntries = createYearBarEntryList(catsWithTransactions, year)
+                            barChart.data?.clearValues()
+                            barChart.loadBarChartData(barEntries, catsWithTransactions)
+                        }
                     }
                 }
             }

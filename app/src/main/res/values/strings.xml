@@ -68,6 +68,7 @@
     <string name="categories">Categories</string>
     <string name="journal">Journal</string>
     <string name="home">Home</string>
+    <string name="no_categories_to_display">Categories to display not chosen</string>
 
 
 </resources>
