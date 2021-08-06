@@ -68,6 +68,12 @@ class EditCategoryFragment : BottomSheetDialogFragment() {
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.catListFlow.collect {
+                viewModel.categories.value = it
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.editCatEvent.collect {
                 when (it){
                     is EditCategoryViewModel.EditCatEvent.NavigateBackWithResult -> {

@@ -2,11 +2,12 @@ package space.rodionov.financialsobriety.ui.categories
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.data.Category
@@ -25,6 +26,10 @@ class EditCategoryViewModel @Inject constructor(
     @ApplicationScope private val applicationScope: CoroutineScope,
     private val state: SavedStateHandle
 ) : ViewModel() {
+    val categories = state.getLiveData<List<Category>>(
+        "categories",
+        repo.getAllCategories().asLiveData().value
+    )
     val title = state.get<String>("title")
     val onlyType = state.get<String>("onlyType")
     val category = state.get<Category>("category")
@@ -45,6 +50,10 @@ class EditCategoryViewModel @Inject constructor(
             state.set("catType", value)
         }
 
+    //==============FLOWS==============================================
+
+    val catListFlow = repo.getAllCategories().stateIn(viewModelScope, SharingStarted.Lazily, null)
+
 
     //==========EVENT CHANNEL==========================================
     private val editCatEventChannel = Channel<EditCatEvent>()
@@ -59,6 +68,16 @@ class EditCategoryViewModel @Inject constructor(
     fun onSaveClick() {
         if (catName.isBlank()) {
             showInvalidInputMsg("Enter category name")
+            return
+        }
+        Timber.d("logs catvalue = ${categories.value}")
+        categories.value?.let {
+            if (it.map {
+                it.catName
+                }.contains(catName)) {
+                showInvalidInputMsg("Category with such name already exists")
+            }
+            Timber.d("logs LET called, catlivedata.value = ${it} ")
             return
         }
         if (category != null) {

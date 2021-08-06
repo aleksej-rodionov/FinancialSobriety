@@ -9,11 +9,12 @@ import kotlinx.android.parcel.Parcelize
 @Entity(tableName = "category_table")
 @Parcelize
 data class Category(
-    @PrimaryKey(autoGenerate = false)
+
     val catName: String,
     val catType: TransactionType,
     val catColor: Int,
-    val catShown: Boolean = true
+    val catShown: Boolean = true,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0
 ) : Parcelable {
 
     override fun toString(): String {
