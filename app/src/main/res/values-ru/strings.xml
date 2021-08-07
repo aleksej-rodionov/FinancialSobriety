@@ -63,10 +63,11 @@
     <string name="cancel_deletion">Отменить удаление</string>
     <string name="enter_category_name_and_type">Введите имя категории и ее тип</string>
     <string name="category_name">Имя категории</string>
-    <string name="enter_name_and_sum_of_debt_or_credit">Введите название и сумму долга или  кредита</string>
+    <string name="enter_name_and_sum_of_debt_or_credit">Введите название и сумму долга или кредита</string>
     <string name="debt_name">Название долга</string>
     <string name="categories">Категории</string>
     <string name="journal">Журнал</string>
     <string name="home">Главная</string>
-    <string name="no_categories_to_display">Categories to display not chosen</string>
+    <string name="no_categories_to_display">Не выбраны категории для показа</string>
+    <string name="for_today">На сегодня</string>
 </resources>

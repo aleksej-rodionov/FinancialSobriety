@@ -32,9 +32,7 @@ abstract class FinDatabase : RoomDatabase() {
                 dao.insertCategory(Category("Transport", TransactionType.OUTCOME, getColors()[1]))
                 dao.insertCategory(Category("Communication", TransactionType.OUTCOME, getColors()[3]))
 
-
             }
         }
     }
-
 }

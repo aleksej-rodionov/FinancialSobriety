@@ -48,6 +48,7 @@ class RecTransChildAdapter(
                 tvCategory.text = transaction.catName
                 tvComment.text = transaction.comment
                 tvSum.text = transaction.sum.toString()
+                tvDate.text = transaction.dateFormatted
                 if (transaction.type == TransactionType.INCOME) {
                     tvSum.setTextColor(context.resources.getColor(R.color.green))
                     tvSum.text = "+ ${tvSum.text}"
