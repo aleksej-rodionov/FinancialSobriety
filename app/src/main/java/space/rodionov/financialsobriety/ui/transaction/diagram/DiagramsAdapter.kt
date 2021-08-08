@@ -151,7 +151,7 @@ class DiagramsAdapter(
             it.value
         }.sumByDouble {
             it.toDouble()
-        }.toFloat()
+        }.toFloat().roundToTwoDecimals()
         val monthText = "${month.toAbbrString().capitalize(Locale.ROOT)}\n$monthSum"
         this.centerText = monthText
         this.setCenterTextSize(19f)

@@ -25,6 +25,9 @@ class FinRepository @Inject constructor(
     fun getCatsWithTransactionsByType(type: TransactionType): Flow<List<CategoryWithTransactions>> =
         finDao.getCatsWithTransactionsByType(type.name)
 
+    fun getAllCatsWithTransactionsByType(type: TransactionType): Flow<List<CategoryWithTransactions>> =
+        finDao.getAllCatsWithTransactionsByType(type.name)
+
     //=========================CATEGORIES===================================
 
     fun getAllCategories(): Flow<List<Category>> = finDao.getAllCategories()

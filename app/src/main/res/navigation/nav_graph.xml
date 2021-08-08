@@ -151,29 +151,5 @@
         <argument
             android:name="category"
             app:argType="space.rodionov.financialsobriety.data.Category" />
-        <action
-            android:id="@+id/action_deleteCategoryDialog_to_deleteAllTransInCatDialog"
-            app:destination="@id/deleteAllTransInCatDialog" />
-    </dialog>
-    <dialog
-        android:id="@+id/deleteAllTransInCatDialog"
-        android:name="space.rodionov.financialsobriety.ui.categories.DeleteAllTransInCatDialog"
-        android:label="DeleteAllTransInCatDialog" >
-        <action
-            android:id="@+id/action_deleteAllTransInCatDialog_to_categoriesFragment"
-            app:destination="@id/categoriesFragment"
-            app:popUpTo="@id/categoriesFragment"
-            app:popUpToInclusive="true"/>
-        <argument
-            android:name="delCategory"
-            app:argType="space.rodionov.financialsobriety.data.Category" />
-        <argument
-            android:name="alterCategory"
-            app:argType="space.rodionov.financialsobriety.data.Category"
-            app:nullable="true"
-            android:defaultValue="@null" />
-        <argument
-            android:name="result"
-            app:argType="integer" />
     </dialog>
 </navigation>

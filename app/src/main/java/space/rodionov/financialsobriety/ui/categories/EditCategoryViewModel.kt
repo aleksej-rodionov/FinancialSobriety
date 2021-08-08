@@ -70,15 +70,13 @@ class EditCategoryViewModel @Inject constructor(
             showInvalidInputMsg("Enter category name")
             return
         }
-        Timber.d("logs catvalue = ${categories.value}")
         categories.value?.let {
             if (it.map {
                 it.catName
                 }.contains(catName)) {
                 showInvalidInputMsg("Category with such name already exists")
+                return
             }
-            Timber.d("logs LET called, catlivedata.value = ${it} ")
-            return
         }
         if (category != null) {
             val updatedCat = category.copy(
@@ -132,7 +130,7 @@ class EditCategoryViewModel @Inject constructor(
 
     private suspend fun chooseCatColor() : Int {
         val numberOfCategories = repo.getNumberOfCatsByType(catType)
-        var colorIndex: Int
+        val colorIndex: Int
         if (numberOfCategories >= getColors().size) {
             colorIndex = numberOfCategories.toString().removeRange(0, numberOfCategories.toString().length - 1).toInt()
         } else {

@@ -35,6 +35,10 @@ interface FinDao {
     @Query("SELECT * FROM category_table WHERE catType = :type AND catShown = 1 ORDER BY catName")
     fun getCatsWithTransactionsByType(type: String): Flow<List<CategoryWithTransactions>>
 
+    @androidx.room.Transaction
+    @Query("SELECT * FROM category_table WHERE catType = :type ORDER BY catName")
+    fun getAllCatsWithTransactionsByType(type: String): Flow<List<CategoryWithTransactions>>
+
     //===============================CATEGORIES==========================
 
     @Query("SELECT * FROM category_table ORDER BY catName")

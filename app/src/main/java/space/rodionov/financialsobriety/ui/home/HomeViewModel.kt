@@ -31,10 +31,10 @@ class HomeViewModel @Inject constructor(
     private val monthIndex: StateFlow<Int> = _monthIndex.asStateFlow()
 
     private val spendCatsWithTransactionsFlow =
-        repo.getCatsWithTransactionsByType(TransactionType.OUTCOME)
+        repo.getAllCatsWithTransactionsByType(TransactionType.OUTCOME)
 
     private val incomeCatsWithTransactionsFlow =
-        repo.getCatsWithTransactionsByType(TransactionType.INCOME)
+        repo.getAllCatsWithTransactionsByType(TransactionType.INCOME)
 
     private val monthDataFlow = combine(
         monthIndex,
