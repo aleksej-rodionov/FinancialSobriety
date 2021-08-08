@@ -1,16 +1,21 @@
 package space.rodionov.financialsobriety.ui.transaction.recycler
 
+import android.graphics.Canvas
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import kotlinx.coroutines.flow.collect
 import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.data.Transaction
@@ -29,37 +34,112 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
     private lateinit var binding: FragmentTransactionsRecyclerBinding
     private val viewModel: TransactionsViewModel by viewModels({ requireParentFragment() })
 
-    lateinit var parentAdapter: RecTransParentAdapter
+    //    lateinit var parentAdapter: RecTransParentAdapter
+    lateinit var mainAdapter: MainAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentTransactionsRecyclerBinding.bind(view)
 
-        parentAdapter = RecTransParentAdapter(
+//        parentAdapter = RecTransParentAdapter(
+//            requireContext(),
+//            viewModel.catsWithTransactionsByType,
+//            viewLifecycleOwner.lifecycleScope,
+//            onTransactionClick = {
+//                onItemClick(it)
+//            },
+//            onDeleteTransaction = {
+//                viewModel.onDeleteTransaction(it)
+//            }
+//        )
+
+        mainAdapter = MainAdapter(
             requireContext(),
-            viewModel.catsWithTransactionsByType,
-            viewLifecycleOwner.lifecycleScope,
             onTransactionClick = {
                 onItemClick(it)
-            },
-            onDeleteTransaction = {
-                viewModel.onDeleteTransaction(it)
             }
         )
 
         binding.apply {
             recyclerView.apply {
-                adapter = parentAdapter
+//                adapter = parentAdapter
+                adapter = mainAdapter
                 layoutManager = LinearLayoutManager(requireContext())
             }
 
             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                viewModel.monthListFlow.collect {
-                    val months = it ?: return@collect
-                    parentAdapter.submitList(months)
+//                viewModel.monthListFlow.collect {
+//                    val months = it ?: return@collect
+//                    parentAdapter.submitList(months)
+//                }
+                viewModel.catsWithTransactionsByType.collect {
+                    val cwts = it ?: return@collect
+                    val transactions = cwts.flatMap { cwt ->
+                        cwt.transactions
+                    }.sortedBy { t ->
+                        t.timestamp
+                    }.asReversed()
+                    mainAdapter.submitList(transactions)
                 }
             }
+
+            ItemTouchHelper(object :
+                ItemTouchHelper.SimpleCallback(
+                    0, /*ItemTouchHelper.LEFT or */
+                    ItemTouchHelper.RIGHT
+                ) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    return false
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val transaction =
+                        mainAdapter.currentList[viewHolder.adapterPosition]
+                    viewModel.onDeleteTransaction(transaction)
+                }
+
+                override fun onChildDraw(
+                    c: Canvas,
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    dX: Float,
+                    dY: Float,
+                    actionState: Int,
+                    isCurrentlyActive: Boolean
+                ) {
+
+                    RecyclerViewSwipeDecorator.Builder(
+                        c,
+                        recyclerView,
+                        viewHolder,
+                        dX,
+                        dY,
+                        actionState,
+                        isCurrentlyActive
+                    )
+                        .addBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
+                        .addActionIcon(R.drawable.ic_delete)
+                        .create()
+                        .decorate();
+
+                    super.onChildDraw(
+                        c,
+                        recyclerView,
+                        viewHolder,
+                        dX,
+                        dY,
+                        actionState,
+                        isCurrentlyActive
+                    )
+                }
+            }).attachToRecyclerView(recyclerView)
         }
+
+
 
         setFragmentResultListener("add_edit_request") { _, bundle ->
             val result = bundle.getInt("add_edit_result")
@@ -82,7 +162,11 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
                         val action =
                             TransactionsFragmentDirections.actionTransactionsFragmentToEditTransactionFragment(
                                 event.transaction,
-                                "${getString(R.string.edit_)} ${event.transaction.type.name.toLowerCase(Locale.ROOT)}",
+                                "${getString(R.string.edit_)} ${
+                                    event.transaction.type.name.toLowerCase(
+                                        Locale.ROOT
+                                    )
+                                }",
                                 event.transaction.type.name
                             )
                         findNavController().navigate(action)

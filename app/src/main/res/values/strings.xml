@@ -70,6 +70,9 @@
     <string name="home">Home</string>
     <string name="no_categories_to_display">Categories to display not chosen</string>
     <string name="for_today">For today</string>
+    <string name="list">List</string>
+    <string name="diagram">Monthly</string>
+    <string name="bar_chart">Annual</string>
 
 
 </resources>

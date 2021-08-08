@@ -49,6 +49,7 @@
     <fragment
         android:id="@+id/transactionsFragment"
         android:name="space.rodionov.financialsobriety.ui.transaction.TransactionsFragment"
+        android:label="@string/journal"
         tools:layout="@layout/fragment_transactions">
         <action
             android:id="@+id/action_transactionsFragment_to_editTransactionFragment"

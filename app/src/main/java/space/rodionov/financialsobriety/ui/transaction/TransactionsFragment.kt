@@ -37,11 +37,17 @@ class TransactionsFragment : Fragment(R.layout.fragment_transactions),
 
     private lateinit var viewPager: ViewPager2
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentTransactionsBinding.bind(view)
 
-        val tabTitles = listOf("Список", "Диаграммы", "Графики")
+//        val tabTitles = listOf("Список", "Диаграммы", "Графики")
+        val listName = resources.getString(R.string.list)
+        val diagramName = resources.getString(R.string.diagram)
+        val barChartName = resources.getString(R.string.bar_chart)
+        val tabTitles = listOf(listName, diagramName, barChartName)
 
         recyclerTransactionsFragment = RecyclerTransactionsFragment()
         diagramsFragment = DiagramsFragment()

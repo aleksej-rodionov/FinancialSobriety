@@ -70,4 +70,7 @@
     <string name="home">Главная</string>
     <string name="no_categories_to_display">Не выбраны категории для показа</string>
     <string name="for_today">На сегодня</string>
+    <string name="list">Список</string>
+    <string name="diagram">По месяцам</string>
+    <string name="bar_chart">По годам</string>
 </resources>
