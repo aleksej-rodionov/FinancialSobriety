@@ -117,7 +117,7 @@ class DiagramsAdapter(
         val dataset = PieDataSet(entries, null)
         dataset.colors = catColors
         dataset.sliceSpace = 5f
-        dataset.setSelectionShift(5f)
+        dataset.setSelectionShift(30f)
 
         //dataSet.setSelectionShift(0f);
         dataset.setValueLinePart1OffsetPercentage(80f)
