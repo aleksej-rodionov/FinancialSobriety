@@ -37,6 +37,7 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories),
         _binding = FragmentCategoriesBinding.bind(view)
 
         val catAdapter = CategoriesAdapter(this)
+
         binding.apply {
             recyclerView.apply {
                 layoutManager = LinearLayoutManager(requireContext())

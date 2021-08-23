@@ -75,7 +75,7 @@ class EditTransactionViewModel @Inject constructor(
             val updatedSpend = transaction.copy(
                 sum = tSum,
                 catName = tCategoryName.value,
-                timestamp = calendar.timeInMillis,
+                timestamp = transaction.timestamp,
                 comment = tComment,
                 type = enumValueOf(tType)
             )

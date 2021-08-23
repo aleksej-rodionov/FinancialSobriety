@@ -85,8 +85,8 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
 
             ItemTouchHelper(object :
                 ItemTouchHelper.SimpleCallback(
-                    0, /*ItemTouchHelper.LEFT or */
-                    ItemTouchHelper.RIGHT
+                    0,
+                    /*ItemTouchHelper.LEFT or */ItemTouchHelper.RIGHT
                 ) {
                 override fun onMove(
                     recyclerView: RecyclerView,
@@ -120,11 +120,10 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
                         dY,
                         actionState,
                         isCurrentlyActive
-                    )
-                        .addBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
+                    ).addBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red))
                         .addActionIcon(R.drawable.ic_delete)
                         .create()
-                        .decorate();
+                        .decorate()
 
                     super.onChildDraw(
                         c,
