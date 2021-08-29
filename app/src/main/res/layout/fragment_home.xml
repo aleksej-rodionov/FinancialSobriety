@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@color/subtle_blue"
     android:paddingHorizontal="16dp"
     android:paddingVertical="40dp"
     xmlns:tools="http://schemas.android.com/tools"
@@ -23,7 +23,7 @@
                 android:layout_centerHorizontal="true"
                 tools:text="Баланс за июнь:"
                 android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:textSize="19sp" />
 
 
             <TextView
@@ -73,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/outcome"
                     android:textColor="@color/black"
-                    android:textSize="19sp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/tv_currency"
@@ -82,7 +82,7 @@
                     android:layout_alignTop="@+id/tv_spends"
                     android:layout_alignParentEnd="true"
                     android:text=""
-                    android:textSize="17sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
 
@@ -93,7 +93,7 @@
                     android:layout_below="@id/tv_spends"
                     android:layout_marginTop="8dp"
                     android:text="За июнь:"
-                    android:textSize="17sp"
+                    android:textSize="16sp"
                     android:textStyle="italic" />
 
                 <TextView
@@ -149,7 +149,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/income"
                     android:textColor="@color/black"
-                    android:textSize="19sp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/tv_income_currency"
@@ -158,7 +158,7 @@
                     android:layout_alignTop="@+id/tv_income"
                     android:layout_alignParentEnd="true"
                     android:text=""
-                    android:textSize="17sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
 
@@ -169,7 +169,7 @@
                     android:layout_below="@id/tv_income"
                     android:layout_marginTop="8dp"
                     android:text="За июнь:"
-                    android:textSize="17sp"
+                    android:textSize="16sp"
                     android:textStyle="italic" />
 
                 <TextView
@@ -225,7 +225,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/total_debt_sum_is_"
                     android:textColor="@color/black"
-                    android:textSize="19sp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/tv_debt_currency"
@@ -234,7 +234,7 @@
                     android:layout_alignTop="@+id/tv_debt"
                     android:layout_alignParentEnd="true"
                     android:text=""
-                    android:textSize="17sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
 
@@ -245,7 +245,7 @@
                     android:layout_below="@id/tv_debt"
                     android:layout_marginTop="8dp"
                     android:text="@string/for_today"
-                    android:textSize="17sp"
+                    android:textSize="16sp"
                     android:textStyle="italic" />
 
                 <TextView

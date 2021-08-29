@@ -11,14 +11,23 @@
         <entry key="..\:/Users/HomoSapiens/AppData/Local/GitHubDesktop/app-2.8.3/FinancialSobriety/app/src/main/res/layout/activity_main.xml" value="0.1648148148148148" />
         <entry key="..\:/Users/HomoSapiens/AppData/Local/GitHubDesktop/app-2.8.3/FinancialSobriety/app/src/main/res/layout/fragment_bottom_sheet.xml" value="0.1796875" />
         <entry key="..\:/Users/HomoSapiens/AppData/Local/GitHubDesktop/app-2.8.3/FinancialSobriety/app/src/main/res/layout/fragment_categories.xml" value="0.1796875" />
+        <entry key="..\:/Users/HomoSapiens/AppData/Local/GitHubDesktop/app-2.8.3/FinancialSobriety/app/src/main/res/layout/fragment_debts.xml" value="0.1796875" />
+        <entry key="..\:/Users/HomoSapiens/AppData/Local/GitHubDesktop/app-2.8.3/FinancialSobriety/app/src/main/res/layout/fragment_diagrams.xml" value="0.1796875" />
+        <entry key="..\:/Users/HomoSapiens/AppData/Local/GitHubDesktop/app-2.8.3/FinancialSobriety/app/src/main/res/layout/fragment_dialog_category_deletion.xml" value="0.1796875" />
+        <entry key="..\:/Users/HomoSapiens/AppData/Local/GitHubDesktop/app-2.8.3/FinancialSobriety/app/src/main/res/layout/fragment_dialog_recycler.xml" value="0.1796875" />
         <entry key="..\:/Users/HomoSapiens/AppData/Local/GitHubDesktop/app-2.8.3/FinancialSobriety/app/src/main/res/layout/fragment_edit_category.xml" value="0.1796875" />
+        <entry key="..\:/Users/HomoSapiens/AppData/Local/GitHubDesktop/app-2.8.3/FinancialSobriety/app/src/main/res/layout/fragment_edit_debt.xml" value="0.1796875" />
         <entry key="..\:/Users/HomoSapiens/AppData/Local/GitHubDesktop/app-2.8.3/FinancialSobriety/app/src/main/res/layout/fragment_edit_transaction.xml" value="0.1796875" />
+        <entry key="..\:/Users/HomoSapiens/AppData/Local/GitHubDesktop/app-2.8.3/FinancialSobriety/app/src/main/res/layout/fragment_home.xml" value="0.1796875" />
         <entry key="..\:/Users/HomoSapiens/AppData/Local/GitHubDesktop/app-2.8.3/FinancialSobriety/app/src/main/res/layout/fragment_transactions.xml" value="0.1796875" />
         <entry key="..\:/Users/HomoSapiens/AppData/Local/GitHubDesktop/app-2.8.3/FinancialSobriety/app/src/main/res/layout/fragment_transactions_recycler.xml" value="0.1796875" />
-        <entry key="..\:/Users/HomoSapiens/AppData/Local/GitHubDesktop/app-2.8.3/FinancialSobriety/app/src/main/res/layout/item_category.xml" value="0.1796875" />
+        <entry key="..\:/Users/HomoSapiens/AppData/Local/GitHubDesktop/app-2.8.3/FinancialSobriety/app/src/main/res/layout/item_category.xml" value="0.22" />
         <entry key="..\:/Users/HomoSapiens/AppData/Local/GitHubDesktop/app-2.8.3/FinancialSobriety/app/src/main/res/layout/item_debt.xml" value="0.1796875" />
+        <entry key="..\:/Users/HomoSapiens/AppData/Local/GitHubDesktop/app-2.8.3/FinancialSobriety/app/src/main/res/layout/item_dialog_recycler.xml" value="0.1796875" />
+        <entry key="..\:/Users/HomoSapiens/AppData/Local/GitHubDesktop/app-2.8.3/FinancialSobriety/app/src/main/res/layout/item_month_home.xml" value="0.1796875" />
         <entry key="..\:/Users/HomoSapiens/AppData/Local/GitHubDesktop/app-2.8.3/FinancialSobriety/app/src/main/res/layout/item_rec_month.xml" value="0.1796875" />
-        <entry key="..\:/Users/HomoSapiens/AppData/Local/GitHubDesktop/app-2.8.3/FinancialSobriety/app/src/main/res/layout/item_transaction.xml" value="0.1796875" />
+        <entry key="..\:/Users/HomoSapiens/AppData/Local/GitHubDesktop/app-2.8.3/FinancialSobriety/app/src/main/res/layout/item_transaction.xml" value="0.22" />
+        <entry key="..\:/Users/HomoSapiens/AppData/Local/GitHubDesktop/app-2.8.3/FinancialSobriety/app/src/main/res/layout/layout_bottom_sheet.xml" value="0.1796875" />
         <entry key="..\:/Users/HomoSapiens/AppData/Local/GitHubDesktop/app-2.8.3/FinancialSobriety/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1648148148148148" />
         <entry key="..\:/Users/HomoSapiens/AppData/Local/GitHubDesktop/app-2.8.3/FinancialSobriety/app/src/main/res/menu/menu_transactions.xml" value="0.1796875" />
       </map>

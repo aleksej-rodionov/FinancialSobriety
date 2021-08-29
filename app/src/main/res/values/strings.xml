@@ -76,6 +76,7 @@
     <string name="filter_by_category">Filter by category</string>
     <string name="show_income">Show income</string>
     <string name="show_outcome">Show outcome</string>
+    <string name="in_this_month">In this month:</string>
 
 
 </resources>

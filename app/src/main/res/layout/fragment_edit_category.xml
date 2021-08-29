@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/subtle_blue"
     tools:context=".ui.categories.EditCategoryFragment">
 
     <LinearLayout
@@ -17,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/enter_category_name_and_type"
-            android:textSize="20sp"
+            android:textSize="19sp"
             android:textAlignment="center"
             android:padding="16dp"
             android:textColor="@color/blue"
@@ -48,7 +49,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/blue"
-                    android:textSize="20sp"
+                    android:textSize="19sp"
                     android:textStyle="italic"
                     android:background="@color/white"
                     android:inputType="textMultiLine|textCapSentences"
@@ -64,7 +65,7 @@
             android:layout_marginBottom="120dp"
             android:layout_marginTop="36dp"
             tools:text="Type of transactions"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textColor="@color/black"
             android:paddingHorizontal="30dp"
             android:buttonTint="#FFFFFF"
