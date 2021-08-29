@@ -23,9 +23,9 @@
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@+id/tv_sum"
             android:maxLines="3"
-            tools:text="Категория"
             android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:text="Категория" />
 
         <TextView
             android:id="@+id/tv_type"

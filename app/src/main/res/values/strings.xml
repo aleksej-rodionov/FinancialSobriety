@@ -73,6 +73,7 @@
     <string name="list">List</string>
     <string name="diagram">Monthly</string>
     <string name="bar_chart">Annual</string>
+    <string name="filter_by_category">Filter by category</string>
 
 
 </resources>

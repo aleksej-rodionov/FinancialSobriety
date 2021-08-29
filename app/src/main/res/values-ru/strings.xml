@@ -73,4 +73,5 @@
     <string name="list">Список</string>
     <string name="diagram">По месяцам</string>
     <string name="bar_chart">По годам</string>
+    <string name="filter_by_category">Filter by category</string>
 </resources>

@@ -65,7 +65,6 @@ class TransactionsFragment : Fragment(R.layout.fragment_transactions),
                 tab.text = tabTitles[pos]
             }.attach()
 
-//            scrollView.meas = View.MeasureSpec.makeMeasureSpec(300, View.MeasureSpec.AT_MOST)
 
             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
                 viewModel.catsByType.collect {
