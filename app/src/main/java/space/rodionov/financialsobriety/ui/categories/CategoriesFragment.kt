@@ -36,7 +36,7 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories),
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentCategoriesBinding.bind(view)
 
-        val catAdapter = CategoriesAdapter(this)
+        val catAdapter = CategoriesAdapter(requireContext(), this)
 
         binding.apply {
             recyclerView.apply {

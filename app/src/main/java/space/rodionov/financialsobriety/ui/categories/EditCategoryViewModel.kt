@@ -31,7 +31,7 @@ class EditCategoryViewModel @Inject constructor(
         repo.getAllCategories().asLiveData().value
     )
     val title = state.get<String>("title")
-    val onlyType = state.get<String>("onlyType")
+    private val onlyType = state.get<String>("onlyType")
     val category = state.get<Category>("category")
     var catName = state.get<String>("catName") ?: category?.catName ?: ""
         set(value) {

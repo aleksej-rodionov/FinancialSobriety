@@ -41,11 +41,13 @@ class EditCategoryFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val initialType = if(viewModel.catType == TransactionType.INCOME) getString(R.string.income) else getString(R.string.outcome)
+
         binding.apply {
             tvTitle.text = viewModel.title
             etCatName.setText(viewModel.catName)
             switchButton.isChecked = viewModel.catType == TransactionType.INCOME
-            switchButton.text = viewModel.catType.name.toLowerCase(Locale.getDefault()).capitalize(Locale.getDefault())
+            switchButton.text = initialType
             if (viewModel.category != null) switchButton.isEnabled = false
 
             //====================LISTENERS================================================

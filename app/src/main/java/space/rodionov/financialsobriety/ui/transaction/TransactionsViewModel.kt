@@ -25,7 +25,8 @@ class TransactionsViewModel @Inject constructor(
 
 //==================================SHARED FLOWS====================================================
 
-    val typeNameFlow = prefManager.typeNameFlow // All three
+    private val typeNameFlow = prefManager.typeNameFlow // All three
+    val typeName = typeNameFlow.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     private var _monthListFlow = MutableStateFlow<List<Month>>(createMonthList())
     val monthListFlow = _monthListFlow.stateIn(viewModelScope, SharingStarted.Lazily, null) // Rec, Dia

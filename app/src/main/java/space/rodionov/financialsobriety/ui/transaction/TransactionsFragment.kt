@@ -18,13 +18,16 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import space.rodionov.financialsobriety.R
+import space.rodionov.financialsobriety.data.TransactionType
 import space.rodionov.financialsobriety.data.getColors
 import space.rodionov.financialsobriety.databinding.FragmentTransactionsBinding
+import space.rodionov.financialsobriety.ui.MainActivity
 import space.rodionov.financialsobriety.ui.transaction.barchart.BarChartsFragment
 import space.rodionov.financialsobriety.ui.transaction.diagram.DiagramsFragment
 import space.rodionov.financialsobriety.ui.transaction.recycler.RecyclerTransactionsFragment
 import space.rodionov.financialsobriety.util.exhaustive
 import timber.log.Timber
+import java.util.*
 
 @AndroidEntryPoint
 class TransactionsFragment : Fragment(R.layout.fragment_transactions),
@@ -47,9 +50,9 @@ class TransactionsFragment : Fragment(R.layout.fragment_transactions),
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentTransactionsBinding.bind(view)
 
-        val listName = resources.getString(R.string.list)
-        val diagramName = resources.getString(R.string.diagram)
-        val barChartName = resources.getString(R.string.bar_chart)
+        val listName = getString(R.string.list)
+        val diagramName = getString(R.string.diagram)
+        val barChartName = getString(R.string.bar_chart)
         val tabTitles = listOf(listName, diagramName, barChartName)
 
         recyclerTransactionsFragment = RecyclerTransactionsFragment()
@@ -116,15 +119,28 @@ class TransactionsFragment : Fragment(R.layout.fragment_transactions),
                     bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                 }
             }
+        }
 
-            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                viewModel.transEvent.collect { event ->
-                    when (event) {
-                        is TransactionsViewModel.TransEvent.ShowInvalidCatNumberMsg -> {
-                            Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_SHORT).show()
-                        }
-                    }.exhaustive
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.typeName.collect {
+                val typeName = it ?: return@collect
+                if (typeName == TransactionType.INCOME.name) {
+                    (activity as MainActivity).supportActionBar?.title =
+                        "${getString(R.string.journal)} (${getString(R.string.income).toLowerCase(Locale.getDefault())})"
+                } else {
+                    (activity as MainActivity).supportActionBar?.title =
+                        "${getString(R.string.journal)} (${getString(R.string.outcome).toLowerCase(Locale.getDefault())})"
                 }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.transEvent.collect { event ->
+                when (event) {
+                    is TransactionsViewModel.TransEvent.ShowInvalidCatNumberMsg -> {
+                        Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_SHORT).show()
+                    }
+                }.exhaustive
             }
         }
 
