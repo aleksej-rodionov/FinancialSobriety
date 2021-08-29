@@ -65,8 +65,17 @@ class TransactionsViewModel @Inject constructor(
     fun onCatShownCheckedChanged(name: String, shown: Boolean) = viewModelScope.launch {
         repo.updateCategory(repo.getCatByName(name).copy(catShown = shown))
     }
+
     fun showInvalidAmountOfCatsMsg() = viewModelScope.launch {
         transEventChannel.send(TransEvent.ShowInvalidCatNumberMsg("You cannot observe less than 1 category"))
+    }
+
+    fun onShowOutcome() = viewModelScope.launch {
+        prefManager.updateTypeName(TransactionType.OUTCOME.name)
+    }
+
+    fun onShowIncome() = viewModelScope.launch {
+        prefManager.updateTypeName(TransactionType.INCOME.name)
     }
 
 

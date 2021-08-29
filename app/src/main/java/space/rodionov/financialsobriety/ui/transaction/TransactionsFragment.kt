@@ -1,6 +1,9 @@
 package space.rodionov.financialsobriety.ui.transaction
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.CompoundButton
 import androidx.core.view.children
@@ -123,6 +126,26 @@ class TransactionsFragment : Fragment(R.layout.fragment_transactions),
                     }.exhaustive
                 }
             }
+        }
+
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_transactions, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_show_outcome -> {
+                viewModel.onShowOutcome()
+                return true
+            }
+            R.id.action_show_income -> {
+                viewModel.onShowIncome()
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

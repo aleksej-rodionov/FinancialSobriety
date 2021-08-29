@@ -45,4 +45,6 @@
     <string name="diagram">Diagram</string>
     <string name="bar_chart">Bar charts</string>
     <string name="filter_by_category">Filter by category</string>
+    <string name="show_income">Show income</string>
+    <string name="show_outcome">Show outcome</string>
 </resources>
