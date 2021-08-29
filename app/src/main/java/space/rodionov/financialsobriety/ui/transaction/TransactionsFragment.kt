@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
@@ -37,13 +38,12 @@ class TransactionsFragment : Fragment(R.layout.fragment_transactions),
 
     private lateinit var viewPager: ViewPager2
 
-
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentTransactionsBinding.bind(view)
 
-//        val tabTitles = listOf("Список", "Диаграммы", "Графики")
         val listName = resources.getString(R.string.list)
         val diagramName = resources.getString(R.string.diagram)
         val barChartName = resources.getString(R.string.bar_chart)
@@ -69,17 +69,48 @@ class TransactionsFragment : Fragment(R.layout.fragment_transactions),
             viewLifecycleOwner.lifecycleScope.launchWhenStarted {
                 viewModel.catsByType.collect {
                     val categories = it ?: return@collect
-                    chipGroup.removeAllViews()
+                    layoutBottomSheet.chipGroup.removeAllViews()
                     for (c in categories) {
                         val chip = Chip(requireContext())
                         chip.text = c.catName
 //                        chip.setChipBackgroundColorResource(c.catColor)
                         chip.isChecked = c.catShown
-                        chipGroup.addView(chip)
-                        chipGroup.children.forEach {
+                        layoutBottomSheet.chipGroup.addView(chip)
+                        layoutBottomSheet.chipGroup.children.forEach {
                             (it as Chip).setOnCheckedChangeListener(this@TransactionsFragment)
                         }
                     }
+                }
+            }
+
+            bottomSheetBehavior = BottomSheetBehavior.from(layoutBottomSheet.root)
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
+            bottomSheetBehavior.setHideable(false)
+
+            bottomSheetBehavior.addBottomSheetCallback(object :
+                BottomSheetBehavior.BottomSheetCallback() {
+                override fun onStateChanged(bottomSheet: View, newState: Int) {
+                    if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
+                        frameLayout.visibility = View.VISIBLE
+                        frameLayout.setOnClickListener {
+                            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                        }
+                    } else if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
+                        frameLayout.visibility = View.GONE
+                    }
+                }
+
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                    frameLayout.setVisibility(View.VISIBLE);
+                    frameLayout.setAlpha(slideOffset);
+                }
+            })
+
+            layoutBottomSheet.bottomPooler.setOnClickListener {
+                if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                } else if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                 }
             }
 
@@ -99,7 +130,7 @@ class TransactionsFragment : Fragment(R.layout.fragment_transactions),
         if (isChecked) {
             viewModel.onCatShownCheckedChanged(compoundButton.text.toString(), isChecked)
         } else {
-            if (binding.chipGroup.checkedChipIds.size < 1) {
+            if (binding.layoutBottomSheet.chipGroup.checkedChipIds.size < 1) {
                 compoundButton.isChecked = true
                 viewModel.showInvalidAmountOfCatsMsg()
             } else {
