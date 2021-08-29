@@ -11,12 +11,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.data.Category
 import space.rodionov.financialsobriety.data.FinRepository
+import space.rodionov.financialsobriety.data.PrefManager
+import space.rodionov.financialsobriety.data.TransactionType
 import space.rodionov.financialsobriety.di.ApplicationScope
 import space.rodionov.financialsobriety.ui.ADD_CATEGORY_RESULT_OK
 import space.rodionov.financialsobriety.ui.CAT_DEL_RESULT_COMPLETE_DELETION
@@ -30,12 +33,18 @@ private const val TAG = "CatViewModel LOGS"
 @HiltViewModel
 class CategoriesViewModel @Inject constructor(
     private val repo: FinRepository,
-    @ApplicationScope private val applicationScope: CoroutineScope,
-    application: Application
+    private val prefManager: PrefManager,
+    @ApplicationScope private val applicationScope: CoroutineScope
 ) : ViewModel() {
-//    private val context = application.applicationContext
+    private val typeNameFlow = prefManager.typeNameFlow
+    val typeName = typeNameFlow.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
-    val categories = repo.getAllCategories().stateIn(viewModelScope, SharingStarted.Lazily, null)
+    private val catsByTypeFlow = typeNameFlow.flatMapLatest {
+        repo.getCategoriesByType(TransactionType.valueOf(it))
+    }
+    val catsByType = catsByTypeFlow.stateIn(viewModelScope, SharingStarted.Lazily, null)
+
+//    val categories = repo.getAllCategories().stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     //=================EVENT CHANNEL================================
 
@@ -52,6 +61,14 @@ class CategoriesViewModel @Inject constructor(
     }
 
     //=========FUNS==============================================
+
+    fun onShowOutcomeCategories() = viewModelScope.launch {
+        prefManager.updateTypeName(TransactionType.OUTCOME.name)
+    }
+
+    fun onShowIncomeCategories() = viewModelScope.launch {
+        prefManager.updateTypeName(TransactionType.INCOME.name)
+    }
 
     fun onNewCatClick() = viewModelScope.launch {
         categoriesEventChannel.send(CategoriesEvent.NavigateToAddCatScreen)

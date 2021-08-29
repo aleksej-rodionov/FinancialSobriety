@@ -86,7 +86,7 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
             ItemTouchHelper(object :
                 ItemTouchHelper.SimpleCallback(
                     0,
-                    /*ItemTouchHelper.LEFT or */ItemTouchHelper.RIGHT
+                    ItemTouchHelper.RIGHT
                 ) {
                 override fun onMove(
                     recyclerView: RecyclerView,
@@ -161,11 +161,7 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
                         val action =
                             TransactionsFragmentDirections.actionTransactionsFragmentToEditTransactionFragment(
                                 event.transaction,
-                                "${getString(R.string.edit_)} ${
-                                    event.transaction.type.name.toLowerCase(
-                                        Locale.ROOT
-                                    )
-                                }",
+                                getString(R.string.edit_) + " " + if (event.transaction.type == TransactionType.INCOME) getString(R.string.income_accusative) else getString(R.string.outcome_accusative),
                                 event.transaction.type.name
                             )
                         findNavController().navigate(action)

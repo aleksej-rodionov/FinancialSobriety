@@ -31,8 +31,8 @@
     <string name="jul">ИЮЛ</string>
     <string name="aug">АВГ</string>
     <string name="sep">СЕН</string>
-    <string name="nov">ОКТ</string>
-    <string name="oct">НОЯ</string>
+    <string name="oct">ОКТ</string>
+    <string name="nov">НОЯ</string>
     <string name="dec">ДЕК</string>
     <string name="category_saved">Категория создана</string>
     <string name="category_updated">Категория изменена</string>
@@ -77,4 +77,9 @@
     <string name="show_income">Показать доходы</string>
     <string name="show_outcome">Показать траты</string>
     <string name="in_this_month">In this month:</string>
+    <string name="edit_transaction">Редактировать транзакцию</string>
+    <string name="outcome_accusative"> трату</string>
+    <string name="income_accusative"> доход</string>
+    <string name="show_outcome_categories">Outcome categories</string>
+    <string name="show_income_categories">Income categories</string>
 </resources>

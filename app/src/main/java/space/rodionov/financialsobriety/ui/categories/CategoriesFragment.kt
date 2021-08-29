@@ -3,6 +3,9 @@ package space.rodionov.financialsobriety.ui.categories
 import android.graphics.Canvas
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -19,8 +22,11 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import kotlinx.coroutines.flow.collect
 import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.data.Category
+import space.rodionov.financialsobriety.data.TransactionType
 import space.rodionov.financialsobriety.databinding.FragmentCategoriesBinding
+import space.rodionov.financialsobriety.ui.MainActivity
 import space.rodionov.financialsobriety.util.exhaustive
+import java.util.*
 
 private const val TAG = "CategoriesFragment LOGS"
 
@@ -80,9 +86,24 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories),
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.categories.collect {
+            viewModel.catsByType.collect {
                 val cats = it ?: return@collect
                 catAdapter.submitList(cats)
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.typeName.collect {
+                val typeName = it ?: return@collect
+                if (typeName == TransactionType.INCOME.name) {
+                    (activity as MainActivity).supportActionBar?.title =
+                        "${getString(R.string.categories)} (${getString(R.string.income).toLowerCase(
+                            Locale.getDefault())})"
+                } else {
+                    (activity as MainActivity).supportActionBar?.title =
+                        "${getString(R.string.categories)} (${getString(R.string.outcome).toLowerCase(
+                            Locale.getDefault())})"
+                }
             }
         }
 
@@ -136,6 +157,26 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories),
                 }.exhaustive
             }
         }
+
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_categories, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId){
+            R.id.action_show_outcome_categories -> {
+                viewModel.onShowOutcomeCategories()
+                return true
+            }
+            R.id.action_show_income_categories -> {
+                viewModel.onShowIncomeCategories()
+                return true
+            }
+     else ->  super.onOptionsItemSelected(item)
+    }
     }
 
     override fun onItemClick(category: Category) {

@@ -31,6 +31,7 @@ class FinRepository @Inject constructor(
     //=========================CATEGORIES===================================
 
     fun getAllCategories(): Flow<List<Category>> = finDao.getAllCategories()
+
     fun getCategoriesByType(type: TransactionType): Flow<List<Category>> =
         finDao.getCategoriesByType(type.name)
 

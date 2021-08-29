@@ -63,7 +63,7 @@ class MainAdapter(
         init {
             binding.apply {
                 root.setOnClickListener {
-                    val position = adapterPosition
+                    val position = bindingAdapterPosition
                     if (position != RecyclerView.NO_POSITION) {
                         onItemClick(position)
                     }

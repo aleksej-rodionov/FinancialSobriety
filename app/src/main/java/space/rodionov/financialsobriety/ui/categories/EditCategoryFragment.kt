@@ -1,5 +1,7 @@
 package space.rodionov.financialsobriety.ui.categories
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -41,7 +43,13 @@ class EditCategoryFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val initialType = if(viewModel.catType == TransactionType.INCOME) getString(R.string.income) else getString(R.string.outcome)
+        val green = Color.parseColor(resources.getString(0 + R.color.green))
+        val blue = Color.parseColor(resources.getString(0 + R.color.blue))
+
+        val initialType =
+            if (viewModel.catType == TransactionType.INCOME) getString(R.string.income) else getString(
+                R.string.outcome
+            )
 
         binding.apply {
             tvTitle.text = viewModel.title
@@ -49,6 +57,10 @@ class EditCategoryFragment : BottomSheetDialogFragment() {
             switchButton.isChecked = viewModel.catType == TransactionType.INCOME
             switchButton.text = initialType
             if (viewModel.category != null) switchButton.isEnabled = false
+
+            if (viewModel.catType == TransactionType.INCOME) switchButton.thumbTintList =
+                ColorStateList.valueOf(green) else switchButton.thumbTintList =
+                ColorStateList.valueOf(blue)
 
             //====================LISTENERS================================================
             etCatName.addTextChangedListener {
@@ -58,9 +70,11 @@ class EditCategoryFragment : BottomSheetDialogFragment() {
                 if (isChecked) {
                     viewModel.catType = TransactionType.INCOME
                     btn.text = resources.getString(R.string.income)
+                    switchButton.thumbTintList = ColorStateList.valueOf(green)
                 } else {
                     viewModel.catType = TransactionType.OUTCOME
                     btn.text = resources.getString(R.string.outcome)
+                    switchButton.thumbTintList = ColorStateList.valueOf(blue)
                 }
             }
 
@@ -77,10 +91,13 @@ class EditCategoryFragment : BottomSheetDialogFragment() {
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.editCatEvent.collect {
-                when (it){
+                when (it) {
                     is EditCategoryViewModel.EditCatEvent.NavigateBackWithResult -> {
                         binding.etCatName.clearFocus()
-                        setFragmentResult("add_edit_request", bundleOf("add_edit_result" to it.result))
+                        setFragmentResult(
+                            "add_edit_request",
+                            bundleOf("add_edit_result" to it.result)
+                        )
                         findNavController().popBackStack()
                     }
                     is EditCategoryViewModel.EditCatEvent.ShowInvalidInputMsg -> {

@@ -31,8 +31,8 @@
     <string name="jul">JUL</string>
     <string name="aug">AUG</string>
     <string name="sep">SEP</string>
-    <string name="nov">OCT</string>
-    <string name="oct">NOV</string>
+    <string name="oct">OCT</string>
+    <string name="nov">NOV</string>
     <string name="dec">DEC</string>
     <string name="category_saved">Category saved</string>
     <string name="category_updated">Category updated</string>
@@ -77,6 +77,10 @@
     <string name="show_income">Show income</string>
     <string name="show_outcome">Show outcome</string>
     <string name="in_this_month">In this month:</string>
-
+    <string name="edit_transaction">Edit transaction</string>
+    <string name="outcome_accusative"> outcome</string>
+    <string name="income_accusative"> income</string>
+    <string name="show_outcome_categories">Outcome categories</string>
+    <string name="show_income_categories">Income categories</string>
 
 </resources>
