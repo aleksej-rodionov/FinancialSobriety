@@ -82,4 +82,6 @@
     <string name="income_accusative"> доход</string>
     <string name="show_outcome_categories">Outcome categories</string>
     <string name="show_income_categories">Income categories</string>
+    <string name="export_to_csv">Export to CSV</string>
+    <string name="import_from_csv">Import from CSV</string>
 </resources>

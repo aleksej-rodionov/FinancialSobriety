@@ -19,14 +19,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import space.rodionov.financialsobriety.R
 import space.rodionov.financialsobriety.data.TransactionType
-import space.rodionov.financialsobriety.data.getColors
 import space.rodionov.financialsobriety.databinding.FragmentTransactionsBinding
 import space.rodionov.financialsobriety.ui.MainActivity
 import space.rodionov.financialsobriety.ui.transaction.barchart.BarChartsFragment
 import space.rodionov.financialsobriety.ui.transaction.diagram.DiagramsFragment
 import space.rodionov.financialsobriety.ui.transaction.recycler.RecyclerTransactionsFragment
 import space.rodionov.financialsobriety.util.exhaustive
-import timber.log.Timber
 import java.util.*
 
 @AndroidEntryPoint
@@ -137,8 +135,14 @@ class TransactionsFragment : Fragment(R.layout.fragment_transactions),
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.transEvent.collect { event ->
                 when (event) {
-                    is TransactionsViewModel.TransEvent.ShowInvalidCatNumberMsg -> {
+                    is TransactionsViewModel.TransEvent.TransactionsSnackbar -> {
                         Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_SHORT).show()
+                    }
+                    is TransactionsViewModel.TransEvent.GoToFileActivity -> {
+
+                    }
+                    is TransactionsViewModel.TransEvent.PickFileActivity -> {
+
                     }
                 }.exhaustive
             }
@@ -159,6 +163,14 @@ class TransactionsFragment : Fragment(R.layout.fragment_transactions),
             }
             R.id.action_show_income -> {
                 viewModel.onShowIncome()
+                return true
+            }
+            R.id.export_to_csv -> {
+                viewModel.exportDataToCSVFile(requireContext())
+                return true
+            }
+            R.id.import_from_csv -> {
+                viewModel.importDataFromCSVFile(requireContext())
                 return true
             }
             else -> super.onOptionsItemSelected(item)

@@ -1,8 +1,11 @@
 package space.rodionov.financialsobriety.ui.transaction
 
+import android.content.Context
+import android.content.Intent
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
@@ -12,8 +15,9 @@ import space.rodionov.financialsobriety.ui.ADD_TRANSACTION_RESULT_OK
 import space.rodionov.financialsobriety.ui.EDIT_TRANSACTION_RESULT_OK
 import space.rodionov.financialsobriety.ui.shared.createMonthList
 import space.rodionov.financialsobriety.ui.shared.createYearList
-import timber.log.Timber
-import java.util.*
+import space.rodionov.financialsobriety.util.generateFile
+import space.rodionov.financialsobriety.util.goToFileIntent
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,13 +27,16 @@ class TransactionsViewModel @Inject constructor(
     private val prefManager: PrefManager
 ) : ViewModel() {
 
+    val csvFileName = "transactions.csv"
+
 //==================================SHARED FLOWS====================================================
 
     private val typeNameFlow = prefManager.typeNameFlow // All three
     val typeName = typeNameFlow.stateIn(viewModelScope, SharingStarted.Lazily, null)
 
     private var _monthListFlow = MutableStateFlow<List<Month>>(createMonthList())
-    val monthListFlow = _monthListFlow.stateIn(viewModelScope, SharingStarted.Lazily, null) // Rec, Dia
+    val monthListFlow =
+        _monthListFlow.stateIn(viewModelScope, SharingStarted.Lazily, null) // Rec, Dia
 
     private val catsWithTransactionsByTypeFlow = typeNameFlow.flatMapLatest {
         repo.getCatsWithTransactionsByType(TransactionType.valueOf(it))
@@ -42,7 +49,6 @@ class TransactionsViewModel @Inject constructor(
 
     private var _yearListFlow = MutableStateFlow(createYearList())
     val yearListFlow = _yearListFlow.stateIn(viewModelScope, SharingStarted.Lazily, null)
-
 
 
 //===============================PARENT FLOWS===============================================
@@ -58,17 +64,49 @@ class TransactionsViewModel @Inject constructor(
     val transEvent = transEventChannel.receiveAsFlow()
 
     sealed class TransEvent {
-        data class ShowInvalidCatNumberMsg(val msg: String) : TransEvent()
+        data class TransactionsSnackbar(val msg: String) : TransEvent()
+        data class GoToFileActivity(val intent: Intent) : TransEvent()
+        data class PickFileActivity(val intent: Intent) : TransEvent()
     }
 
 //===============================PARENT FRAGMENT FUNCTIONS===============================================
+
+    fun exportDataToCSVFile(context: Context) {
+        val csvFile = generateFile(context, csvFileName)
+        if (csvFile != null) {
+            exportTransactionsToCSVFile(csvFile)
+            val intent = goToFileIntent(context, csvFile)
+            viewModelScope.launch {
+                transEventChannel.send(TransEvent.GoToFileActivity(intent))
+            }
+        } else {
+            viewModelScope.launch {
+                transEventChannel.send(TransEvent.TransactionsSnackbar("CSV file not generated"))
+            }
+        }
+    }
+
+    private fun exportTransactionsToCSVFile(csvFile: File) {
+        csvWriter().open(csvFile, append = false) {
+            // Header
+            writeRow(
+                listOf(
+//we are hERE //todo
+                )
+            )
+        }
+    }
+
+    fun importDataFromCSVFile(context: Context) {
+
+    }
 
     fun onCatShownCheckedChanged(name: String, shown: Boolean) = viewModelScope.launch {
         repo.updateCategory(repo.getCatByName(name).copy(catShown = shown))
     }
 
     fun showInvalidAmountOfCatsMsg() = viewModelScope.launch {
-        transEventChannel.send(TransEvent.ShowInvalidCatNumberMsg("You cannot observe less than 1 category"))
+        transEventChannel.send(TransEvent.TransactionsSnackbar("You cannot observe less than 1 category"))
     }
 
     fun onShowOutcome() = viewModelScope.launch {
