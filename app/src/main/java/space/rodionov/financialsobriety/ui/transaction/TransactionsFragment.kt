@@ -48,6 +48,8 @@ class TransactionsFragment : Fragment(R.layout.fragment_transactions),
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentTransactionsBinding.bind(view)
 
+        viewModel.subscribeToTransactionsFlow()
+
         val listName = getString(R.string.list)
         val diagramName = getString(R.string.diagram)
         val barChartName = getString(R.string.bar_chart)
@@ -139,7 +141,7 @@ class TransactionsFragment : Fragment(R.layout.fragment_transactions),
                         Snackbar.make(requireView(), event.msg, Snackbar.LENGTH_SHORT).show()
                     }
                     is TransactionsViewModel.TransEvent.GoToFileActivity -> {
-
+                        startActivity(event.intent)
                     }
                     is TransactionsViewModel.TransEvent.PickFileActivity -> {
 

@@ -2,6 +2,7 @@ package space.rodionov.financialsobriety.ui.transaction
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,6 +21,8 @@ import space.rodionov.financialsobriety.util.goToFileIntent
 import java.io.File
 import javax.inject.Inject
 
+private const val TAG = "ViewModel LOGS"
+
 @HiltViewModel
 class TransactionsViewModel @Inject constructor(
     private val repo: FinRepository,
@@ -28,6 +31,7 @@ class TransactionsViewModel @Inject constructor(
 ) : ViewModel() {
 
     val csvFileName = "transactions.csv"
+    val oriList = mutableListOf<Transaction>()
 
 //==================================SHARED FLOWS====================================================
 
@@ -43,6 +47,12 @@ class TransactionsViewModel @Inject constructor(
     }
     val catsWithTransactionsByType = catsWithTransactionsByTypeFlow
         .stateIn(viewModelScope, SharingStarted.Lazily, null) // Rec, Dia
+
+
+
+    private val allTransactionsFlow = repo.getAllTransactions()
+    private val _allTransactionsFlow = MutableStateFlow<List<Transaction>>(oriList)
+
 
 
 //==================================BARCHART FLOWS========================================
@@ -75,6 +85,7 @@ class TransactionsViewModel @Inject constructor(
         val csvFile = generateFile(context, csvFileName)
         if (csvFile != null) {
             exportTransactionsToCSVFile(csvFile)
+            Log.d(TAG, "CSV file generated")
             val intent = goToFileIntent(context, csvFile)
             viewModelScope.launch {
                 transEventChannel.send(TransEvent.GoToFileActivity(intent))
@@ -91,14 +102,39 @@ class TransactionsViewModel @Inject constructor(
             // Header
             writeRow(
                 listOf(
-//we are hERE //todo
+                    "[sum]",
+                    "[category]",
+                    "[timestamp]",
+                    "[comment]",
+                    "[type]",
+                    "[local db id]",
+                    "[remote db author id]"
                 )
             )
+            // Body
+            viewModelScope.launch {
+                allTransactionsFlow.collectLatest { transactions ->
+                    transactions.forEach { t ->
+                        writeRow(t.sum, t.catName, t.timestamp, t.comment, t.type, t.id, t.authorId)
+                    }
+                }
+            }
         }
     }
 
     fun importDataFromCSVFile(context: Context) {
 
+    }
+
+    fun subscribeToTransactionsFlow() = viewModelScope.launch {
+        repo.getAllTransactions().collectLatest {
+            updateTransactionsFlow(it)
+        }
+    }
+
+    private fun updateTransactionsFlow(transactions: List<Transaction>) {
+        Log.d(TAG, "upd $transactions")
+        _allTransactionsFlow.value = transactions
     }
 
     fun onCatShownCheckedChanged(name: String, shown: Boolean) = viewModelScope.launch {
