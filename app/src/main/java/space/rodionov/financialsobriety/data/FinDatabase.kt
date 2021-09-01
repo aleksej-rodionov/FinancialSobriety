@@ -37,7 +37,7 @@ abstract class FinDatabase : RoomDatabase() {
             val dao = database.get().finDao()
 
             applicationScope.launch {
-                dao.insertDebt(Debt("Tinkoff", 53692.27f))
+                dao.insertDebt(Debt("Tinkoff", 49842.27f))
 
 
                 dao.insertCategory(Category("Food", TransactionType.OUTCOME, getColors()[0]))
