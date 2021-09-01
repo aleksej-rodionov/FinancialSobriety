@@ -55,6 +55,7 @@ class TransactionsFragment : Fragment(R.layout.fragment_transactions),
         _binding = FragmentTransactionsBinding.bind(view)
 
         viewModel.subscribeToTransactionsFlow()
+        viewModel.subscribeToCategoriessFlow()
 
         val listName = getString(R.string.list)
         val diagramName = getString(R.string.diagram)

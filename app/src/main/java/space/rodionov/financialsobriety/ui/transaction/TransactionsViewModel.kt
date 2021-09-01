@@ -35,7 +35,8 @@ class TransactionsViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val csvFileName = "transactions.csv"
-    private val oriList = mutableListOf<Transaction>()
+    private val oriTransList = mutableListOf<Transaction>()
+    private val oriCatList = mutableListOf<Category>()
 
 //==================================SHARED FLOWS====================================================
 
@@ -53,7 +54,11 @@ class TransactionsViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.Lazily, null) // Rec, Dia
 
 
-    private val _allTransactionsFlow = MutableStateFlow<List<Transaction>>(oriList)
+    //    private val allTransactionsFlow = repo.getAllTransactions()
+    private val _allTransactionsFlow = MutableStateFlow<List<Transaction>>(oriTransList)
+
+    //    private val allCategories = repo.getAllCategories()
+    private val _allCategoriesFlow = MutableStateFlow<List<Category>>(oriCatList)
 
 
 //==================================BARCHART FLOWS========================================
@@ -134,6 +139,11 @@ class TransactionsViewModel @Inject constructor(
         val rows: List<List<String>> = csvReader {
             skipMissMatchedRow = true
         }.readAll(inputStream)
+
+        val catNames = _allCategoriesFlow.value.map {
+            it.catName
+        }.toMutableList()
+
         rows.forEachIndexed { index, row ->
             if (index > 0) {
                 val transaction = Transaction(
@@ -147,9 +157,29 @@ class TransactionsViewModel @Inject constructor(
                 )
                 insertTransaction(transaction)
 
-//todo
+                if (!catNames.contains(row[1])) {
+                    val category = Category(
+                        row[1],
+                        TransactionType.valueOf(row[4]),
+                        chooseCatColorByType(TransactionType.valueOf(row[4]))
+                    )
+                    insertCategory(category)
+                    catNames.add(category.catName)
+                }
             }
         }
+    }
+
+    private suspend fun chooseCatColorByType(catType: TransactionType) : Int {
+        val numberOfCategories = repo.getNumberOfCatsByType(catType)
+        val colorIndex: Int
+        if (numberOfCategories >= getColors().size) {
+            colorIndex = numberOfCategories.toString().removeRange(0, numberOfCategories.toString().length - 1).toInt()
+        } else {
+            colorIndex = numberOfCategories
+        }
+        Timber.d("logs colorIndex = $colorIndex")
+        return getColors()[colorIndex]
     }
 
     private fun insertTransaction(transaction: Transaction) = viewModelScope.launch {
@@ -167,9 +197,24 @@ class TransactionsViewModel @Inject constructor(
     }
 
     private fun updateTransactionsFlow(transactions: List<Transaction>) {
-        Log.d(TAG, "upd $transactions")
+        Log.d(TAG, "upd transs ${transactions.size}")
         _allTransactionsFlow.value = transactions
     }
+
+    fun subscribeToCategoriessFlow() = viewModelScope.launch {
+        repo.getAllCategories().collectLatest {
+            updateCategoriesFlow(it)
+        }
+    }
+
+    private fun updateCategoriesFlow(categories: List<Category>) {
+        Log.d(TAG, "upd cats ${categories.size}")
+        _allCategoriesFlow.value = categories
+    }
+
+//    private fun addCategoryToList(category: Category) {
+//        _allCategoriesFlow.value
+//    }
 
     fun onCatShownCheckedChanged(name: String, shown: Boolean) = viewModelScope.launch {
         repo.updateCategory(repo.getCatByName(name).copy(catShown = shown))
