@@ -10,7 +10,8 @@ import kotlinx.android.parcel.Parcelize
 data class Debt(
     var debtName: String,
     var debtSum: Float,
-    @PrimaryKey(autoGenerate = true) val debtId: Int = 0
+    @PrimaryKey(autoGenerate = true) val debtId: Int = 0,
+    var authorId: String = ""
 ) : Parcelable {
     override fun toString(): String {
         return "$debtName (-$debtSum)"

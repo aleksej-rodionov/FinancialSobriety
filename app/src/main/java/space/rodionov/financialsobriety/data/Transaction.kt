@@ -16,7 +16,8 @@ data class Transaction(
     var timestamp: Long = 0L,
     var comment: String?,
     var type: TransactionType = TransactionType.OUTCOME,
-    @PrimaryKey(autoGenerate = true) val id: Int = 0
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    var authorId: String = ""
 ) : Parcelable {
     val dateFormatted: String
         get() = sdf.format(timestamp)

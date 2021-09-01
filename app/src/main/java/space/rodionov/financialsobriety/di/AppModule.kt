@@ -22,7 +22,8 @@ object AppModule {
         app: Application,
         callback: FinDatabase.Callback
     ) = Room.databaseBuilder(app, FinDatabase::class.java, "fin_database")
-        .fallbackToDestructiveMigration()
+//        .fallbackToDestructiveMigration()
+        .addMigrations(FinDatabase.MIGRATION_1_2)
         .addCallback(callback)
         .build()
 
@@ -33,7 +34,8 @@ object AppModule {
     @ApplicationScope // we tell here dagger "it's not just a coroutineScope, it's the ApplicationScope"
     @Provides
     @Singleton
-    fun provideApplicationScope() = CoroutineScope(SupervisorJob()) // here we created our own coroutine scope
+    fun provideApplicationScope() =
+        CoroutineScope(SupervisorJob()) // here we created our own coroutine scope
     // that lives as long as our application lives. We can use it for long-running operations of our whole app
     // but by default a coroutine gets cancelled when any of its child fails.
     // And if there are 2 running coroutines in it and one of them fails, scope casts the second one to begins of its way.

@@ -3,6 +3,7 @@ package space.rodionov.financialsobriety.data
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.github.mikephil.charting.utils.ColorTemplate
 import kotlinx.coroutines.CoroutineScope
@@ -11,11 +12,19 @@ import space.rodionov.financialsobriety.di.ApplicationScope
 import javax.inject.Inject
 import javax.inject.Provider
 
-@Database(entities = [Transaction::class, Category::class, Debt::class], version = 1, exportSchema = false)
+@Database(entities = [Transaction::class, Category::class, Debt::class], version = 2, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class FinDatabase : RoomDatabase() {
 
     abstract fun finDao() : FinDao
+
+    object MIGRATION_1_2  : Migration(1, 2) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL("ALTER TABLE spend_table ADD COLUMN authorId NOT NULL DEFAULT ''")
+            database.execSQL("ALTER TABLE category_table ADD COLUMN authorId NOT NULL DEFAULT ''")
+            database.execSQL("ALTER TABLE debt_table ADD COLUMN authorId NOT NULL DEFAULT ''")
+        }
+    }
 
     class Callback @Inject constructor(
         private val database: Provider<FinDatabase>,

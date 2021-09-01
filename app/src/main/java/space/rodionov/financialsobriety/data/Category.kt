@@ -14,7 +14,8 @@ data class Category(
     val catType: TransactionType,
     val catColor: Int,
     val catShown: Boolean = true,
-    @PrimaryKey(autoGenerate = true) val id: Int = 0
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    var authorId: String = ""
 ) : Parcelable {
 
     override fun toString(): String {
