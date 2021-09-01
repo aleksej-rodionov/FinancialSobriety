@@ -1,11 +1,14 @@
 package space.rodionov.financialsobriety.ui.transaction
 
+import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.CompoundButton
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,6 +18,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
+import com.jaiselrahman.filepicker.activity.FilePickerActivity
+import com.jaiselrahman.filepicker.model.MediaFile
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import space.rodionov.financialsobriety.R
@@ -25,6 +30,7 @@ import space.rodionov.financialsobriety.ui.transaction.barchart.BarChartsFragmen
 import space.rodionov.financialsobriety.ui.transaction.diagram.DiagramsFragment
 import space.rodionov.financialsobriety.ui.transaction.recycler.RecyclerTransactionsFragment
 import space.rodionov.financialsobriety.util.exhaustive
+import timber.log.Timber
 import java.util.*
 
 @AndroidEntryPoint
@@ -152,6 +158,24 @@ class TransactionsFragment : Fragment(R.layout.fragment_transactions),
 
         setHasOptionsMenu(true)
     }
+
+    private val filePickerActivityLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode != Activity.RESULT_CANCELED && result.data != null) {
+                val data = result.data
+                val mediaFiles = data?.getParcelableArrayListExtra<MediaFile>(
+                    FilePickerActivity.MEDIA_FILES
+                )
+                Timber.d("LOGS: mediafiles.size = ${mediaFiles?.size}")
+                val uri = mediaFiles?.get(0)?.uri
+                val inputStream = uri?.let {
+                    requireContext().contentResolver.openInputStream(uri)
+                }
+                inputStream?.let {
+                    viewModel.parseInputStream(it)
+                }
+            }
+        }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_transactions, menu)

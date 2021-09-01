@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -16,9 +17,12 @@ import space.rodionov.financialsobriety.ui.ADD_TRANSACTION_RESULT_OK
 import space.rodionov.financialsobriety.ui.EDIT_TRANSACTION_RESULT_OK
 import space.rodionov.financialsobriety.ui.shared.createMonthList
 import space.rodionov.financialsobriety.ui.shared.createYearList
+import space.rodionov.financialsobriety.util.filePickerIntent
 import space.rodionov.financialsobriety.util.generateFile
 import space.rodionov.financialsobriety.util.goToFileIntent
+import timber.log.Timber
 import java.io.File
+import java.io.InputStream
 import javax.inject.Inject
 
 private const val TAG = "ViewModel LOGS"
@@ -30,8 +34,8 @@ class TransactionsViewModel @Inject constructor(
     private val prefManager: PrefManager
 ) : ViewModel() {
 
-    val csvFileName = "transactions.csv"
-    val oriList = mutableListOf<Transaction>()
+    private val csvFileName = "transactions.csv"
+    private val oriList = mutableListOf<Transaction>()
 
 //==================================SHARED FLOWS====================================================
 
@@ -49,10 +53,7 @@ class TransactionsViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.Lazily, null) // Rec, Dia
 
 
-
-    private val allTransactionsFlow = repo.getAllTransactions()
     private val _allTransactionsFlow = MutableStateFlow<List<Transaction>>(oriList)
-
 
 
 //==================================BARCHART FLOWS========================================
@@ -113,7 +114,7 @@ class TransactionsViewModel @Inject constructor(
             )
             // Body
             viewModelScope.launch {
-                allTransactionsFlow.collectLatest { transactions ->
+                _allTransactionsFlow.collectLatest { transactions ->
                     transactions.forEach { t ->
                         writeRow(t.sum, t.catName, t.timestamp, t.comment, t.type, t.id, t.authorId)
                     }
@@ -122,8 +123,41 @@ class TransactionsViewModel @Inject constructor(
         }
     }
 
-    fun importDataFromCSVFile(context: Context) {
+    fun importDataFromCSVFile(context: Context) = viewModelScope.launch {
+        val intent = filePickerIntent(context)
+        Log.d(TAG, "viewModel: Intent created and sent to Channel")
+        transEventChannel.send(TransEvent.PickFileActivity(intent))
+    }
 
+    fun parseInputStream(inputStream: InputStream) = viewModelScope.launch {
+        Timber.d("LOGS: parseInputStream() CALLED ")
+        val rows: List<List<String>> = csvReader {
+            skipMissMatchedRow = true
+        }.readAll(inputStream)
+        rows.forEachIndexed { index, row ->
+            if (index > 0) {
+                val transaction = Transaction(
+                    "${row[0]}f".toFloat(),
+                    row[1],
+                    row[2].toLong(),
+                    row[3],
+                    TransactionType.valueOf(row[4]),
+                    row[5].toInt(),
+                    row[6]
+                )
+                insertTransaction(transaction)
+
+//todo
+            }
+        }
+    }
+
+    private fun insertTransaction(transaction: Transaction) = viewModelScope.launch {
+        repo.insertSpend(transaction)
+    }
+
+    private fun insertCategory(category: Category) = viewModelScope.launch {
+        repo.insertCategory(category)
     }
 
     fun subscribeToTransactionsFlow() = viewModelScope.launch {
