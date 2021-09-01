@@ -214,19 +214,32 @@ abstract class FinDatabase : RoomDatabase() {
 
 
                 dao.insertSpend(Transaction(18465.43f, "Food", 1625086800000, null))
-                dao.insertSpend(Transaction(0f, "Transport", 1625086800000, null))
+                dao.insertSpend(Transaction(182f, "Transport", 1625086800000, null))
                 dao.insertSpend(Transaction(899f, "Communication", 1625086800000, null))
-                dao.insertSpend(Transaction(0f, "Taxi", 1625086800000, null))
+                dao.insertSpend(Transaction(254f, "Taxi", 1625086800000, null))
                 dao.insertSpend(Transaction(547.6f, "Restaurants", 1625086800000, null))
                 dao.insertSpend(Transaction(8000f, "Dwelling", 1625086800000, null))
                 dao.insertSpend(Transaction(1321.98f, "Other", 1625086800000, null))
                 dao.insertSpend(Transaction(4535.85f, "Credits", 1625086800000, null))
                 dao.insertSpend(Transaction(2175f, "Taxes", 1625086800000, null))
-                dao.insertSpend(Transaction(11180.3f, "Communal", 1625086800000, null))
-                dao.insertSpend(Transaction(19362.59f, "Brother", 1625086800000, null))
+                dao.insertSpend(Transaction(15107.26f, "Communal", 1625086800000, null))
+                dao.insertSpend(Transaction(18792.59f, "Brother", 1625086800000, null))
                 dao.insertSpend(Transaction(1629f, "Myself", 1625086800000, null))
                 dao.insertSpend(Transaction(182f, "Healthcare", 1625086800000, null))
 
+                dao.insertSpend(Transaction(17626.94f, "Food", 1627765200000, null))
+                dao.insertSpend(Transaction(339f, "Transport", 1627765200000, null))
+                dao.insertSpend(Transaction(949f, "Communication", 1627765200000, null))
+                dao.insertSpend(Transaction(0f, "Taxi", 1627765200000, null))
+                dao.insertSpend(Transaction(99.9f, "Restaurants", 1627765200000, null))
+                dao.insertSpend(Transaction(8000f, "Dwelling", 1627765200000, null))
+                dao.insertSpend(Transaction(2435.96f, "Other", 1627765200000, null))
+                dao.insertSpend(Transaction(4593.68f, "Credits", 1627765200000, null))
+                dao.insertSpend(Transaction(2271.6f, "Taxes", 1627765200000, null))
+                dao.insertSpend(Transaction(12902.77f, "Communal", 1627765200000, null))
+                dao.insertSpend(Transaction(22100.47f, "Brother", 1627765200000, null))
+                dao.insertSpend(Transaction(0f, "Myself", 1627765200000, null))
+                dao.insertSpend(Transaction(6270f, "Healthcare", 1627765200000, null))
 
 
 
