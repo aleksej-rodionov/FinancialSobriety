@@ -133,10 +133,18 @@ class TransactionsFragment : Fragment(R.layout.fragment_transactions),
                 val typeName = it ?: return@collect
                 if (typeName == TransactionType.INCOME.name) {
                     (activity as MainActivity).supportActionBar?.title =
-                        "${getString(R.string.journal)} (${getString(R.string.income).toLowerCase(Locale.getDefault())})"
+                        "${getString(R.string.journal)} (${
+                            getString(R.string.income).toLowerCase(
+                                Locale.getDefault()
+                            )
+                        })"
                 } else {
                     (activity as MainActivity).supportActionBar?.title =
-                        "${getString(R.string.journal)} (${getString(R.string.outcome).toLowerCase(Locale.getDefault())})"
+                        "${getString(R.string.journal)} (${
+                            getString(R.string.outcome).toLowerCase(
+                                Locale.getDefault()
+                            )
+                        })"
                 }
             }
         }
@@ -151,7 +159,7 @@ class TransactionsFragment : Fragment(R.layout.fragment_transactions),
                         startActivity(event.intent)
                     }
                     is TransactionsViewModel.TransEvent.PickFileActivity -> {
-
+                        filePickerActivityLauncher.launch(event.intent)
                     }
                 }.exhaustive
             }
