@@ -20,9 +20,9 @@ abstract class FinDatabase : RoomDatabase() {
 
     object MIGRATION_1_2  : Migration(1, 2) {
         override fun migrate(database: SupportSQLiteDatabase) {
-            database.execSQL("ALTER TABLE spend_table ADD COLUMN authorId NOT NULL DEFAULT ''")
-            database.execSQL("ALTER TABLE category_table ADD COLUMN authorId NOT NULL DEFAULT ''")
-            database.execSQL("ALTER TABLE debt_table ADD COLUMN authorId NOT NULL DEFAULT ''")
+            database.execSQL("ALTER TABLE spend_table ADD COLUMN authorId TEXT NOT NULL DEFAULT ''")
+            database.execSQL("ALTER TABLE category_table ADD COLUMN authorId TEXT NOT NULL DEFAULT ''")
+            database.execSQL("ALTER TABLE debt_table ADD COLUMN authorId TEXT NOT NULL DEFAULT ''")
         }
     }
 

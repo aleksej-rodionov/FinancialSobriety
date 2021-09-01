@@ -57,6 +57,7 @@ class RecyclerTransactionsFragment : Fragment(R.layout.fragment_transactions_rec
             requireContext(),
             onTransactionClick = {
                 onItemClick(it)
+                Log.d(TAG, "$it")
             }
         )
 
