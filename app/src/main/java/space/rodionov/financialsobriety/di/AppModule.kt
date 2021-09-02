@@ -22,7 +22,7 @@ object AppModule {
         app: Application,
         callback: FinDatabase.Callback
     ) = Room.databaseBuilder(app, FinDatabase::class.java, "fin_database")
-        .fallbackToDestructiveMigration()
+//        .fallbackToDestructiveMigration()
         .addMigrations(FinDatabase.MIGRATION_1_2)
         .addCallback(callback)
         .build()
