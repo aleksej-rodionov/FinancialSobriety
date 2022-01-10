@@ -54,7 +54,25 @@
                 android:layout_marginVertical="8dp"
                 app:cardCornerRadius="6dp">
 
-                <com.google.android.material.textfield.TextInputLayout
+                <EditText
+                    android:id="@+id/etTransactionSum"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/sum"
+                    android:layout_margin="12dp"
+                    android:background="@null"
+                    android:textColorHint="?android:textColorHint"
+                    app:layout_constraintBottom_toBottomOf="@+id/spFromCurrency"
+                    app:layout_constraintEnd_toStartOf="@+id/spFromCurrency"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/spFromCurrency"
+                    android:textColor="@color/blue"
+                    android:textSize="19sp"
+                    android:textStyle="italic"
+                    android:inputType="numberDecimal"/>
+
+
+                <!--<com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_transaction_sum"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
@@ -74,11 +92,12 @@
                         android:background="@color/white"
                         android:inputType="numberDecimal"
                         android:padding="12dp"
+                        tools:hint="0.0"
                         android:textColor="@color/blue"
                         android:textSize="19sp"
                         android:textStyle="italic" />
 
-                </com.google.android.material.textfield.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>-->
 
             </androidx.cardview.widget.CardView>
 
@@ -142,31 +161,47 @@
                 android:layout_marginVertical="8dp"
                 app:cardCornerRadius="6dp">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/til_transaction_comment"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                <EditText
+                    android:id="@+id/et_transaction_comment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="3dp"
                     android:hint="@string/comment_not_neccessary"
+                    android:layout_margin="12dp"
+                    android:background="@null"
                     android:textColorHint="?android:textColorHint"
                     app:layout_constraintBottom_toBottomOf="@+id/spFromCurrency"
                     app:layout_constraintEnd_toStartOf="@+id/spFromCurrency"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/spFromCurrency">
+                    app:layout_constraintTop_toTopOf="@+id/spFromCurrency"
+                    android:textColor="@color/blue"
+                    android:textSize="19sp"
+                    android:textStyle="italic"/>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_transaction_comment"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/white"
-                        android:inputType="textMultiLine|textCapSentences"
-                        android:padding="12dp"
-                        android:textColor="@color/blue"
-                        android:textSize="19sp"
-                        android:textStyle="italic" />
+<!--                <com.google.android.material.textfield.TextInputLayout-->
+<!--                    android:id="@+id/til_transaction_comment"-->
+<!--                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="3dp"-->
+<!--                    android:hint="@string/comment_not_neccessary"-->
+<!--                    android:textColorHint="?android:textColorHint"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/spFromCurrency"-->
+<!--                    app:layout_constraintEnd_toStartOf="@+id/spFromCurrency"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/spFromCurrency">-->
 
-                </com.google.android.material.textfield.TextInputLayout>
+<!--                    <com.google.android.material.textfield.TextInputEditText-->
+<!--                        android:id="@+id/et_transaction_comment"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:background="@color/white"-->
+<!--                        android:inputType="textMultiLine|textCapSentences"-->
+<!--                        android:padding="12dp"-->
+<!--                        android:textColor="@color/blue"-->
+<!--                        android:textSize="19sp"-->
+<!--                        android:textStyle="italic" />-->
+
+<!--                </com.google.android.material.textfield.TextInputLayout>-->
 
             </androidx.cardview.widget.CardView>
 

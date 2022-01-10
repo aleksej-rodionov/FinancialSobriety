@@ -27,36 +27,38 @@
             android:layout_alignParentStart="true"
             android:layout_marginEnd="10dp"
             android:layout_toStartOf="@+id/tv_sum"
-            android:maxLines="3"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:textColor="@color/black"
             android:textSize="17sp"
             tools:text="Категория" />
 
         <TextView
-            android:id="@+id/tv_date"
-
+            android:id="@+id/tv_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_category"
             android:layout_alignParentStart="true"
             android:layout_marginTop="6dp"
             android:layout_marginEnd="10dp"
-            android:textSize="16sp"
-            android:textStyle="italic"
-            tools:text="03.02.1991" />
+            android:maxLines="2"
+            android:ellipsize="end"
+            tools:text="Комментарий"
+            android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/tv_comment"
+            android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@id/tv_date"
-            android:layout_alignBottom="@id/tv_date"
+            android:layout_alignTop="@id/tv_comment"
+            android:layout_alignBottom="@id/tv_comment"
             android:layout_alignParentEnd="true"
-            android:layout_toEndOf="@id/tv_date"
+            android:layout_toEndOf="@id/tv_comment"
             android:maxLines="3"
             android:textAlignment="viewEnd"
             android:textSize="16sp"
-            tools:text="Комментарий" />
+            android:textStyle="italic"
+            tools:text="03.02.1991" />
 
         <TextView
             android:id="@+id/tv_sum"

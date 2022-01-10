@@ -53,6 +53,7 @@
     <string name="transaction_deleted">Transaction deleted for good</string>
     <string name="category_">Category…</string>
     <string name="sum">Sum</string>
+    <string name="hint_sum">0.0</string>
     <string name="comment_not_neccessary">Comment (not necessary)</string>
     <string name="no_debt_chosen">No debt chosen</string>
     <string name="you_can_reduce_your_debt">You can reduce debt by the sum entered. For this, choose the debt.</string>

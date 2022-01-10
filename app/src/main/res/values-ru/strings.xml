@@ -53,6 +53,7 @@
     <string name="transaction_deleted">Транзакция удалена навсегда</string>
     <string name="category_">Категория…</string>
     <string name="sum">Сумма</string>
+    <string name="hint_sum">0.0</string>
     <string name="comment_not_neccessary">Коментарий (не обязательно)</string>
     <string name="no_debt_chosen">Долг не выбран</string>
     <string name="you_can_reduce_your_debt">Вы можете сократить долг на указанную сумму. Для этого укажите название долга</string>

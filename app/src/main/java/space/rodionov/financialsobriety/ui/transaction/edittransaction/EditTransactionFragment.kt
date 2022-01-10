@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.EditText
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -45,7 +46,9 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
             viewModel.tDateFormatted.observe(viewLifecycleOwner) {
                 tvDate.setText(it)
             }
-            etTransactionSum.setText(viewModel.tSum.toString())
+            etTransactionSum.setText(viewModel.tSum?.let { sum ->
+                sum.toString()
+            } ?: "")
             viewModel.tCategoryName.observe(viewLifecycleOwner) {
                 if (it.isNotBlank()) tvCategory.setText(it)
             }
@@ -67,6 +70,9 @@ class EditTransactionFragment : Fragment(R.layout.fragment_edit_transaction) {
 
             //===========LISTENERS=================================
 
+//            etTransactionSum.setOnClickListener {
+//                if (viewModel.tSum == 0f) (it as EditText).setText("")
+//            }
             ivDate.setOnClickListener {
                 viewModel.onChooseDateClick()
             }

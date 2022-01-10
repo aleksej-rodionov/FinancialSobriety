@@ -44,7 +44,7 @@ class EditTransactionViewModel @Inject constructor(
         transaction?.dateFormatted ?: sdf.format(System.currentTimeMillis())
     )
 
-    var tSum = state.get<Float>("spendSum") ?: transaction?.sum ?: 0f
+    var tSum = state.get<Float?>("spendSum") ?: transaction?.sum /*?: 0f*/
         set(value) {
             field = value
             state.set("spendSum", value)
@@ -64,33 +64,41 @@ class EditTransactionViewModel @Inject constructor(
     //=======================================================================
 
     fun onSaveClick() {
-        if (tSum.equals(0f) || tSum.toString().isBlank() || tCategoryName.value.isNullOrBlank()) {
+        if (tSum == null) {
             showInvalidInputMessage("Enter sum and category") // EVENT caller
             return
         }
-        val calendar = Calendar.getInstance()
-        calendar.time = sdf.parse(tDateFormatted.value)
 
-        if (transaction != null) {
-            val updatedSpend = transaction.copy(
-                sum = tSum,
-                catName = tCategoryName.value,
-                timestamp = transaction.timestamp,
-                comment = tComment,
-                type = enumValueOf(tType)
-            )
-            updateSpend(updatedSpend) // EVENT caller
-            Timber.d("LOGS edited trans = ${updatedSpend}")
-        } else {
-            val newSpend = Transaction(
-                tSum,
-                tCategoryName.value,
-                calendar.timeInMillis,
-                tComment,
-                enumValueOf(tType)
-            )
-            insertSpend(newSpend) // EVENT caller
-            Timber.d("LOGS edited trans = ${newSpend}")
+        tSum?.let { sum ->
+            if (sum.equals(0f) || tSum.toString().isBlank() || tCategoryName.value.isNullOrBlank()
+            ) {
+                showInvalidInputMessage("Enter sum and category") // EVENT caller
+                return
+            }
+            val calendar = Calendar.getInstance()
+            calendar.time = sdf.parse(tDateFormatted.value)
+
+            if (transaction != null) {
+                val updatedSpend = transaction.copy(
+                    sum = sum,
+                    catName = tCategoryName.value,
+                    timestamp = transaction.timestamp,
+                    comment = tComment,
+                    type = enumValueOf(tType)
+                )
+                updateSpend(updatedSpend) // EVENT caller
+                Timber.d("LOGS edited trans = ${updatedSpend}")
+            } else {
+                val newSpend = Transaction(
+                    sum,
+                    tCategoryName.value,
+                    calendar.timeInMillis,
+                    tComment,
+                    enumValueOf(tType)
+                )
+                insertSpend(newSpend) // EVENT caller
+                Timber.d("LOGS edited trans = ${newSpend}")
+            }
         }
         Timber.d("LOGS etvm type = ${tType}")
 
