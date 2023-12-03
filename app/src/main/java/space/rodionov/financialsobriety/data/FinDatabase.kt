@@ -5,7 +5,6 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.github.mikephil.charting.utils.ColorTemplate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import space.rodionov.financialsobriety.di.ApplicationScope
@@ -37,24 +36,19 @@ abstract class FinDatabase : RoomDatabase() {
             val dao = database.get().finDao()
 
             applicationScope.launch {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                dao.insertCategory(Category("Food", TransactionType.OUTCOME, getColors()[0]))
+                dao.insertCategory(Category("Transport", TransactionType.OUTCOME, getColors()[1]))
+                dao.insertCategory(Category("Communication", TransactionType.OUTCOME, getColors()[3]))
+                dao.insertCategory(Category("Taxi", TransactionType.OUTCOME, getColors()[2]))
+                dao.insertCategory(Category("Restaurants", TransactionType.OUTCOME, getColors()[4]))
+                dao.insertCategory(Category("Dwelling", TransactionType.OUTCOME, getColors()[5]))
+                dao.insertCategory(Category("Other", TransactionType.OUTCOME, getColors()[6]))
+                dao.insertCategory(Category("Credits", TransactionType.OUTCOME, getColors()[7]))
+                dao.insertCategory(Category("Taxes", TransactionType.OUTCOME, getColors()[9]))
+                dao.insertCategory(Category("Communal", TransactionType.OUTCOME, getColors()[4]))
+                dao.insertCategory(Category("Brother", TransactionType.OUTCOME, getColors()[8]))
+                dao.insertCategory(Category("Myself", TransactionType.OUTCOME, getColors()[3]))
+                dao.insertCategory(Category("Healthcare", TransactionType.OUTCOME, getColors()[2]))
             }
         }
     }

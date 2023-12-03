@@ -2,7 +2,6 @@ package space.rodionov.financialsobriety.ui.categories
 
 import android.graphics.Canvas
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -26,7 +25,7 @@ import space.rodionov.financialsobriety.data.TransactionType
 import space.rodionov.financialsobriety.databinding.FragmentCategoriesBinding
 import space.rodionov.financialsobriety.ui.MainActivity
 import space.rodionov.financialsobriety.util.exhaustive
-import java.util.*
+import java.util.Locale
 
 private const val TAG = "CategoriesFragment LOGS"
 
@@ -123,14 +122,18 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories),
                     CategoriesViewModel.CategoriesEvent.NavigateToAddCatScreen -> {
                         val action =
                             CategoriesFragmentDirections.actionCategoriesFragmentToEditCategoryFragment(
-                                null, resources.getString(R.string.new_category), null
+                                category = null,
+                                title = resources.getString(R.string.new_category),
+                                onlyType = null
                             )
                         findNavController().navigate(action)
                     }
                     is CategoriesViewModel.CategoriesEvent.NavigateToEditCatScreen -> {
                         val action =
                             CategoriesFragmentDirections.actionCategoriesFragmentToEditCategoryFragment(
-                                event.category, resources.getString(R.string.edit_category), null
+                                category = event.category,
+                                title = resources.getString(R.string.edit_category),
+                                onlyType = null
                             )
                         findNavController().navigate(action)
                     }
